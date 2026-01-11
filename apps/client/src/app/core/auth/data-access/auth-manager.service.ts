@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { ApiHelperService } from '../../../../../shared/services/api-helper.service';
+import { ApiHelperService } from '../../../shared/services/api-helper.service';
 import { User } from 'generated/prisma/client';
 
 @Injectable({ providedIn: 'root' })

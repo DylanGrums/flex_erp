@@ -6,13 +6,13 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { providePrimeNG } from 'primeng/config';
 import ZincBluePreset from '../themes/zinc-blue.preset';
 import { NgxsModule, Store } from '@ngxs/store';
-import { AuthState } from './modules/dashboard/core/auth/data-access/auth.state';
+import { AuthState } from './core/auth/data-access/auth.state';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { environment } from '../environments/environment';
 import { DynamicDialogModule, DialogService } from 'primeng/dynamicdialog';
-import { Refresh } from './modules/dashboard/core/auth/data-access/auth.actions';
-import { authInterceptor } from './modules/dashboard/core/auth/data-access/auth.interceptor';
+import { Refresh } from './core/auth/data-access/auth.actions';
+import { authInterceptor } from './core/auth/data-access/auth.interceptor';
 import { catchError, of, firstValueFrom } from 'rxjs';
 import { API_BASE_URL } from './tokens';
 

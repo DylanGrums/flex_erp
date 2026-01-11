@@ -2,7 +2,7 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { AuthState } from './auth.state';
-import { API_BASE_URL } from '../../../../../tokens';
+import { API_BASE_URL } from '../../../tokens';
 
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {

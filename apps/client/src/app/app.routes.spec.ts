@@ -2,6 +2,7 @@ import { routes } from './app.routes';
 import { DefaultLayoutComponent } from './core/layout/default-layout/default-layout.component';
 import { DashboardPageComponent } from './modules/dashboard/dashboard-page.component';
 import { ResidentManagementComponent } from './modules/resident/resident-management/resident-management.component';
+import { UiKitDemoComponent } from './modules/dev/ui-kit-demo/ui-kit-demo.component';
 
 describe('app.routes', () => {
   it('defines redirect and layout children', () => {
@@ -24,6 +25,10 @@ describe('app.routes', () => {
         expect.objectContaining({
           path: 'residents',
           component: ResidentManagementComponent,
+        }),
+        expect.objectContaining({
+          path: 'dev/ui',
+          component: UiKitDemoComponent,
         }),
       ]),
     );

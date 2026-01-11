@@ -1,0 +1,61 @@
+<section class="space-y-6">
+  <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+    <h2 class="text-lg font-semibold text-gray-800 dark:text-zinc-100">Admin UI Kit</h2>
+    <p class="text-sm text-gray-500 dark:text-zinc-400">
+      Shared components extracted from the Medusa Admin patterns.
+    </p>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-3">
+    <fe-input
+      label="Search"
+      placeholder="Search by title or ID"
+      [value]="searchTerm"
+      (valueChange)="onSearchChange($event)"
+    ></fe-input>
+
+    <fe-select
+      label="Status"
+      [options]="statusOptions"
+      [value]="statusFilter"
+      (valueChange)="onStatusChange($event)"
+    ></fe-select>
+
+    <fe-textarea
+      label="Notes"
+      placeholder="Optional note"
+      [value]="notes"
+      (valueChange)="notes = $event"
+    ></fe-textarea>
+  </div>
+
+  <div class="space-y-3">
+    <fe-admin-table
+      [columns]="columns"
+      [rows]="filteredRows"
+      [rowActions]="rowActions"
+      [page]="page"
+      [pageSize]="pageSize"
+      [loading]="loading"
+      [emptyState]="emptyState"
+    ></fe-admin-table>
+
+    <fe-admin-pagination
+      [page]="page"
+      [pageSize]="pageSize"
+      [total]="filteredRows.length"
+      (change)="onPaginationChange($event)"
+    ></fe-admin-pagination>
+  </div>
+
+  <fe-confirm-dialog
+    [open]="confirmOpen"
+    [title]="confirmTitle"
+    [description]="confirmDescription"
+    confirmText="Delete"
+    cancelText="Cancel"
+    (confirmed)="confirmDelete()"
+    (canceled)="cancelDelete()"
+    (openChange)="confirmOpen = $event"
+  ></fe-confirm-dialog>
+</section>
