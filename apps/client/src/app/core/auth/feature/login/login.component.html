@@ -1,0 +1,40 @@
+<div class="space-y-5">
+  <form class="space-y-4" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="flex flex-col gap-2">
+      <div class="flex items-center justify-between">
+        <label for="email" class="text-sm font-medium text-gray-200">Email</label>
+        <span [hidden]="!error" class="text-xs text-red-400">Invalid credentials</span>
+      </div>
+      <span class="p-input-icon-left w-full">
+        <i class="pi pi-envelope text-gray-400"></i>
+        <input pInputText id="email" type="email" formControlName="email" autocomplete="email"
+          class="w-full !bg-[#0f1320] !border-[#252b3a] !text-gray-100 placeholder:!text-gray-500 focus:!border-sky-500 focus:!ring-sky-500"
+          placeholder="you@example.com" />
+      </span>
+      <small [hidden]="!(submitted && f['email'].errors)" class="text-xs text-red-400">Provide a valid email.</small>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="password" class="text-sm font-medium text-gray-200">Password</label>
+      <p-password inputId="password" formControlName="password" [feedback]="false" toggleMask
+        placeholder="Enter your password"
+        inputStyleClass="w-full !bg-[#0f1320] !border-[#252b3a] !text-gray-100 placeholder:!text-gray-500 focus:!border-sky-500 focus:!ring-sky-500">
+      </p-password>
+      <small [hidden]="!(submitted && f['password'].errors)" class="text-xs text-red-400">
+        Password must be at least 6 characters.
+      </small>
+    </div>
+
+    <div class="flex items-center justify-between text-sm text-gray-400">
+      <div class="flex items-center gap-2">
+        <p-checkbox inputId="rememberMe" binary="true" [(ngModel)]="rememberMe"
+          [ngModelOptions]="{ standalone: true }"></p-checkbox>
+        <label for="rememberMe" class="cursor-pointer">Remember me</label>
+      </div>
+      <a class="text-sky-300 hover:text-sky-200 cursor-pointer">Forgot password?</a>
+    </div>
+
+    <button pButton type="submit" icon="pi pi-sign-in" class="w-full !bg-sky-500 !border-sky-500 hover:!bg-sky-400">Log
+      in</button>
+  </form>
+</div>

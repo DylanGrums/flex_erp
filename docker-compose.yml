@@ -1,0 +1,113 @@
+networks:
+  flex-erp-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+
+services:
+  app:
+    image: jc21/nginx-proxy-manager:latest
+    restart: unless-stopped
+    ports:
+      - "443:443"   # Public HTTPS
+      - "81:81"     # Admin UI
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    networks:
+      - flex-erp-network
+
+  website:
+    container_name: website
+    build:
+      context: ./
+      cache_from:
+        - my-base-image:nx-base
+      dockerfile: ./apps/website/Dockerfile
+      args:
+        NODE_ENV: "production"
+    image: website:nx-dev
+    ports:
+      - "3000:3000"
+    networks:
+      - flex-erp-network
+    restart: on-failure
+
+  client:
+    container_name: client
+    build:
+      context: ./
+      cache_from:
+        - nginx:1.19.2
+      dockerfile: ./apps/client/Dockerfile
+      args:
+        NODE_ENV: "production"
+        BUILD_FLAG: ""
+    image: client:nx-dev
+    ports:
+      - "4900:80"
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      PORT: 4900
+    networks:
+      - flex-erp-network
+    restart: on-failure
+
+  api:
+    container_name: api
+    build:
+      context: ./
+      cache_from:
+        - my-base-image:nx-base
+      dockerfile: ./apps/api/Dockerfile
+      args:
+        NODE_ENV: "development"
+        BUILD_FLAG: ""
+    image: api:nx-dev
+    ports:
+      - "4939:4939"
+    environment:
+      NODE_ENV: "development"
+      PORT: 4939
+      # Redis
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      # Prisma URL for your app
+      DATABASE_URL: ${DATABASE_URL:?Missing DATABASE_URL in .env}
+      # (optional) expose discrete PG vars if your code also reads them
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - flex-erp-network
+    restart: on-failure
+
+  postgres:
+    image: postgres:18.0
+    container_name: postgres
+    hostname: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    networks:
+      - flex-erp-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.0-alpine
+    container_name: redis
+    hostname: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - flex-erp-network
+    restart: unless-stopped

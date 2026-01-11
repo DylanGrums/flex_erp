@@ -14,7 +14,15 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@flex-erp/store-feature": ["libs/store/feature/src/index.ts"],
+      "@flex-erp/store-data-access": ["libs/store/data-access/src/index.ts"],
+      "@flex-erp/store-types": ["libs/store/types/src/index.ts"],
+      "@flex-erp/store-util": ["libs/store/util/src/index.ts"],
+
+      "@flex-erp/shared-ui": ["libs/shared/ui/src/index.ts"],
+      "@flex-erp/store-ui": ["libs/store/ui/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
