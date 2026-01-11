@@ -1,53 +1,80 @@
 <section class="space-y-6">
-  <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-    <h2 class="text-lg font-semibold text-gray-800 dark:text-zinc-100">Admin UI Kit</h2>
-    <p class="text-sm text-gray-500 dark:text-zinc-400">
-      Shared components extracted from the Medusa Admin patterns.
-    </p>
+  <!-- Page header (Medusa-like) -->
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+    <div>
+      <h1 class="text-lg font-semibold text-ui-fg-base">Admin UI Kit</h1>
+      <p class="mt-1 text-sm text-ui-fg-subtle">
+        Shared components extracted from the Medusa Admin patterns.
+      </p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <button pButton type="button" label="Export" class="p-button-secondary">Export</button>
+      <button pButton type="button" label="Import" class="p-button-secondary">Import</button>
+      <button pButton type="button" label="Create" icon="pi pi-plus">Create</button>
+    </div>
   </div>
 
-  <div class="grid gap-4 md:grid-cols-3">
-    <fe-input
-      label="Search"
-      placeholder="Search by title or ID"
-      [value]="searchTerm"
-      (valueChange)="onSearchChange($event)"
-    ></fe-input>
+  <!-- Filters panel -->
+  <div class="medusa-panel p-4">
+    <div class="grid gap-4 md:grid-cols-3">
+      <fe-input
+        label="Search"
+        placeholder="Search by title or ID"
+        [value]="searchTerm"
+        (valueChange)="onSearchChange($event)"
+      ></fe-input>
 
-    <fe-select
-      label="Status"
-      [options]="statusOptions"
-      [value]="statusFilter"
-      (valueChange)="onStatusChange($event)"
-    ></fe-select>
+      <fe-select
+        label="Status"
+        [options]="statusOptions"
+        [value]="statusFilter"
+        (valueChange)="onStatusChange($event)"
+      ></fe-select>
 
-    <fe-textarea
-      label="Notes"
-      placeholder="Optional note"
-      [value]="notes"
-      (valueChange)="notes = $event"
-    ></fe-textarea>
+      <fe-textarea
+        label="Notes"
+        placeholder="Optional note"
+        [value]="notes"
+        (valueChange)="notes = $event"
+      ></fe-textarea>
+    </div>
   </div>
 
-  <div class="space-y-3">
-    <fe-admin-table
-      [columns]="columns"
-      [rows]="filteredRows"
-      [rowActions]="rowActions"
-      [page]="page"
-      [pageSize]="pageSize"
-      [loading]="loading"
-      [emptyState]="emptyState"
-    ></fe-admin-table>
+  <!-- Table panel -->
+  <div class="medusa-panel overflow-hidden">
+    <div class="p-4">
+      <div class="flex items-center justify-between gap-2">
+        <div class="text-sm font-medium text-ui-fg-base">Results</div>
+        <div class="text-xs text-ui-fg-muted">
+          {{ filteredRows.length }} item(s)
+        </div>
+      </div>
+    </div>
 
-    <fe-admin-pagination
-      [page]="page"
-      [pageSize]="pageSize"
-      [total]="filteredRows.length"
-      (change)="onPaginationChange($event)"
-    ></fe-admin-pagination>
+    <div class="border-t border-ui-border-base">
+      <fe-admin-table
+        [columns]="columns"
+        [rows]="filteredRows"
+        [rowActions]="rowActions"
+        [page]="page"
+        [pageSize]="pageSize"
+        [loading]="loading"
+        [emptyState]="emptyState"
+      ></fe-admin-table>
+    </div>
+
+    <div class="border-t border-ui-border-base">
+      <fe-admin-pagination
+        [page]="page"
+        [pageSize]="pageSize"
+        [total]="filteredRows.length"
+        (change)="onPaginationChange($event)"
+      ></fe-admin-pagination>
+    </div>
   </div>
 
+  <!-- Dialog (global styles already handle .p-dialog) -->
   <fe-confirm-dialog
     [open]="confirmOpen"
     [title]="confirmTitle"
