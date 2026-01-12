@@ -1,0 +1,109 @@
+<div class="p-2 text-xs text-red-500">SIDEBAR RENDERED</div>
+
+
+<aside class="flex flex-1 flex-col justify-between overflow-y-auto">
+  <div class="flex flex-1 flex-col">
+    <div class="bg-ui-bg-subtle sticky top-0">
+      <div class="w-full p-3">
+        <p-popover  #storePanel [styleClass]="'w-[220px] max-w-[220px]'">
+          <div class="flex items-center gap-x-3 px-2 py-1">
+            <div class="flex h-8 w-8 items-center justify-center rounded-md bg-ui-bg-base">
+              <span class="text-xs font-semibold">{{ (storeSvc.store()?.name?.[0] || 'S') | uppercase }}</span>
+            </div>
+            <div class="flex flex-col overflow-hidden">
+              <div class="truncate text-sm font-semibold">{{ storeSvc.store()?.name }}</div>
+              <div class="text-xs text-ui-fg-subtle">Store</div>
+            </div>
+          </div>
+
+          <p-divider styleClass="my-2" />
+
+          <a class="flex items-center gap-x-2 rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover" [routerLink]="'/settings/store'">
+            <i class="pi pi-shop text-ui-fg-subtle"></i>
+            <span class="text-sm">Store Settings</span>
+          </a>
+
+          <p-divider styleClass="my-2" />
+
+          <a class="flex items-center gap-x-2 rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover" [routerLink]="'/login'">
+            <i class="pi pi-sign-out text-ui-fg-subtle"></i>
+            <span class="text-sm">Logout</span>
+          </a>
+        </p-popover>
+
+        <button
+          type="button"
+          class="bg-ui-bg-subtle transition-fg grid w-full grid-cols-[24px_1fr_15px] items-center gap-x-3 rounded-md p-0.5 pe-2 outline-none hover:bg-ui-bg-subtle-hover focus-visible:shadow-borders-focus"
+          (click)="storePanel.toggle($event)"
+        >
+          <div class="flex h-6 w-6 items-center justify-center rounded-md bg-ui-bg-base">
+            <span class="text-xs font-semibold">{{ (storeSvc.store()?.name?.[0] || 'S') | uppercase }}</span>
+          </div>
+
+          <div class="block overflow-hidden text-start">
+            <div class="truncate text-sm font-semibold">{{ storeSvc.store()?.name || 'Loading…' }}</div>
+          </div>
+
+          <i class="pi pi-ellipsis-h text-ui-fg-muted"></i>
+        </button>
+      </div>
+
+      <div class="px-3">
+        <p-divider type="dashed" />
+      </div>
+    </div>
+
+    <div class="flex flex-1 flex-col justify-between">
+      <div class="flex flex-1 flex-col">
+        <nav class="flex flex-col gap-y-1 py-3">
+          <div class="px-3">
+            <button
+              type="button"
+              class="bg-ui-bg-subtle text-ui-fg-subtle flex w-full items-center gap-x-2.5 rounded-md px-2 py-1 outline-none hover:bg-ui-bg-subtle-hover focus-visible:shadow-borders-focus"
+              (click)="toggleSearch()"
+            >
+              <i class="pi pi-search"></i>
+              <div class="flex-1 text-start"><span class="text-sm font-semibold">Search</span></div>
+              <span class="text-sm text-ui-fg-muted">⌘K</span>
+            </button>
+          </div>
+
+          <ng-container *ngFor="let route of coreRoutes()">
+            <app-nav-item [item]="route"></app-nav-item>
+          </ng-container>
+        </nav>
+
+        <div *ngIf="extensionRoutes().length > 0">
+          <div class="px-3"><p-divider type="dashed" /></div>
+
+          <div class="flex flex-col gap-y-1 py-3">
+            <div class="px-4">
+              <button type="button" class="text-ui-fg-subtle flex w-full items-center justify-between px-2" (click)="toggleExtensions()">
+                <span class="text-xs font-semibold">Extensions</span>
+                <div class="text-ui-fg-muted">
+                  <i class="pi pi-chevron-down" *ngIf="extensionsOpen()"></i>
+                  <i class="pi pi-minus" *ngIf="!extensionsOpen()"></i>
+                </div>
+              </button>
+            </div>
+
+            <nav *ngIf="extensionsOpen()" class="flex flex-col gap-y-0.5 py-1 pb-4">
+              <ng-container *ngFor="let route of extensionRoutes()">
+                <app-nav-item [item]="getExtensionNavItems(route)"></app-nav-item>
+              </ng-container>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-y-0.5 py-3">
+        <app-nav-item [item]="{ icon: 'pi pi-cog', label: 'Settings', to: '/settings', type: 'core' }"></app-nav-item>
+      </div>
+    </div>
+
+    <div class="bg-ui-bg-subtle sticky bottom-0">
+      <div class="px-3"><p-divider type="dashed" /></div>
+      <app-user-menu></app-user-menu>
+    </div>
+  </div>
+</aside>

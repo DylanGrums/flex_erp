@@ -1,4 +1,3 @@
-export * from './lib/ui/ui';
 export * from './lib/admin-kit/admin-kit.types';
 export * from './lib/admin-kit/table/admin-table.component';
 export * from './lib/admin-kit/pagination/admin-pagination.component';

@@ -1,0 +1,78 @@
+<div class="px-3">
+  <a
+    [routerLink]="item().to"
+    class="text-ui-fg-subtle transition-fg hover:bg-ui-bg-subtle-hover flex items-center gap-x-2 rounded-md py-0.5 pl-0.5 pr-2 outline-none focus-visible:shadow-borders-focus"
+    [class.bg-ui-bg-base]="isActive(item().to)"
+    [class.shadow-elevation-card-rest]="isActive(item().to)"
+    [class.text-ui-fg-base]="isActive(item().to)"
+    [class.hover\:bg-ui-bg-base]="isActive(item().to)"
+    [class.pl-2]="isSetting()"
+    [pTooltip]="tooltipHtml() || ''"
+    [escape]="false"
+    tooltipPosition="right"
+    [tooltipDisabled]="!tooltipHtml()"
+  >
+    <div *ngIf="!isSetting()" class="flex size-6 items-center justify-center">
+      <ng-container *ngIf="item().type === 'extension'; else normalIcon">
+        <div class="shadow-borders-base bg-ui-bg-base flex h-5 w-5 items-center justify-center rounded-[4px]">
+          <div class="h-[15px] w-[15px] overflow-hidden rounded-sm">
+            <i [class]="item().icon"></i>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #normalIcon>
+        <i [class]="item().icon"></i>
+      </ng-template>
+    </div>
+
+    <span class="text-sm font-semibold">{{ item().label }}</span>
+  </a>
+
+  <button
+    *ngIf="item().items?.length"
+    type="button"
+    class="text-ui-fg-subtle hover:text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover mt-1 flex w-full items-center gap-x-2 rounded-md py-0.5 pl-0.5 pr-2 outline-none lg:hidden"
+    [class.pl-2]="isSetting()"
+    (click)="toggleOpen()"
+  >
+    <div class="flex size-6 items-center justify-center">
+      <ng-container *ngIf="item().type === 'extension'; else normalIcon2">
+        <div class="shadow-borders-base bg-ui-bg-base flex h-5 w-5 items-center justify-center rounded-[4px]">
+          <div class="h-[15px] w-[15px] overflow-hidden rounded-sm">
+            <i [class]="item().icon"></i>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #normalIcon2>
+        <i [class]="item().icon"></i>
+      </ng-template>
+    </div>
+    <span class="text-sm font-semibold">{{ item().label }}</span>
+  </button>
+
+  <div *ngIf="item().items?.length && open()" class="lg:hidden">
+    <div class="flex flex-col gap-y-0.5 pb-2 pt-0.5">
+      <ul class="flex flex-col gap-y-0.5">
+        <li class="flex w-full items-center gap-x-1">
+          <a
+            [routerLink]="item().to"
+            class="pl-[34px] pr-2 py-1 w-full text-ui-fg-muted rounded-md hover:bg-ui-bg-subtle-hover"
+            [class.bg-ui-bg-base]="isActive(item().to)"
+          >
+            <span class="text-sm font-semibold">{{ item().label }}</span>
+          </a>
+        </li>
+
+        <li *ngFor="let sub of item().items" class="flex h-7 items-center">
+          <a
+            [routerLink]="sub.to"
+            class="pl-[34px] pr-2 py-1 w-full text-ui-fg-muted rounded-md hover:bg-ui-bg-subtle-hover"
+            [class.bg-ui-bg-base]="isActive(sub.to)"
+          >
+            <span class="text-sm font-semibold">{{ sub.label }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

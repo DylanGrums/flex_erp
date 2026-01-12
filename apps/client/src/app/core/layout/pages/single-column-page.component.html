@@ -1,0 +1,16 @@
+<div class="flex flex-col gap-y-3">
+  <ng-container *ngFor="let C of widgets.before">
+    <ng-container *ngComponentOutlet="C; inputs: widgetContext"></ng-container>
+  </ng-container>
+
+  <ng-content></ng-content>
+
+  <ng-container *ngFor="let C of widgets.after">
+    <ng-container *ngComponentOutlet="C; inputs: widgetContext"></ng-container>
+  </ng-container>
+
+  <app-metadata-section *ngIf="showMetadata && data" [data]="data"></app-metadata-section>
+  <app-json-view-section *ngIf="showJSON && data" [data]="data"></app-json-view-section>
+
+  <router-outlet *ngIf="hasOutlet"></router-outlet>
+</div>

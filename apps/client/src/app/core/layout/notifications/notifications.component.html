@@ -1,0 +1,56 @@
+<div class="relative">
+  <button
+    pButton
+    type="button"
+    class="p-button-text p-button-sm text-ui-fg-muted hover:text-ui-fg-subtle relative"
+    icon="pi pi-bell"
+    aria-label="Notifications"
+    (click)="toggle()"
+  ></button>
+
+  <span *ngIf="hasUnread()" class="absolute right-2 top-1 h-2 w-2 rounded bg-ui-bg-interactive"></span>
+</div>
+
+<p-drawer
+  [visible]="open()"
+  (visibleChange)="setOpen($event)"
+  position="right"
+  [blockScroll]="true"
+  [style]="{ width: '420px', maxWidth: 'calc(100vw - 24px)' }"
+>
+  <div class="flex items-center justify-between">
+    <div class="text-base font-semibold">Notifications</div>
+  </div>
+
+  <p-divider />
+
+  <div *ngIf="items().length === 0" class="flex h-full flex-col items-center justify-center">
+    <i class="pi pi-bell-slash text-2xl"></i>
+    <div class="mt-3 text-sm font-semibold">You're all caught up</div>
+    <div class="mt-1 max-w-[294px] text-center text-sm text-ui-fg-muted">No notifications to show.</div>
+  </div>
+
+  <div *ngIf="items().length > 0" class="-mx-4">
+    <div *ngFor="let n of items()" class="relative flex items-start gap-3 border-b px-6 py-4">
+      <div class="text-ui-fg-muted flex size-5 items-center justify-center">
+        <i class="pi pi-info-circle"></i>
+      </div>
+
+      <div class="flex w-full flex-col gap-y-2">
+        <div class="flex items-center justify-between">
+          <div class="text-sm font-semibold">{{ n.title }}</div>
+
+          <div class="flex items-center gap-2">
+            <span class="text-sm" [class.text-ui-fg-base]="isUnread(n)" [class.text-ui-fg-subtle]="!isUnread(n)">
+              {{ n.createdAt | date: 'short' }}
+            </span>
+
+            <span *ngIf="isUnread(n)" class="bg-ui-bg-interactive h-2 w-2 rounded" role="status"></span>
+          </div>
+        </div>
+
+        <div *ngIf="n.description" class="text-sm text-ui-fg-subtle whitespace-pre-line">{{ n.description }}</div>
+      </div>
+    </div>
+  </div>
+</p-drawer>
