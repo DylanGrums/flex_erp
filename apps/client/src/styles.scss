@@ -1,6 +1,10 @@
 @use "themes/tailwind";
 
 :root {
+  color-scheme: light;
+}
+
+.dark {
   color-scheme: dark;
 }
 
@@ -80,7 +84,7 @@ body {
 }
 
 .p-button.p-button-danger {
-  @apply bg-red-900/20 border border-red-900/50 text-red-500 hover:bg-red-900/30;
+  @apply bg-ui-button-danger border border-ui-border-danger text-ui-fg-on-color hover:bg-ui-button-danger-hover;
 }
 
 .p-paginator {

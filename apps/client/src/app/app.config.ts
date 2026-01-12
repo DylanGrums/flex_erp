@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom, inject } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -15,6 +15,7 @@ import { Refresh } from './core/auth/data-access/auth.actions';
 import { authInterceptor } from './core/auth/data-access/auth.interceptor';
 import { catchError, of, firstValueFrom } from 'rxjs';
 import { API_BASE_URL } from './tokens';
+import { ThemeService } from './shared/theme/theme.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -42,12 +43,20 @@ export const appConfig: ApplicationConfig = {
           )
         ),
     },
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      useFactory: () => {
+        const themeService = inject(ThemeService);
+        return () => themeService.init();
+      },
+    },
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
         preset: ZincBluePreset,
         options: {
-          darkModeSelector: '.app-dark',
+          darkModeSelector: '.dark',
           cssLayer: { name: 'primeng', order: 'theme, base, primeng' }
         }
       }

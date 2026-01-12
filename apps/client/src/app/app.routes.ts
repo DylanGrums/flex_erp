@@ -9,6 +9,11 @@ export const routes: Routes = [
     path: '', redirectTo: 'home', pathMatch: 'full'
   },
   {
+    path: 'store',
+    loadChildren: () =>
+      import('@flex-erp/store-feature').then((m) => m.storeFeatureRoutes),
+  },
+  {
     path: '', component: DefaultLayoutComponent, children: [
       {
         path: 'home', component: DashboardPageComponent,

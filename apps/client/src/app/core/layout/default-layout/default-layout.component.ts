@@ -1,7 +1,6 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  OnInit,
   inject,
 } from '@angular/core';
 import {
@@ -30,6 +29,7 @@ import {
   startWith,
 } from 'rxjs';
 import { AuthState } from '../../auth/data-access/auth.state';
+import { ThemeService } from '../../../shared/theme/theme.service';
 
 type RouteMeta = {
   title?: string;
@@ -50,8 +50,7 @@ type RouteMeta = {
   templateUrl: './default-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DefaultLayoutComponent implements OnInit {
-  public isDarkMode = false;
+export class DefaultLayoutComponent {
 
   ref!: DynamicDialogRef | null;
 
@@ -59,6 +58,9 @@ export class DefaultLayoutComponent implements OnInit {
   private readonly _store = inject(Store);
   private readonly _router = inject(Router);
   private readonly _route = inject(ActivatedRoute);
+  private readonly _themeService = inject(ThemeService);
+
+  public readonly isDarkMode = this._themeService.isDarkMode;
 
   public user$: Observable<User | null> = this._store
     .select(AuthState.user)
@@ -94,38 +96,8 @@ export class DefaultLayoutComponent implements OnInit {
     map((d) => d.subtitle ?? ''),
   );
 
-  ngOnInit(): void {
-    // Check local storage for user preference
-    const darkModePreference = localStorage.getItem('darkMode');
-    if (darkModePreference) {
-      this.isDarkMode = darkModePreference === 'true';
-      if (this.isDarkMode) {
-        document.documentElement.classList.add('app-dark');
-      } else {
-        document.documentElement.classList.remove('app-dark');
-      }
-    } else {
-      // If no preference, check system preference
-      const prefersDark =
-        window.matchMedia &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches;
-      this.isDarkMode = prefersDark;
-      if (this.isDarkMode) {
-        document.documentElement.classList.add('app-dark');
-      } else {
-        document.documentElement.classList.remove('app-dark');
-      }
-    }
-  }
-
   toggleDarkMode() {
-    const element = document.querySelector('html');
-    if (element) {
-      element.classList.toggle('app-dark');
-      this.isDarkMode = element.classList.contains('app-dark');
-      // Save preference to local storage
-      localStorage.setItem('darkMode', this.isDarkMode ? 'true' : 'false');
-    }
+    this._themeService.toggle();
   }
 
   openLoginDialog() {

@@ -1,41 +1,41 @@
-<div class="flex w-full h-screen bg-gray-50 dark:bg-zinc-950">
+<div class="flex w-full h-screen bg-ui-bg-base">
   <app-sidebar></app-sidebar>
 
   <main class="flex flex-1 flex-col min-h-0 p-6">
     <header class="flex justify-between items-center mb-6 shrink-0">
       <div>
-        <h1 class="text-2xl font-semibold text-gray-800 dark:text-zinc-100">
+        <h1 class="text-2xl font-semibold text-ui-fg-base">
           {{ pageTitle$ | async }}
 
         </h1>
-        <p class="text-gray-500 dark:text-zinc-400 text-sm mt-1">
+        <p class="text-ui-fg-subtle text-sm mt-1">
           {{ pageSubtitle$ | async }}
         </p>
       </div>
 
       <div class="flex items-center gap-2">
-        <p-inputgroup class="text-gray-800 dark:text-zinc-100 h-8">
+        <p-inputgroup class="text-ui-fg-base h-8">
           <input pInputText placeholder="Search"
-            class="!bg-white dark:!bg-zinc-900 !text-gray-800 dark:!text-zinc-100 !placeholder-gray-400 dark:!placeholder-zinc-500 !border-gray-200 dark:!border-zinc-700" />
-          <p-inputgroup-addon class="!bg-gray-100 dark:!bg-zinc-800 !border-gray-200 dark:!border-zinc-700">
+            class="!bg-ui-bg-field !text-ui-fg-base !placeholder:text-ui-fg-muted !border-ui-border-base" />
+          <p-inputgroup-addon class="!bg-ui-bg-subtle !border-ui-border-base">
             <p-button icon="pi pi-search" severity="secondary" variant="text"
-              styleClass="!text-gray-700 dark:!text-zinc-200 hover:!bg-gray-200 dark:hover:!bg-zinc-700" />
+              styleClass="!text-ui-fg-base hover:!bg-ui-bg-subtle" />
           </p-inputgroup-addon>
         </p-inputgroup>
 
         <button pButton type="button"
-          class="p-button-text relative !text-gray-700 dark:!text-zinc-200 hover:!bg-gray-100 dark:hover:!bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          class="p-button-text relative !text-ui-fg-base hover:!bg-ui-bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           aria-label="Notifications" icon="pi pi-bell">
-          <span class="p-badge absolute -top-1 -right-1 bg-transparent !text-gray-700 dark:!text-zinc-200">3</span>
+          <span class="p-badge absolute -top-1 -right-1 bg-transparent !text-ui-fg-base">3</span>
         </button>
 
-        @if (isDarkMode) {
-        <i class="pi pi-sun cursor-pointer p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-700 dark:text-zinc-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        @if (isDarkMode()) {
+        <i class="pi pi-sun cursor-pointer p-3 rounded-xl hover:bg-ui-bg-subtle text-ui-fg-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           tabindex="0" role="button" (click)="toggleDarkMode()"
           (keyup)="($event.key === 'Enter' || $event.key === ' ') && toggleDarkMode()"
           aria-label="Toggle dark mode"></i>
         } @else {
-        <i class="pi pi-moon cursor-pointer p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-700 dark:text-zinc-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        <i class="pi pi-moon cursor-pointer p-3 rounded-xl hover:bg-ui-bg-subtle text-ui-fg-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           tabindex="0" role="button" (click)="toggleDarkMode()"
           (keyup)="($event.key === 'Enter' || $event.key === ' ') && toggleDarkMode()"
           aria-label="Toggle dark mode"></i>

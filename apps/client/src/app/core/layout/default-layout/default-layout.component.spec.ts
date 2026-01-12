@@ -4,6 +4,7 @@ import { Subject, firstValueFrom, of } from 'rxjs';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Store } from '@ngxs/store';
 import { DefaultLayoutComponent } from './default-layout.component';
+import { ThemeService } from '../../../shared/theme/theme.service';
 
 describe('DefaultLayoutComponent', () => {
   let component: DefaultLayoutComponent;
@@ -12,6 +13,7 @@ describe('DefaultLayoutComponent', () => {
   let dialogService: { open: jest.Mock };
   let childRoute: any;
   let logSpy: jest.SpyInstance;
+  let themeService: ThemeService;
 
   beforeEach(
     waitForAsync(() => {
@@ -51,6 +53,7 @@ describe('DefaultLayoutComponent', () => {
         ],
       }).compileComponents();
 
+      themeService = TestBed.inject(ThemeService);
       const fixture = TestBed.createComponent(DefaultLayoutComponent);
       component = fixture.componentInstance;
     }),
@@ -58,7 +61,7 @@ describe('DefaultLayoutComponent', () => {
 
   beforeEach(() => {
     localStorage.clear();
-    document.documentElement.classList.remove('app-dark');
+    document.documentElement.classList.remove('dark');
     const route = TestBed.inject(ActivatedRoute) as any;
     route.firstChild = childRoute;
     route.snapshot.data = {};
@@ -70,25 +73,27 @@ describe('DefaultLayoutComponent', () => {
   });
 
   it('initializes dark mode from localStorage preference', () => {
-    localStorage.setItem('darkMode', 'true');
+    localStorage.setItem('theme', 'dark');
+    themeService.init();
     const fixture = TestBed.createComponent(DefaultLayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    expect(component.isDarkMode).toBe(true);
-    expect(document.documentElement.classList.contains('app-dark')).toBe(true);
+    expect(component.isDarkMode()).toBe(true);
+    expect(document.documentElement.classList.contains('dark')).toBe(true);
   });
 
   it('removes dark mode when stored preference is false', () => {
-    document.documentElement.classList.add('app-dark');
-    localStorage.setItem('darkMode', 'false');
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('theme', 'light');
+    themeService.init();
 
     const fixture = TestBed.createComponent(DefaultLayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    expect(component.isDarkMode).toBe(false);
-    expect(document.documentElement.classList.contains('app-dark')).toBe(false);
+    expect(component.isDarkMode()).toBe(false);
+    expect(document.documentElement.classList.contains('dark')).toBe(false);
   });
 
   it('falls back to matchMedia when no preference and toggles mode', () => {
@@ -103,14 +108,15 @@ describe('DefaultLayoutComponent', () => {
       media: '',
     });
 
+    themeService.init();
     const fixture = TestBed.createComponent(DefaultLayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.isDarkMode).toBe(true);
+    expect(component.isDarkMode()).toBe(true);
 
     component.toggleDarkMode();
-    expect(component.isDarkMode).toBe(false);
-    expect(localStorage.getItem('darkMode')).toBe('false');
+    expect(component.isDarkMode()).toBe(false);
+    expect(localStorage.getItem('theme')).toBe('light');
   });
 
   it('handles light system preference when none stored', () => {
@@ -125,12 +131,13 @@ describe('DefaultLayoutComponent', () => {
       media: '',
     });
 
+    themeService.init();
     const fixture = TestBed.createComponent(DefaultLayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    expect(component.isDarkMode).toBe(false);
-    expect(document.documentElement.classList.contains('app-dark')).toBe(false);
+    expect(component.isDarkMode()).toBe(false);
+    expect(document.documentElement.classList.contains('dark')).toBe(false);
   });
 
   it('exposes page metadata from deepest activated route', async () => {
@@ -218,35 +225,23 @@ describe('DefaultLayoutComponent', () => {
     }, 0);
   });
 
-  it('ignores toggle when html element is missing', () => {
-    const originalQuerySelector = document.querySelector.bind(document);
-    const querySpy = jest
-      .spyOn(document, 'querySelector')
-      .mockImplementation((selector: string) => {
-        if (selector === 'html') {
-          return null as any;
-        }
-        return originalQuerySelector(selector);
-      });
+  it('migrates legacy darkMode preference', () => {
+    localStorage.setItem('darkMode', 'true');
+    themeService.init();
 
-    const fixture = TestBed.createComponent(DefaultLayoutComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    component.toggleDarkMode();
-    expect(component.isDarkMode).toBe(false);
-
-    querySpy.mockRestore();
+    expect(localStorage.getItem('theme')).toBe('dark');
+    expect(localStorage.getItem('darkMode')).toBeNull();
+    expect(document.documentElement.classList.contains('dark')).toBe(true);
   });
 
   it('stores dark mode preference when toggled on', () => {
-    document.documentElement.classList.remove('app-dark');
+    document.documentElement.classList.remove('dark');
+    themeService.init();
     const fixture = TestBed.createComponent(DefaultLayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    component.isDarkMode = false;
     component.toggleDarkMode();
-    expect(localStorage.getItem('darkMode')).toBe('true');
+    expect(localStorage.getItem('theme')).toBe('dark');
   });
 });

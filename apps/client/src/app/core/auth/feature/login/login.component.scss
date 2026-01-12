@@ -3,15 +3,13 @@
 }
 
 .login-shell {
-  background: radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.12), transparent 28%),
-    radial-gradient(circle at 80% 0%, rgba(99, 102, 241, 0.1), transparent 25%),
-    #0b1021;
+  background: var(--bg-base);
 }
 
 .login-card {
-  background: #0f172a;
-  border: 1px solid rgba(56, 189, 248, 0.22);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  background: var(--bg-component);
+  border: 1px solid var(--border-base);
+  box-shadow: var(--elevation-modal);
   border-radius: 18px;
 }
 

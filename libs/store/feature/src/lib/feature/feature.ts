@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'lib-feature',
+  selector: 'fe-store-feature',
   imports: [],
   templateUrl: './feature.html',
   styleUrl: './feature.css',
