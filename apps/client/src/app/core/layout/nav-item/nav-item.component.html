@@ -101,10 +101,10 @@
 
       <div rdxCollapsibleContent>
         <div *rdxCollapsibleContentPresence>
-          <div class="flex flex-col pb-1 pt-2">
-            <div class="flex flex-col">
+          <div class="flex flex-col pt-1">
+            <div class="flex flex-col gap-1">
               <!-- parent entry inside collapsible -->
-              <div class="flex w-full items-center gap-x-1 lg:hidden">
+              <div class="flex w-full items-center gap-2 lg:hidden">
                 @if (hasTooltipFor(item().to)) {
                   <ng-container rdxTooltipRoot [openDelay]="openDelay()">
                     <div
@@ -131,7 +131,7 @@
                           class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
                         >
                           <span>{{ sc.label }}</span>
-                          <div class="flex items-center gap-x-1">
+                          <div class="flex items-center gap-1">
                             @for (key of (sc.keys.Mac ?? []); track key; let i = $index) {
                               <div class="flex items-center gap-x-1">
                                 <kbd

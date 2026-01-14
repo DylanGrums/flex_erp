@@ -20,6 +20,7 @@ import {
   RdxDropdownMenuContentDirective,
   RdxDropdownMenuItemDirective,
 } from '@radix-ng/primitives/dropdown-menu';
+import { NAV_MANIFESTS } from '@flex-erp/shared/nav';
 
 
 @Component({
@@ -51,46 +52,12 @@ export class MainSidebarComponent {
   readonly search = inject(SearchService);
   readonly shortcuts = inject(ShortcutsService);
 
-  readonly coreRoutes = computed<NavItem[]>(() => [
-    { icon: 'pi pi-shopping-cart', label: 'Orders', to: '/orders', type: 'core' },
+  private readonly manifests = inject(NAV_MANIFESTS, { optional: true }) ?? [];
 
-    {
-      icon: 'pi pi-tags',
-      label: 'Products',
-      to: '/products',
-      items: [
-        { label: 'Collections', to: '/collections' },
-        { label: 'Categories', to: '/categories' },
-      ],
-      type: 'core',
-    },
-
-    {
-      icon: 'pi pi-building',
-      label: 'Inventory',
-      to: '/inventory',
-      items: [{ label: 'Reservations', to: '/reservations' }],
-      type: 'core',
-    },
-
-    {
-      icon: 'pi pi-users',
-      label: 'Customers',
-      to: '/customers',
-      items: [{ label: 'Customer Groups', to: '/customer-groups' }],
-      type: 'core',
-    },
-
-    {
-      icon: 'pi pi-percentage',
-      label: 'Promotions',
-      to: '/promotions',
-      items: [{ label: 'Campaigns', to: '/campaigns' }],
-      type: 'core',
-    },
-
-    { icon: 'pi pi-dollar', label: 'Price Lists', to: '/price-lists', type: 'core' },
-  ]);
+  readonly coreRoutes = computed<NavItem[]>(() => {
+    const sorted = [...this.manifests].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    return sorted.flatMap((m) => m.items as NavItem[]);
+  });
 
 
   toggleSearch(): void {
