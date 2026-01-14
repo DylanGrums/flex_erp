@@ -10,7 +10,7 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'orders' },
       {
         path: '',
-        loadChildren: () => import('@flex-erp/store-feature').then((m) => m.storeFeatureRoutes),
+        loadChildren: () => import('@flex-erp/store/feature').then((m) => m.storeFeatureRoutes),
       },
     ],
   },

@@ -16,7 +16,7 @@ import { authInterceptor } from './core/auth/data-access/auth.interceptor';
 import { catchError, of, firstValueFrom } from 'rxjs';
 import { API_BASE_URL } from './tokens';
 import { ThemeService } from './shared/theme/theme.service';
-import { STORE_NAV } from '@flex-erp/store-manifest';
+import { STORE_NAV } from '@flex-erp/store/manifest';
 import { provideNavManifest } from '@flex-erp/shared/nav';
 
 export const appConfig: ApplicationConfig = {

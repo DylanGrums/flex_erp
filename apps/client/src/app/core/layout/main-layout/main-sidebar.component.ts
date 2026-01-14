@@ -13,7 +13,7 @@ import { ShortcutsService } from '../nav-item/shortcuts.service';
 import { SearchService } from './search.service';
 import { NavItem } from './nav.models';
 
-import { FlexDividerComponent } from '@flex-erp/shared-ui';
+import { FlexDividerComponent } from '@flex-erp/shared/ui';
 
 import {
   RdxDropdownMenuTriggerDirective,

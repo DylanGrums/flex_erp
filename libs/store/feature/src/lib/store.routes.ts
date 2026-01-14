@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { applyRouteMeta } from '@flex-erp/shared/nav';
-import { STORE_NAV } from '@flex-erp/store-manifest';
+import { STORE_NAV } from '@flex-erp/store/manifest';
 
 import { StoreOrdersPageComponent } from './pages/orders/orders.page';
 import { StoreProductsPageComponent } from './pages/products/products.page';
