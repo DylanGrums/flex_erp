@@ -1,4 +1,27 @@
-@use "themes/tailwind";
+@use 'themes/tailwind';
+
+@import 'primeicons/primeicons.css';
+
+/* ---- RESET SYSTEM COLORS ---- */
+
+body {
+  background-color: var(--bg-base);
+  color: var(--fg-base);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+}
+
+button,
+input,
+textarea,
+select {
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  background: none;
+}
 
 :root {
   color-scheme: light;
@@ -8,9 +31,28 @@
   color-scheme: dark;
 }
 
-body {
-  @apply bg-ui-bg-base text-ui-fg-base antialiased;
-  font-family: 'Inter', sans-serif;
+@font-face {
+  font-family: 'Inter';
+  font-weight: 400;
+  src: url('./assets/fonts/Inter-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-weight: 500;
+  src: url('./assets/fonts/Inter-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto Mono';
+  font-weight: 400;
+  src: url('./assets/fonts/RobotoMono-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto Mono';
+  font-weight: 500;
+  src: url('./assets/fonts/RobotoMono-Medium.ttf') format('truetype');
 }
 
 /* PrimeNG Overrides for Medusa Look */
@@ -23,79 +65,11 @@ body {
   @apply bg-ui-bg-base border border-ui-border-base rounded-lg shadow-sm;
 }
 
-/* Table overrides */
-.p-datatable-table {
-  @apply bg-transparent;
+.p-button-text,
+.p-button.p-button-text {
+  @apply text-ui-fg-muted bg-ui-button-transparent hover:bg-ui-button-transparent-hover border-ui-border-transparent;
 }
 
-.p-datatable-thead > tr > th {
-  @apply bg-ui-bg-subtle text-ui-fg-subtle text-xs font-medium border-b border-ui-border-base py-2 px-4 text-left uppercase tracking-wider;
-}
-
-.p-datatable-tbody > tr {
-  @apply bg-transparent border-b border-ui-border-base transition-colors hover:bg-ui-bg-subtle/50;
-}
-
-.p-datatable-tbody > tr > td {
-  @apply py-2.5 px-4 text-sm text-ui-fg-base;
-}
-
-/* Input overrides */
-.p-inputtext {
-  @apply bg-ui-bg-field border-ui-border-base text-ui-fg-base shadow-sm transition-colors rounded-md;
-}
-
-.p-inputtext:enabled:focus {
-  @apply border-ui-border-strong ring-1 ring-ui-border-strong ring-offset-0;
-}
-
-.p-inputtext:enabled:hover {
-  @apply border-ui-border-strong;
-}
-
-/* Dialog overrides */
 .p-dialog {
-  @apply bg-ui-bg-base border border-ui-border-base shadow-xl rounded-lg overflow-hidden;
-}
-
-.p-dialog-header {
-  @apply bg-ui-bg-base border-b border-ui-border-base py-3 px-4 flex items-center justify-between;
-}
-
-.p-dialog-title {
-  @apply font-semibold text-base text-ui-fg-base;
-}
-
-.p-dialog-content {
-  @apply bg-ui-bg-base p-4 text-ui-fg-subtle;
-}
-
-.p-dialog-footer {
-  @apply bg-ui-bg-base border-t border-ui-border-base p-3 flex justify-end gap-2;
-}
-
-/* Button overrides */
-.p-button {
-  @apply rounded-md text-sm font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-offset-ui-bg-base focus:ring-ui-border-strong;
-}
-
-.p-button.p-button-secondary {
-  @apply bg-transparent border border-ui-border-base text-ui-fg-base hover:bg-ui-bg-subtle;
-}
-
-.p-button.p-button-danger {
-  @apply bg-ui-button-danger border border-ui-border-danger text-ui-fg-on-color hover:bg-ui-button-danger-hover;
-}
-
-.p-paginator {
-  @apply bg-transparent border-t border-ui-border-base py-2;
-}
-.p-paginator-current {
-  @apply text-ui-fg-subtle text-xs;
-}
-.p-paginator .p-paginator-pages .p-paginator-page {
-  @apply text-ui-fg-subtle hover:bg-ui-bg-subtle rounded-md min-w-[2rem] h-[2rem];
-}
-.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
-  @apply bg-ui-bg-subtle text-ui-fg-base;
+  max-height: 100%;
 }

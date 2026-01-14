@@ -1,88 +1,161 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input, computed, effect, inject, signal } from '@angular/core';
-import { NavigationEnd, Router, RouterModule } from '@angular/router';
-import { filter } from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  computed,
+  effect,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs/operators';
 
-import { TooltipModule } from 'primeng/tooltip';
+import { RdxCollapsibleModule } from '@radix-ng/primitives/collapsible';
+import { RdxTooltipModule } from '@radix-ng/primitives/tooltip';
 
-import { NavItem } from '../main-layout/nav.models';
-import { ShortcutsService } from './shortcuts.service';
+export type ItemType = 'core' | 'extension' | 'setting';
+
+export type NestedItem = {
+  label: string;
+  to: string;
+  translationNs?: string;
+};
+
+export type NavItem = {
+  icon?: string;
+  label: string;
+  to: string;
+  items?: NestedItem[];
+  type?: ItemType;
+  from?: string;
+  nested?: string;
+  translationNs?: string;
+};
+
+export type GlobalShortcut = {
+  to: string;
+  label: string;
+  keys: { Mac?: string[] };
+};
+
+const BASE_NAV_LINK_CLASSES =
+  'text-ui-fg-subtle transition-fg hover:bg-ui-bg-subtle-hover flex items-center gap-x-2 rounded-md py-0.5 pl-0.5 pr-2 outline-none focus-visible:shadow-borders-focus [&>svg]:text-ui-fg-subtle [&>i]:text-ui-fg-subtle';
+const ACTIVE_NAV_LINK_CLASSES =
+  'bg-ui-bg-base shadow-elevation-card-rest text-ui-fg-base hover:bg-ui-bg-base';
+const NESTED_NAV_LINK_CLASSES = 'pl-[34px] pr-2 py-1 w-full text-ui-fg-muted';
+const SETTING_NAV_LINK_CLASSES = 'pl-2 py-1';
 
 @Component({
   selector: 'app-nav-item',
   standalone: true,
-  imports: [CommonModule, RouterModule, TooltipModule],
+  imports: [RouterLink, RdxCollapsibleModule, RdxTooltipModule],
   templateUrl: './nav-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavItemComponent {
   private readonly router = inject(Router);
-  private readonly shortcuts = inject(ShortcutsService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  // ✅ use input() signal so it's always safe + reactive
   readonly item = input.required<NavItem>();
+  readonly shortcuts = input<GlobalShortcut[]>([]);
+  readonly thenLabel = input<string>('then');
+  readonly openDelay = input<number>(1500);
 
+  private readonly pathname = signal(this.router.url);
   readonly open = signal(false);
-  readonly pathname = signal<string>('/');
 
-  readonly isSetting = computed(() => (this.item().type ?? 'core') === 'setting');
+  readonly type = computed<ItemType>(() => this.item().type ?? 'core');
+  readonly isSetting = computed(() => this.type() === 'setting');
 
-  readonly tooltipHtml = computed(() => {
-    const s = this.shortcuts.find(this.item().to);
-    if (!s?.keys?.Mac?.length) return null;
+  readonly resolvedItems = computed(() => {
+    const it = this.item();
+    const parentTo = this.normalizePath(it.to);
 
-    const keys = s.keys.Mac
-      .map((k) => `<span class="px-1 py-0.5 rounded border text-xs">${k}</span>`)
-      .join(' ');
-
-    return `
-      <div class="flex items-center justify-between gap-x-2 whitespace-nowrap">
-        <span>${escapeHtml(s.label)}</span>
-        <div class="flex items-center gap-x-1">${keys}</div>
-      </div>
-    `.trim();
+    const items = it.items ?? [];
+    return items.map((sub) => ({
+      ...sub,
+      to: this.resolveChildTo(parentTo, sub.to),
+    }));
   });
 
   constructor() {
-    this.pathname.set(this.router.url);
+    this.router.events
+      .pipe(
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => this.pathname.set(this.router.url));
 
-    this.router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe(() => {
-      this.pathname.set(this.router.url);
-    });
-
-    // ✅ recompute open whenever route OR input changes
     effect(() => {
-      const _ = this.pathname(); // track
-      const __ = this.item(); // track
-      this.open.set(this.getIsOpen());
+      const it = this.item();
+      const parentTo = this.normalizePath(it.to);
+      const childTos = this.resolvedItems().map((x) => x.to);
+      this.open.set(this.getIsOpen(parentTo, childTos, this.pathname()));
     });
   }
 
-  toggleOpen(): void {
-    this.open.update((v) => !v);
+  shortcutFor(to: string) {
+    const key = this.normalizePath(to);
+    return this.shortcuts().find((s) => this.normalizePath(s.to) === key) ?? null;
   }
 
-  private getIsOpen(): boolean {
-    const item = this.item();
-    const to = item?.to ?? '';
-    const items = item?.items ?? [];
-    const p = this.pathname();
-
-    return [to, ...items.map((i) => i.to)].filter(Boolean).some((x) => p.startsWith(x));
+  hasTooltipFor(to: string) {
+    return !!this.shortcutFor(to);
   }
 
-  isActive(path: string): boolean {
-    const type = this.item().type ?? 'core';
-    if (type === 'core' || type === 'setting') return this.pathname().startsWith(path);
-    return this.pathname() === path;
+  isActive(to: string) {
+    const normalizedTo = this.normalizePath(to);
+    const path = this.normalizePath(this.pathname());
+    return path.startsWith(normalizedTo);
   }
-}
 
-function escapeHtml(s: string): string {
-  return s
-    .replace('&', '&amp;')
-    .replace('<', '&lt;')
-    .replace('>', '&gt;')
-    .replace('"', '&quot;')
-    .replace("'", '&#039;');
+  navLinkClassNames(opts: {
+    to: string;
+    isActive: boolean;
+    isNested?: boolean;
+    isSetting?: boolean;
+  }) {
+    return this.clx(BASE_NAV_LINK_CLASSES, {
+      [NESTED_NAV_LINK_CLASSES]: !!opts.isNested,
+      [ACTIVE_NAV_LINK_CLASSES]: !!opts.isActive,
+      [SETTING_NAV_LINK_CLASSES]: !!opts.isSetting,
+    });
+  }
+
+  parentLinkExtraClasses() {
+    return (this.item().items?.length ?? 0) > 0 ? 'max-lg:hidden' : '';
+  }
+
+  isExtension() {
+    return this.type() === 'extension';
+  }
+
+  private normalizePath(p: string) {
+    if (!p) return '/';
+    return p.startsWith('/') ? p : `/${p}`;
+  }
+
+  private resolveChildTo(parentTo: string, childTo: string) {
+    if (childTo.startsWith('/')) return this.normalizePath(childTo);
+
+    const cleanParent = parentTo.endsWith('/') ? parentTo.slice(0, -1) : parentTo;
+    const cleanChild = childTo.startsWith('/') ? childTo.slice(1) : childTo;
+
+    return this.normalizePath(`${cleanParent}/${cleanChild}`);
+  }
+
+  private getIsOpen(parentTo: string, childTos: string[], pathname: string) {
+    const path = this.normalizePath(pathname);
+    return [parentTo, ...childTos].some((p) => path.startsWith(this.normalizePath(p)));
+  }
+
+  clx(base: string, cond: Record<string, boolean>) {
+    const extra = Object.entries(cond)
+      .filter(([, v]) => v)
+      .map(([k]) => k)
+      .join(' ');
+    return extra ? `${base} ${extra}` : base;
+  }
 }

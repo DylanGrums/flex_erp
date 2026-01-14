@@ -1,78 +1,249 @@
-<div class="px-3">
-  <a
-    [routerLink]="item().to"
-    class="text-ui-fg-subtle transition-fg hover:bg-ui-bg-subtle-hover flex items-center gap-x-2 rounded-md py-0.5 pl-0.5 pr-2 outline-none focus-visible:shadow-borders-focus"
-    [class.bg-ui-bg-base]="isActive(item().to)"
-    [class.shadow-elevation-card-rest]="isActive(item().to)"
-    [class.text-ui-fg-base]="isActive(item().to)"
-    [class.hover\:bg-ui-bg-base]="isActive(item().to)"
-    [class.pl-2]="isSetting()"
-    [pTooltip]="tooltipHtml() || ''"
-    [escape]="false"
-    tooltipPosition="right"
-    [tooltipDisabled]="!tooltipHtml()"
-  >
-    <div *ngIf="!isSetting()" class="flex size-6 items-center justify-center">
-      <ng-container *ngIf="item().type === 'extension'; else normalIcon">
-        <div class="shadow-borders-base bg-ui-bg-base flex h-5 w-5 items-center justify-center rounded-[4px]">
-          <div class="h-[15px] w-[15px] overflow-hidden rounded-sm">
-            <i [class]="item().icon"></i>
+<div class="px-3 cursor-pointer">
+  <!-- PARENT (desktop link; hidden on mobile if has subitems) -->
+  @if (hasTooltipFor(item().to)) {
+    <ng-container rdxTooltipRoot [openDelay]="openDelay()">
+      <div
+        rdxTooltipTrigger
+        [routerLink]="item().to"
+        [state]="item().from ? { from: item().from } : undefined"
+        [class]="
+          navLinkClassNames({
+            to: item().to,
+            isActive: isActive(item().to),
+            isSetting: isSetting()
+          }) +
+          ' ' +
+          parentLinkExtraClasses()
+        "
+      >
+        @if (!isSetting()) {
+          <div class="flex size-6 items-center justify-center">
+            <i class="text-base leading-none" [class]="item().icon"></i>
+          </div>
+        }
+        <span class="font-medium font-sans txt-compact-small">{{
+          item().label
+        }}</span>
+      </div>
+
+      <ng-template rdxTooltipContent>
+        @if (shortcutFor(item().to); as sc) {
+          <div
+            rdxTooltipContentAttributes
+            class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
+          >
+            <span>{{ sc.label }}</span>
+
+            <div class="flex items-center gap-x-1">
+              @for (key of (sc.keys.Mac ?? []); track key; let i = $index) {
+                <div class="flex items-center gap-x-1">
+                  <kbd
+                    class="bg-ui-bg-field-component rounded px-1.5 py-0.5 text-[11px] font-medium leading-none"
+                  >
+                    {{ key }}
+                  </kbd>
+
+                  @if (i < (sc.keys.Mac?.length ?? 0) - 1) {
+                    <span class="text-ui-fg-muted txt-compact-xsmall">
+                      {{ thenLabel() }}
+                    </span>
+                  }
+                </div>
+              }
+            </div>
+
+            <div rdxTooltipArrow></div>
+          </div>
+        }
+      </ng-template>
+    </ng-container>
+  } @else {
+    <div
+      [routerLink]="item().to"
+      [state]="item().from ? { from: item().from } : undefined"
+      [class]="
+        navLinkClassNames({
+          to: item().to,
+          isActive: isActive(item().to),
+          isSetting: isSetting()
+        }) +
+        ' ' +
+        parentLinkExtraClasses()
+      "
+    >
+      @if (!isSetting()) {
+        <div class="flex size-6 items-center justify-center">
+          <i class="text-base leading-none" [class]="item().icon"></i>
+        </div>
+      }
+      <span class="font-medium font-sans txt-compact-small">{{ item().label }}</span>
+    </div>
+  }
+
+  <!-- MOBILE: collapsible (shows parent + sub items) -->
+  @if (resolvedItems().length > 0) {
+    <div rdxCollapsibleRoot [open]="open()" (openChange)="open.set($event)">
+      <button
+        rdxCollapsibleTrigger
+        type="button"
+        [class]="
+          clx(
+            'text-ui-fg-subtle hover:text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover flex w-full items-center gap-x-2 rounded-md py-0.5 pl-0.5 pr-2 outline-none lg:hidden',
+            { 'pl-2': isSetting() }
+          )
+        "
+      >
+        <div class="flex size-6 items-center justify-center">
+          <i class="text-base leading-none" [class]="item().icon"></i>
+        </div>
+        <span class="font-medium font-sans txt-compact-small">{{ item().label }}</span>
+      </button>
+
+      <div rdxCollapsibleContent>
+        <div *rdxCollapsibleContentPresence>
+          <div class="flex flex-col pb-1 pt-2">
+            <div class="flex flex-col">
+              <!-- parent entry inside collapsible -->
+              <div class="flex w-full items-center gap-x-1 lg:hidden">
+                @if (hasTooltipFor(item().to)) {
+                  <ng-container rdxTooltipRoot [openDelay]="openDelay()">
+                    <div
+                      rdxTooltipTrigger
+                      [routerLink]="item().to"
+                      [class]="
+                        navLinkClassNames({
+                          to: item().to,
+                          isActive: isActive(item().to),
+                          isSetting: isSetting(),
+                          isNested: true
+                        })
+                      "
+                    >
+                      <span class="font-medium font-sans txt-compact-small">{{
+                        item().label
+                      }}</span>
+                    </div>
+
+                    <ng-template rdxTooltipContent>
+                      @if (shortcutFor(item().to); as sc) {
+                        <div
+                          rdxTooltipContentAttributes
+                          class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
+                        >
+                          <span>{{ sc.label }}</span>
+                          <div class="flex items-center gap-x-1">
+                            @for (key of (sc.keys.Mac ?? []); track key; let i = $index) {
+                              <div class="flex items-center gap-x-1">
+                                <kbd
+                                  class="bg-ui-bg-field-component rounded px-1.5 py-0.5 text-[11px] font-medium leading-none"
+                                >
+                                  {{ key }}
+                                </kbd>
+                                @if (i < (sc.keys.Mac?.length ?? 0) - 1) {
+                                  <span class="text-ui-fg-muted txt-compact-xsmall">{{
+                                    thenLabel()
+                                  }}</span>
+                                }
+                              </div>
+                            }
+                          </div>
+                          <div rdxTooltipArrow></div>
+                        </div>
+                      }
+                    </ng-template>
+                  </ng-container>
+                } @else {
+                  <div
+                    [routerLink]="item().to"
+                    [class]="
+                      navLinkClassNames({
+                        to: item().to,
+                        isActive: isActive(item().to),
+                        isSetting: isSetting(),
+                        isNested: true
+                      })
+                    "
+                  >
+                    <span class="font-medium font-sans txt-compact-small">{{
+                      item().label
+                    }}</span>
+                  </div>
+                }
+              </div>
+
+              <!-- sub links -->
+              @for (sub of resolvedItems(); track sub.to) {
+                <div class="flex items-center">
+                  @if (hasTooltipFor(sub.to)) {
+                    <ng-container rdxTooltipRoot [openDelay]="openDelay()">
+                      <div
+                        rdxTooltipTrigger
+                        [routerLink]="sub.to"
+                        [class]="
+                          navLinkClassNames({
+                            to: sub.to,
+                            isActive: isActive(sub.to),
+                            isSetting: isSetting(),
+                            isNested: true
+                          })
+                        "
+                      >
+                        <span class="font-medium font-sans txt-compact-small">{{
+                          sub.label
+                        }}</span>
+                      </div>
+
+                      <ng-template rdxTooltipContent>
+                        @if (shortcutFor(sub.to); as sc) {
+                          <div
+                            rdxTooltipContentAttributes
+                            class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
+                          >
+                            <span>{{ sc.label }}</span>
+                            <div class="flex items-center gap-x-1">
+                              @for (key of (sc.keys.Mac ?? []); track key; let i = $index) {
+                                <div class="flex items-center gap-x-1">
+                                  <kbd
+                                    class="bg-ui-bg-field-component rounded px-1.5 py-0.5 text-[11px] font-medium leading-none"
+                                  >
+                                    {{ key }}
+                                  </kbd>
+                                  @if (i < (sc.keys.Mac?.length ?? 0) - 1) {
+                                    <span class="text-ui-fg-muted txt-compact-xsmall">{{
+                                      thenLabel()
+                                    }}</span>
+                                  }
+                                </div>
+                              }
+                            </div>
+                            <div rdxTooltipArrow></div>
+                          </div>
+                        }
+                      </ng-template>
+                    </ng-container>
+                  } @else {
+                    <div
+                      [routerLink]="sub.to"
+                      [class]="
+                        navLinkClassNames({
+                          to: sub.to,
+                          isActive: isActive(sub.to),
+                          isSetting: isSetting(),
+                          isNested: true
+                        })
+                      "
+                    >
+                      <span class="font-medium font-sans txt-compact-small">{{
+                        sub.label
+                      }}</span>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
           </div>
         </div>
-      </ng-container>
-      <ng-template #normalIcon>
-        <i [class]="item().icon"></i>
-      </ng-template>
+      </div>
     </div>
-
-    <span class="text-sm font-semibold">{{ item().label }}</span>
-  </a>
-
-  <button
-    *ngIf="item().items?.length"
-    type="button"
-    class="text-ui-fg-subtle hover:text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover mt-1 flex w-full items-center gap-x-2 rounded-md py-0.5 pl-0.5 pr-2 outline-none lg:hidden"
-    [class.pl-2]="isSetting()"
-    (click)="toggleOpen()"
-  >
-    <div class="flex size-6 items-center justify-center">
-      <ng-container *ngIf="item().type === 'extension'; else normalIcon2">
-        <div class="shadow-borders-base bg-ui-bg-base flex h-5 w-5 items-center justify-center rounded-[4px]">
-          <div class="h-[15px] w-[15px] overflow-hidden rounded-sm">
-            <i [class]="item().icon"></i>
-          </div>
-        </div>
-      </ng-container>
-      <ng-template #normalIcon2>
-        <i [class]="item().icon"></i>
-      </ng-template>
-    </div>
-    <span class="text-sm font-semibold">{{ item().label }}</span>
-  </button>
-
-  <div *ngIf="item().items?.length && open()" class="lg:hidden">
-    <div class="flex flex-col gap-y-0.5 pb-2 pt-0.5">
-      <ul class="flex flex-col gap-y-0.5">
-        <li class="flex w-full items-center gap-x-1">
-          <a
-            [routerLink]="item().to"
-            class="pl-[34px] pr-2 py-1 w-full text-ui-fg-muted rounded-md hover:bg-ui-bg-subtle-hover"
-            [class.bg-ui-bg-base]="isActive(item().to)"
-          >
-            <span class="text-sm font-semibold">{{ item().label }}</span>
-          </a>
-        </li>
-
-        <li *ngFor="let sub of item().items" class="flex h-7 items-center">
-          <a
-            [routerLink]="sub.to"
-            class="pl-[34px] pr-2 py-1 w-full text-ui-fg-muted rounded-md hover:bg-ui-bg-subtle-hover"
-            [class.bg-ui-bg-base]="isActive(sub.to)"
-          >
-            <span class="text-sm font-semibold">{{ sub.label }}</span>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
+  }
 </div>

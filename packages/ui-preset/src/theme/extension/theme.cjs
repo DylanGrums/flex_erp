@@ -230,6 +230,9 @@ const theme = {
             },
             "top": {
               "DEFAULT": "var(--contrast-border-top)"
+            },
+            "transparent": {
+              "DEFAULT": "var(--contrast-border-transparent)"
             }
           }
         },

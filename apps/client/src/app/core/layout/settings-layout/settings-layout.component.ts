@@ -10,7 +10,9 @@ import { SettingsSidebarComponent } from './settings-sidebar.component';
   imports: [CommonModule, ShellComponent, SettingsSidebarComponent],
   template: `
     <app-shell>
-      <app-settings-sidebar sidebar />
+      <ng-template #sidebar>
+        <app-settings-sidebar />
+      </ng-template>
     </app-shell>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

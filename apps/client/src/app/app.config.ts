@@ -4,7 +4,7 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
-import ZincBluePreset from '../themes/zinc-blue.preset';
+import { FlexPreset } from '../themes/flex.preset';
 import { NgxsModule, Store } from '@ngxs/store';
 import { AuthState } from './core/auth/data-access/auth.state';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -54,10 +54,13 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: ZincBluePreset,
+        preset: FlexPreset,
         options: {
           darkModeSelector: '.dark',
-          cssLayer: { name: 'primeng', order: 'theme, base, primeng' }
+          cssLayer: {
+            name: 'primeng',
+            order: 'app-styles, primeng'
+          }
         }
       }
     }),

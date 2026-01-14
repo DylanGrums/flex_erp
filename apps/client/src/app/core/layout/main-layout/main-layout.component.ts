@@ -10,7 +10,9 @@ import { MainSidebarComponent } from './main-sidebar.component';
   imports: [CommonModule, ShellComponent, MainSidebarComponent],
   template: `
     <app-shell>
-        <app-main-sidebar sidebar></app-main-sidebar>
+      <ng-template #sidebar>
+        <app-main-sidebar></app-main-sidebar>
+      </ng-template>
     </app-shell>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

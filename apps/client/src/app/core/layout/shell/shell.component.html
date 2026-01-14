@@ -1,11 +1,13 @@
 <!-- NavigationBar loading progress (fixed top) -->
 <div class="fixed inset-x-0 top-0 z-50 h-1">
   @if (loading()) {
-    <p-progressBar mode="indeterminate" [style]="{ height: '4px' }" />
+  <p-progressBar mode="indeterminate" [style]="{ height: '4px' }" />
   }
 </div>
 
-<div class="relative flex h-screen flex-col items-start overflow-hidden lg:flex-row">
+<div
+  class="relative flex h-screen flex-col items-start overflow-hidden lg:flex-row bg-ui-bg-subtle"
+>
   <div>
     <p-dialog
       [visible]="sidebar.mobileOpen()"
@@ -15,9 +17,8 @@
       [draggable]="false"
       [resizable]="false"
       [closable]="false"
-      [style]="{ width: '304px', maxWidth: '304px' }"
+      [style]="{ width: '304px', maxWidth: '304px', height: '100vh' }"
       [contentStyle]="{ padding: '0' }"
-      styleClass="!m-0 !p-0"
       position="left"
     >
       <ng-template pTemplate="header">
@@ -34,20 +35,22 @@
         </div>
       </ng-template>
 
-      <ng-content select="[sidebar]"></ng-content>
-
+      @if (sidebarTemplate) {
+      <ng-container *ngTemplateOutlet="sidebarTemplate"></ng-container>
+      }
     </p-dialog>
 
     @if (sidebar.desktopOpen()) {
-      <div class="hidden h-screen w-[220px] border-e lg:flex">
-        <ng-content select="[sidebar]"></ng-content>
-
-      </div>
+    <div class="hidden h-screen w-[220px] border-e lg:flex">
+      @if (sidebarTemplate) {
+      <ng-container *ngTemplateOutlet="sidebarTemplate"></ng-container>
+      }
+    </div>
     }
   </div>
 
   <div class="flex h-screen w-full flex-col overflow-auto">
-    <div class="grid w-full grid-cols-2 border-b p-3">
+    <div class="grid w-full grid-cols-2 border-b p-2">
       <div class="flex items-center gap-x-1.5">
         <div>
           <button
@@ -55,6 +58,7 @@
             type="button"
             class="hidden p-button-text p-button-sm lg:flex"
             icon="pi pi-bars"
+            size="small"
             aria-label="Toggle navigation"
             (click)="toggleDesktop()"
           ></button>
@@ -65,11 +69,25 @@
             class="flex p-button-text p-button-sm lg:hidden"
             icon="pi pi-bars"
             aria-label="Open navigation"
+            size="small"
             (click)="toggleMobile()"
           ></button>
         </div>
 
-        <ol class="text-ui-fg-muted txt-compact-small-plus flex select-none items-center">
+        <!-- <div class="px-3">
+          <button
+            type="button"
+            class="bg-ui-bg-subtle text-ui-fg-subtle flex w-full items-center gap-x-2.5 rounded-md px-2 py-1 outline-none hover:bg-ui-bg-subtle-hover focus-visible:shadow-borders-focus"
+          >
+            <i class="pi pi-search"></i>
+            <div class="flex-1 text-start">
+              <span class="text-sm font-semibold">Search</span>
+            </div>
+            <span class="text-sm text-ui-fg-muted">⌘K</span>
+          </button>
+        </div> -->
+
+        <!-- <ol class="text-ui-fg-muted txt-compact-small-plus flex select-none items-center">
           <ng-container *ngFor="let c of breadcrumbs.crumbs(); let i = index">
             <li class="flex items-center">
               @if (i < breadcrumbs.crumbs().length - 1) {
@@ -97,7 +115,7 @@
               }
             </li>
           </ng-container>
-        </ol>
+        </ol> -->
       </div>
 
       <div class="flex items-center justify-end gap-x-3">

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, HostListener, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ContentChild, HostListener, TemplateRef, inject, signal } from '@angular/core';
 import { NavigationStart, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
 
@@ -24,6 +24,7 @@ export class ShellComponent {
   readonly breadcrumbs = inject(BreadcrumbsService);
 
   readonly loading = signal(false);
+  @ContentChild('sidebar', { read: TemplateRef }) sidebarTemplate?: TemplateRef<unknown>;
 
   constructor() {
     this.router.events.pipe(filter((e) => e instanceof NavigationStart)).subscribe(() => {

@@ -7,7 +7,6 @@ import { ButtonModule } from 'primeng/button';
 
 import { NavItemComponent } from '../nav-item/nav-item.component';
 import { UserMenuComponent } from '../user-menu/user-menu.component';
-import { ExtensionService } from '../main-layout/extension.service';
 import { NavItem } from '../main-layout/nav.models';
 
 @Component({
@@ -18,7 +17,6 @@ import { NavItem } from '../main-layout/nav.models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsSidebarComponent {
-  private readonly ext = inject(ExtensionService);
 
   readonly generalOpen = signal(true);
   readonly developerOpen = signal(true);
@@ -46,8 +44,6 @@ export class SettingsSidebarComponent {
 
   readonly accountRoutes = computed<NavItem[]>(() => [{ label: 'Profile', to: '/settings/profile', type: 'setting' }]);
 
-  readonly extensionRoutes = computed<NavItem[]>(() => this.ext.getMenu('settingsExtensions'));
-
   toggle(which: 'general' | 'developer' | 'account' | 'extensions'): void {
     const map = {
       general: this.generalOpen,
@@ -58,7 +54,4 @@ export class SettingsSidebarComponent {
     map[which].update((v) => !v);
   }
 
-  extensionRoutesWithType(): NavItem[] {
-    return this.extensionRoutes().map((r) => ({ ...r, type: 'setting' }));
-  }
 }
