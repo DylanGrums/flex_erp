@@ -17,6 +17,10 @@ export const routes: Routes = [
         path: '',
         loadChildren: () => import('@flex-erp/store/feature').then((m) => m.storeFeatureRoutes),
       },
+      {
+        path: 'cms',
+        loadChildren: () => import('@flex-erp/feature').then((m) => m.cmsFeatureRoutes),
+      },
     ],
   },
   {

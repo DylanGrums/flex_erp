@@ -1,0 +1,240 @@
+<div class="w-[320px] bg-ui-bg-base border-l border-ui-border-base flex flex-col h-full">
+  @if (!selectedSection) {
+    <div class="flex-1 flex items-center justify-center p-8">
+      <div class="text-center text-ui-fg-muted">
+        <p class="font-medium mb-1">No section selected</p>
+        <p class="text-sm">Click on a section in the preview or left panel to edit its settings</p>
+      </div>
+    </div>
+  } @else {
+    <div class="px-4 py-3 border-b border-ui-border-base">
+      <h2 class="text-sm font-semibold text-ui-fg-base">{{ selectedSection.name }}</h2>
+      <p class="text-xs text-ui-fg-muted capitalize">{{ selectedSection.type.replace('-', ' ') }}</p>
+    </div>
+
+    <cms-scroll-area className="flex-1">
+      <div class="p-4 space-y-4">
+        @for (group of groupEntries; track group.key) {
+          <div
+            rdxCollapsibleRoot
+            [open]="openGroups[group.key] !== false"
+            (openChange)="toggleGroup(group.key)"
+          >
+            <button
+              rdxCollapsibleTrigger
+              type="button"
+              class="flex items-center justify-between w-full py-2 text-sm font-medium hover:text-ui-fg-base transition-colors"
+            >
+              {{ group.key }}
+              @if (openGroups[group.key] !== false) {
+                <i class="pi pi-chevron-down text-xs"></i>
+              } @else {
+                <i class="pi pi-chevron-right text-xs"></i>
+              }
+            </button>
+
+            <div rdxCollapsibleContent class="space-y-4 pt-2">
+              @for (field of group.value; track field.key) {
+                @switch (field.type) {
+                  @case ('text') {
+                    <div class="space-y-2">
+                      <span class="text-sm">{{ field.label }}</span>
+                      <cms-input
+                        [value]="$any(selectedSection.settings[field.key])"
+                        (valueChange)="updateSetting(field.key, $event)"
+                        [placeholder]="field.label"
+                      ></cms-input>
+                      @if (field.description) {
+                        <p class="text-xs text-ui-fg-muted">{{ field.description }}</p>
+                      }
+                    </div>
+                  }
+                  @case ('textarea') {
+                    <div class="space-y-2">
+                      <div class="flex items-center justify-between">
+                        <span class="text-sm">{{ field.label }}</span>
+                        <span class="text-xs text-ui-fg-muted">{{ ($any(selectedSection.settings[field.key]) || '').length }} characters</span>
+                      </div>
+                      <cms-textarea
+                        [value]="$any(selectedSection.settings[field.key])"
+                        (valueChange)="updateSetting(field.key, $event)"
+                        [placeholder]="field.label"
+                        [rows]="3"
+                      ></cms-textarea>
+                    </div>
+                  }
+                  @case ('toggle') {
+                    <div class="flex items-center justify-between py-1">
+                      <div>
+                        <span class="text-sm">{{ field.label }}</span>
+                        @if (field.description) {
+                          <p class="text-xs text-ui-fg-muted">{{ field.description }}</p>
+                        }
+                      </div>
+                      <cms-switch
+                        [checked]="!!selectedSection.settings[field.key]"
+                        (checkedChange)="updateSetting(field.key, $event)"
+                      ></cms-switch>
+                    </div>
+                  }
+                  @case ('select') {
+                    <div class="space-y-2">
+                      <span class="text-sm">{{ field.label }}</span>
+                      <cms-select
+                        [value]="$any(selectedSection.settings[field.key])"
+                        (valueChange)="updateSetting(field.key, $event)"
+                        [placeholder]="'Select ' + field.label.toLowerCase()"
+                        [options]="field.options || []"
+                      ></cms-select>
+                    </div>
+                  }
+                  @case ('color') {
+                    <div class="space-y-2">
+                      <span class="text-sm">{{ field.label }}</span>
+                      <div class="flex items-center gap-2">
+                        <div
+                          class="w-10 h-10 rounded-lg border border-ui-border-base cursor-pointer"
+                          [style.backgroundColor]="selectedSection.settings[field.key] || '#FFFFFF'"
+                        >
+                          <input
+                            type="color"
+                            [value]="$any(selectedSection.settings[field.key]) || '#FFFFFF'"
+                            (input)="updateSetting(field.key, $any($event.target).value)"
+                            class="w-full h-full opacity-0 cursor-pointer"
+                          />
+                        </div>
+                        <cms-input
+                          [value]="$any(selectedSection.settings[field.key])"
+                          (valueChange)="updateSetting(field.key, $event)"
+                          placeholder="#FFFFFF"
+                          className="flex-1 font-mono text-sm"
+                        ></cms-input>
+                      </div>
+                      <div class="flex flex-wrap gap-1.5">
+                        @for (color of presetColors; track color) {
+                          <button
+                            type="button"
+                            (click)="updateSetting(field.key, color)"
+                            class="w-6 h-6 rounded border border-ui-border-base transition-transform hover:scale-110"
+                            [class.ring-2]="selectedSection.settings[field.key] === color"
+                            [class.ring-ui-border-interactive]="selectedSection.settings[field.key] === color"
+                            [style.backgroundColor]="color"
+                          >
+                            <span class="sr-only">Select color {{ color }}</span>
+                          </button>
+                        }
+                      </div>
+                    </div>
+                  }
+                  @case ('range') {
+                    <div class="space-y-3">
+                      <div class="flex items-center justify-between">
+                        <span class="text-sm">{{ field.label }}</span>
+                        <span class="text-sm font-medium tabular-nums">{{ selectedSection.settings[field.key] || field.min || 0 }}</span>
+                      </div>
+                      <cms-slider
+                        [value]="toNumber($any(selectedSection.settings[field.key]), field.min || 0)"
+                        (valueChange)="updateSetting(field.key, $event)"
+                        [min]="field.min || 0"
+                        [max]="field.max || 100"
+                        [step]="field.step || 1"
+                      ></cms-slider>
+                    </div>
+                  }
+                  @case ('image') {
+                    <div class="space-y-2">
+                      <span class="text-sm">{{ field.label }}</span>
+                      @if (selectedSection.settings[field.key]) {
+                        <div class="relative aspect-video bg-ui-bg-subtle rounded-lg overflow-hidden group">
+                          <div class="absolute inset-0 flex items-center justify-center text-ui-fg-muted">
+                            <i class="pi pi-image text-2xl"></i>
+                          </div>
+                          <button
+                            type="button"
+                            (click)="updateSetting(field.key, null)"
+                            class="absolute top-2 right-2 p-1.5 bg-ui-bg-base/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-ui-button-danger hover:text-ui-fg-on-color"
+                          >
+                            <i class="pi pi-times text-xs"></i>
+                          </button>
+                        </div>
+                      } @else {
+                        <button
+                          type="button"
+                          (click)="updateSetting(field.key, 'placeholder-image')"
+                          class="w-full aspect-video border-2 border-dashed rounded-lg flex flex-col items-center justify-center gap-2 text-ui-fg-muted hover:border-ui-border-interactive hover:text-ui-fg-base transition-colors"
+                        >
+                          <i class="pi pi-image text-2xl"></i>
+                          <span class="text-sm">Click to upload</span>
+                        </button>
+                      }
+                    </div>
+                  }
+                  @case ('collection') {
+                    <div class="space-y-2">
+                      <span class="text-sm">{{ field.label }}</span>
+                      @if (selectedCollection()) {
+                        <div class="flex items-center gap-3 p-3 bg-ui-bg-subtle rounded-lg">
+                          <div class="w-12 h-12 bg-ui-bg-field rounded-lg flex items-center justify-center">
+                            <i class="pi pi-image text-ui-fg-muted"></i>
+                          </div>
+                          <div class="flex-1 min-w-0">
+                            <p class="font-medium text-sm truncate">{{ selectedCollection()?.name }}</p>
+                            <p class="text-xs text-ui-fg-muted">{{ selectedCollection()?.productCount }} products</p>
+                          </div>
+                          <cms-button variant="ghost" size="sm" (click)="clearCollection()">
+                            <i class="pi pi-times text-sm"></i>
+                          </cms-button>
+                        </div>
+                      } @else {
+                        <cms-button
+                          variant="outline"
+                          className="w-full justify-between"
+                          (click)="collectionOpen = !collectionOpen"
+                        >
+                          Select collection
+                          <i class="pi pi-chevron-down text-xs" [class.rotate-180]="collectionOpen"></i>
+                        </cms-button>
+                        @if (collectionOpen) {
+                          <div class="mt-2 space-y-2">
+                            <cms-input
+                              placeholder="Search collections..."
+                              [value]="collectionSearch"
+                              (valueChange)="collectionSearch = $event"
+                            ></cms-input>
+                            <div class="grid grid-cols-2 gap-2 max-h-48 overflow-auto">
+                              @for (collection of filteredCollections(); track collection.id) {
+                                <button
+                                  type="button"
+                                  (click)="selectCollection(collection.id)"
+                                  class="p-3 bg-ui-bg-subtle rounded-lg hover:bg-ui-bg-subtle-hover transition-colors text-left"
+                                >
+                                  <div class="w-full aspect-square bg-ui-bg-field rounded-lg mb-2 flex items-center justify-center">
+                                    <i class="pi pi-image text-ui-fg-muted"></i>
+                                  </div>
+                                  <p class="font-medium text-sm truncate">{{ collection.name }}</p>
+                                  <p class="text-xs text-ui-fg-muted">{{ collection.productCount }} products</p>
+                                </button>
+                              }
+                            </div>
+                          </div>
+                        }
+                      }
+                    </div>
+                  }
+                }
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </cms-scroll-area>
+
+    <div class="p-4 border-t border-ui-border-base">
+      <cms-button variant="outline" size="sm" className="w-full gap-2 text-ui-fg-muted hover:text-ui-fg-base">
+        <i class="pi pi-refresh text-sm"></i>
+        Reset Section
+      </cms-button>
+    </div>
+  }
+</div>
+

@@ -1,0 +1,130 @@
+<div class="min-h-screen bg-gradient-to-br from-ui-bg-base via-ui-bg-base to-ui-bg-subtle flex items-center justify-center p-8">
+  <div class="max-w-4xl w-full">
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ui-bg-subtle text-ui-fg-base text-sm font-medium mb-6">
+        <i class="pi pi-star text-xs"></i>
+        Start Building Your Store
+      </div>
+      <h1 class="text-4xl font-bold tracking-tight mb-4">Choose Your Starting Template</h1>
+      <p class="text-lg text-ui-fg-muted max-w-xl mx-auto">
+        Select a template that best matches your vision. You can customize everything later.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 mb-8">
+      @for (template of templates; track template.id) {
+        <button
+          type="button"
+          (click)="setSelected(template.id)"
+          class="relative p-6 rounded-2xl border-2 text-left transition-all"
+          [class.border-ui-border-base]="!isSelected(template)"
+          [class.bg-ui-bg-base]="!isSelected(template)"
+          [class.hover:border-ui-border-strong]="!isSelected(template)"
+          [class.border-ui-border-interactive]="isSelected(template)"
+          [class.bg-ui-bg-subtle]="isSelected(template)"
+          [class.shadow-lg]="isSelected(template)"
+        >
+          <div
+            class="absolute top-4 right-4 w-6 h-6 rounded-full flex items-center justify-center transition-all"
+            [class.bg-ui-bg-interactive]="isSelected(template)"
+            [class.text-ui-fg-on-color]="isSelected(template)"
+            [class.bg-ui-bg-subtle]="!isSelected(template)"
+          >
+            @if (isSelected(template)) {
+              <i class="pi pi-check text-xs"></i>
+            }
+          </div>
+
+          <div class="aspect-[4/3] bg-ui-bg-subtle rounded-lg mb-6 overflow-hidden">
+            @if (isClassic(template)) {
+              <div class="h-full flex flex-col">
+                <div class="h-8 bg-ui-bg-base border-b border-ui-border-base flex items-center px-3">
+                  <div class="w-12 h-3 bg-ui-bg-field rounded"></div>
+                </div>
+                <div class="flex-1 bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center">
+                  <div class="text-center">
+                    <div class="w-32 h-4 bg-white/30 rounded mx-auto mb-2"></div>
+                    <div class="w-24 h-3 bg-white/20 rounded mx-auto mb-4"></div>
+                    <div class="w-16 h-6 bg-white rounded mx-auto"></div>
+                  </div>
+                </div>
+                <div class="h-20 bg-ui-bg-base p-3">
+                  <div class="grid grid-cols-4 gap-2 h-full">
+                    @for (_ of [1,2,3,4]; track $index) {
+                      <div class="bg-ui-bg-subtle rounded"></div>
+                    }
+                  </div>
+                </div>
+                <div class="h-8 bg-ui-bg-subtle flex items-center justify-center">
+                  <div class="w-24 h-2 bg-ui-bg-field rounded"></div>
+                </div>
+              </div>
+            } @else {
+              <div class="h-full flex flex-col">
+                <div class="h-6 bg-indigo-600"></div>
+                <div class="h-8 bg-ui-bg-base border-b border-ui-border-base flex items-center px-3">
+                  <div class="w-16 h-3 bg-ui-bg-field rounded"></div>
+                </div>
+                <div class="flex-1 flex">
+                  <div class="flex-1 bg-ui-bg-subtle p-3 flex flex-col justify-center">
+                    <div class="w-24 h-4 bg-ui-bg-field rounded mb-2"></div>
+                    <div class="w-32 h-3 bg-ui-bg-field rounded mb-3"></div>
+                    <div class="w-16 h-6 bg-ui-bg-base rounded"></div>
+                  </div>
+                  <div class="flex-1 bg-ui-bg-field"></div>
+                </div>
+                <div class="h-16 bg-ui-bg-base p-2 flex gap-2 justify-center">
+                  @for (_ of [1,2,3]; track $index) {
+                    <div class="w-12 h-full bg-ui-bg-subtle rounded flex flex-col items-center justify-center">
+                      <div class="w-4 h-4 bg-indigo-200 rounded-full mb-1"></div>
+                      <div class="w-8 h-1.5 bg-ui-bg-field rounded"></div>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div
+              class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+              [class.bg-indigo-100]="isClassic(template)"
+              [class.bg-emerald-100]="!isClassic(template)"
+            >
+              <i
+                class="pi"
+                [class.pi-star]="isClassic(template)"
+                [class.pi-bolt]="!isClassic(template)"
+                [class.text-indigo-600]="isClassic(template)"
+                [class.text-emerald-600]="!isClassic(template)"
+              ></i>
+            </div>
+            <div>
+              <h3 class="font-semibold text-lg mb-1">{{ template.name }}</h3>
+              <p class="text-sm text-ui-fg-muted mb-3">{{ template.description }}</p>
+              <div class="flex flex-wrap gap-1.5">
+                @for (section of template.sections; track section.id) {
+                  <span class="px-2 py-0.5 bg-ui-bg-subtle text-ui-fg-muted rounded text-xs">
+                    {{ section.name }}
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
+        </button>
+      }
+    </div>
+
+    <div class="text-center">
+      <cms-button
+        size="lg"
+        [disabled]="!selectedId"
+        (click)="start()"
+        className="px-8 gap-2"
+      >
+        Start with this template
+        <i class="pi pi-bolt text-sm"></i>
+      </cms-button>
+    </div>
+  </div>
+</div>

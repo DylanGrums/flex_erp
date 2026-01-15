@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Theme Editor Design System - Modern Neutral with Indigo accent */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 215 25% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 10%;
+
+    --primary: 239 84% 67%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 215 20% 96%;
+    --secondary-foreground: 215 25% 10%;
+
+    --muted: 215 20% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 215 20% 96%;
+    --accent-foreground: 215 25% 10%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 160 84% 39%;
+    --success-foreground: 0 0% 100%;
+
+    --border: 215 20% 91%;
+    --input: 215 20% 91%;
+    --ring: 239 84% 67%;
+
+    --radius: 0.5rem;
+
+    /* Editor-specific tokens */
+    --editor-bg: 215 20% 97%;
+    --editor-panel: 0 0% 100%;
+    --editor-border: 215 20% 91%;
+    --editor-hover: 215 20% 95%;
+    --editor-selected: 239 84% 97%;
+    --editor-selected-border: 239 84% 67%;
+
+    /* Canvas tokens */
+    --canvas-bg: 215 16% 93%;
+    --canvas-frame: 0 0% 100%;
+
+    /* Sidebar tokens */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 215 25% 27%;
+    --sidebar-primary: 239 84% 67%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 20% 96%;
+    --sidebar-accent-foreground: 215 25% 10%;
+    --sidebar-border: 215 20% 91%;
+    --sidebar-ring: 239 84% 67%;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 239 84% 67%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 160 84% 39%;
+    --success-foreground: 0 0% 100%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 239 84% 67%;
+
+    /* Editor-specific tokens */
+    --editor-bg: 222 47% 5%;
+    --editor-panel: 222 47% 8%;
+    --editor-border: 217 33% 17%;
+    --editor-hover: 217 33% 12%;
+    --editor-selected: 239 84% 12%;
+    --editor-selected-border: 239 84% 67%;
+
+    /* Canvas tokens */
+    --canvas-bg: 222 47% 4%;
+    --canvas-frame: 222 47% 8%;
+
+    /* Sidebar tokens */
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 210 40% 85%;
+    --sidebar-primary: 239 84% 67%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 217 33% 12%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 239 84% 67%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--muted-foreground) / 0.5);
+  }
+}

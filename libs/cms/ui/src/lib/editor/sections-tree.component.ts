@@ -1,0 +1,111 @@
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { NodeId, Section } from '@flex-erp/types';
+import { CmsButtonComponent } from '../primitives/button/cms-button.component';
+import { CmsScrollAreaComponent } from '../primitives/scroll-area/cms-scroll-area.component';
+import { CmsDialogComponent } from '../primitives/dialog/cms-dialog.component';
+
+@Component({
+  selector: 'cms-sections-tree',
+  standalone: true,
+  imports: [CmsButtonComponent, CmsScrollAreaComponent, CmsDialogComponent],
+  templateUrl: './sections-tree.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class CmsSectionsTreeComponent {
+  @Input() sections: Section[] = [];
+  @Input() selectedNodeId: NodeId | null = null;
+  @Input() selectedNodeKind: 'section' | 'block' | null = null;
+
+  @Output() openSectionLibrary = new EventEmitter<void>();
+  @Output() selectNode = new EventEmitter<NodeId>();
+  @Output() toggleVisibility = new EventEmitter<NodeId>();
+  @Output() duplicateNode = new EventEmitter<NodeId>();
+  @Output() removeNode = new EventEmitter<NodeId>();
+  @Output() reorderSections = new EventEmitter<{ startIndex: number; endIndex: number }>();
+
+  dragOverIndex: number | null = null;
+  draggedIndex: number | null = null;
+  expandedSections = new Set<string>();
+  pendingDelete: Section | null = null;
+
+  iconClass(icon: string): string {
+    const map: Record<string, string> = {
+      'layout-template': 'pi pi-table',
+      image: 'pi pi-image',
+      columns: 'pi pi-sliders-h',
+      'grid-3x3': 'pi pi-th-large',
+      mail: 'pi pi-envelope',
+      'panel-bottom': 'pi pi-window-maximize',
+      megaphone: 'pi pi-megaphone',
+      'credit-card': 'pi pi-credit-card',
+      quote: 'pi pi-quote-left',
+      'folder-kanban': 'pi pi-sitemap',
+    };
+    return map[icon] || 'pi pi-table';
+  }
+
+  isSectionSelected(section: Section): boolean {
+    return this.selectedNodeKind === 'section' && this.selectedNodeId === section.id;
+  }
+
+  isBlockSelected(sectionId: string, blockId: string): boolean {
+    return this.selectedNodeKind === 'block' && this.selectedNodeId === blockId;
+  }
+
+  toggleExpanded(sectionId: string): void {
+    if (this.expandedSections.has(sectionId)) {
+      this.expandedSections.delete(sectionId);
+      return;
+    }
+    this.expandedSections.add(sectionId);
+  }
+
+  onDragStart(event: DragEvent, index: number): void {
+    this.draggedIndex = index;
+    event.dataTransfer?.setData('text/plain', index.toString());
+    event.dataTransfer?.setDragImage(new Image(), 0, 0);
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = 'move';
+    }
+  }
+
+  onDragEnter(index: number): void {
+    if (this.draggedIndex !== null && this.draggedIndex !== index) {
+      this.dragOverIndex = index;
+    }
+  }
+
+  onDrop(event: DragEvent, targetIndex: number): void {
+    event.preventDefault();
+    const sourceIndex = Number(event.dataTransfer?.getData('text/plain'));
+    if (!Number.isNaN(sourceIndex) && sourceIndex !== targetIndex) {
+      this.reorderSections.emit({ startIndex: sourceIndex, endIndex: targetIndex });
+    }
+    this.dragOverIndex = null;
+    this.draggedIndex = null;
+  }
+
+  onDragEnd(): void {
+    this.dragOverIndex = null;
+    this.draggedIndex = null;
+  }
+
+  confirmDelete(section: Section): void {
+    this.pendingDelete = section;
+  }
+
+  cancelDelete(): void {
+    this.pendingDelete = null;
+  }
+
+  deleteSection(): void {
+    if (this.pendingDelete) {
+      this.removeNode.emit(this.pendingDelete.id);
+    }
+    this.pendingDelete = null;
+  }
+}

@@ -28,7 +28,12 @@
       "@flex-erp/auth/ui": ["libs/auth/ui/src/index.ts"],
       "@flex-erp/auth/data-access": ["libs/auth/data-access/src/index.ts"],
       "@flex-erp/auth/feature": ["libs/auth/feature/src/index.ts"],
-      "@flex-erp/auth/api": ["libs/auth/api/src/index.ts"]
+      "@flex-erp/auth/api": ["libs/auth/api/src/index.ts"],
+      "@flex-erp/ui": ["libs/cms/ui/src/index.ts"],
+      "@flex-erp/types": ["libs/cms/types/src/index.ts"],
+      "@flex-erp/util": ["libs/cms/util/src/index.ts"],
+      "@flex-erp/data-access": ["libs/cms/data-access/src/index.ts"],
+      "@flex-erp/feature": ["libs/cms/feature/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

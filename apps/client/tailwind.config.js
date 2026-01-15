@@ -12,6 +12,7 @@ module.exports = {
     join(__dirname, 'src/**/!(*.stories|*.spec).{ts,html}'),
     join(__dirname, '../../libs/shared/ui/src/**/!(*.stories|*.spec).{ts,html}'),
     join(__dirname, '../../libs/store/ui/src/**/!(*.stories|*.spec).{ts,html}'),
+    join(__dirname, '../../libs/cms/**/!(*.stories|*.spec).{ts,html}'),
   ],
 
 

@@ -1,0 +1,20 @@
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'cms-scroll-area',
+  standalone: true,
+  template: `
+    <div [class]="scrollClass">
+      <ng-content></ng-content>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class CmsScrollAreaComponent {
+  @Input() className = '';
+
+  get scrollClass(): string {
+    const base = 'h-full w-full overflow-auto';
+    return [base, this.className].filter(Boolean).join(' ');
+  }
+}
