@@ -9,6 +9,9 @@ import { CmsEditorShellComponent } from '@flex-erp/ui';
   imports: [CmsEditorShellComponent],
   templateUrl: './cms-editor-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'block h-full min-h-0',
+  },
 })
 export class CmsEditorPageComponent {
   private facade = inject(CmsEditorFacade);

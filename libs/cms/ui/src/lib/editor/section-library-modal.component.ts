@@ -22,6 +22,7 @@ const CATEGORIES: CmsTabItem[] = [
   imports: [CmsButtonComponent, CmsInputComponent, CmsScrollAreaComponent, CmsDialogComponent, CmsTabsComponent],
   templateUrl: './section-library-modal.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
 export class CmsSectionLibraryModalComponent {
   @Input() open = false;

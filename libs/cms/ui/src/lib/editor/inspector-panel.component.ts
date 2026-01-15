@@ -32,6 +32,13 @@ import { RdxCollapsibleModule } from '@radix-ng/primitives/collapsible';
   ],
   templateUrl: './inspector-panel.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+    styles: [
+    `
+      :host {
+        @apply h-full;
+      }
+    `,
+  ],
 })
 export class CmsInspectorPanelComponent implements OnChanges {
   @Input() selectedSection: Section | null = null;

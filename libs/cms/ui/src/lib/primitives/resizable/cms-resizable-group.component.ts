@@ -4,6 +4,7 @@ import {
   Component,
   ContentChildren,
   DestroyRef,
+  HostBinding,
   Input,
   NgZone,
   QueryList,
@@ -15,19 +16,8 @@ import { CmsResizablePanelComponent } from './cms-resizable-panel.component';
 @Component({
   selector: 'cms-resizable-group',
   standalone: true,
-  template: `
-    <div [class]="groupClass">
-      <ng-content></ng-content>
-    </div>
-  `,
+  template: ` <ng-content></ng-content> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: [
-    `
-      :host {
-        @apply flex h-full w-full;
-      }
-    `,
-  ],
 })
 export class CmsResizableGroupComponent implements AfterContentInit {
   @Input() className = '';
@@ -45,8 +35,9 @@ export class CmsResizableGroupComponent implements AfterContentInit {
     startAfter: number;
   } | null = null;
 
-  get groupClass(): string {
-    const base = 'flex h-full w-full overflow-hidden';
+  @HostBinding('class')
+  get hostClass(): string {
+    const base = 'flex h-full w-full min-h-0 min-w-0 overflow-hidden';
     return [base, this.className].filter(Boolean).join(' ');
   }
 

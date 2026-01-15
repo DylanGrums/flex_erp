@@ -26,6 +26,9 @@ import { CmsResizableHandleComponent } from '../primitives/resizable/cms-resizab
   ],
   templateUrl: './editor-shell.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'block h-full min-h-0',
+  },
 })
 export class CmsEditorShellComponent {
   @Input() showOnboarding = false;

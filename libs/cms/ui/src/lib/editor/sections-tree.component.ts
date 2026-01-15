@@ -10,6 +10,13 @@ import { CmsDialogComponent } from '../primitives/dialog/cms-dialog.component';
   imports: [CmsButtonComponent, CmsScrollAreaComponent, CmsDialogComponent],
   templateUrl: './sections-tree.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+    styles: [
+      `
+        :host {
+          @apply h-full;
+        }
+      `,
+    ],
 })
 export class CmsSectionsTreeComponent {
   @Input() sections: Section[] = [];
