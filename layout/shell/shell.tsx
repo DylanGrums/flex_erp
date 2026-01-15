@@ -32,7 +32,7 @@ export const Shell = ({ children }: PropsWithChildren) => {
           <MobileSidebarContainer>{children}</MobileSidebarContainer>
           <DesktopSidebarContainer>{children}</DesktopSidebarContainer>
         </div>
-        <div className="flex h-screen w-full flex-col overflow-auto">
+        <div className="flex h-screen w-full flex-col">
           <Topbar />
           <main
             className={clx(

@@ -1,26 +1,27 @@
 @if (showOnboarding) {
-  <cms-onboarding-screen
-    [templates]="templates"
-    (selectTemplate)="selectTemplate.emit($event)"
-  ></cms-onboarding-screen>
+<cms-onboarding-screen
+  [templates]="templates"
+  (selectTemplate)="selectTemplate.emit($event)"
+></cms-onboarding-screen>
 } @else {
-  <div class="h-screen flex flex-col bg-ui-bg-subtle overflow-hidden">
-    <cms-top-bar
-      [storeName]="storeName"
-      [currentPage]="currentPage"
-      [viewportMode]="viewportMode"
-      [canUndo]="canUndo"
-      [canRedo]="canRedo"
-      (storeNameChange)="storeNameChange.emit($event)"
-      (currentPageChange)="currentPageChange.emit($event)"
-      (viewportModeChange)="viewportModeChange.emit($event)"
-      (undo)="undo.emit()"
-      (redo)="redo.emit()"
-      (save)="save.emit()"
-      (publish)="publish.emit()"
-    ></cms-top-bar>
+<div class="h-full min-h-0 flex flex-col bg-ui-bg-subtle overflow-hidden">
+  <cms-top-bar
+    [storeName]="storeName"
+    [currentPage]="currentPage"
+    [viewportMode]="viewportMode"
+    [canUndo]="canUndo"
+    [canRedo]="canRedo"
+    (storeNameChange)="storeNameChange.emit($event)"
+    (currentPageChange)="currentPageChange.emit($event)"
+    (viewportModeChange)="viewportModeChange.emit($event)"
+    (undo)="undo.emit()"
+    (redo)="redo.emit()"
+    (save)="save.emit()"
+    (publish)="publish.emit()"
+  ></cms-top-bar>
 
-    <cms-resizable-group className="flex-1 flex overflow-hidden justify-between">
+  <cms-resizable-group>
+    <div class="min-h-0 flex overflow-hidden justify-between">
       <cms-resizable-panel [minPx]="220" [defaultPx]="280">
         <cms-sections-tree
           [sections]="sections"
@@ -35,6 +36,8 @@
         ></cms-sections-tree>
       </cms-resizable-panel>
       <cms-resizable-handle></cms-resizable-handle>
+    </div>
+    <div class="flex-1">
       <cms-resizable-panel [flex]="true">
         <cms-preview-canvas
           [sections]="sections"
@@ -43,6 +46,8 @@
           (selectNode)="selectNode.emit($event)"
         ></cms-preview-canvas>
       </cms-resizable-panel>
+    </div>
+    <div class="min-h-0 flex overflow-hidden justify-between">
       <cms-resizable-handle></cms-resizable-handle>
       <cms-resizable-panel [minPx]="260" [defaultPx]="320">
         <cms-inspector-panel
@@ -52,13 +57,14 @@
           (updateSectionSettings)="updateSectionSettings.emit($event)"
         ></cms-inspector-panel>
       </cms-resizable-panel>
-    </cms-resizable-group>
-  </div>
+    </div>
+  </cms-resizable-group>
+</div>
 
-  <cms-section-library-modal
-    [open]="isSectionLibraryOpen"
-    [sectionDefinitions]="sectionDefinitions"
-    (requestClose)="closeSectionLibrary.emit()"
-    (addSection)="addSection.emit($event)"
-  ></cms-section-library-modal>
+<cms-section-library-modal
+  [open]="isSectionLibraryOpen"
+  [sectionDefinitions]="sectionDefinitions"
+  (requestClose)="closeSectionLibrary.emit()"
+  (addSection)="addSection.emit($event)"
+></cms-section-library-modal>
 }

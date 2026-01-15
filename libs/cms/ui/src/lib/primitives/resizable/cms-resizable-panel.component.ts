@@ -9,6 +9,13 @@ import { ChangeDetectionStrategy, Component, ElementRef, Input, inject } from '@
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [
+    `
+      :host {
+        @apply flex h-full;
+      }
+    `,
+  ],
 })
 export class CmsResizablePanelComponent {
   @Input() minPx = 200;
