@@ -1,5 +1,5 @@
 import { Controller, Get, UseGuards, Req, Param, Body, Put, Delete, UnauthorizedException } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@flex-erp/auth/api';
 import { UserService } from './user.service';
 import 'moment-timezone';
 import { Prisma } from 'generated/prisma/client';

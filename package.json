@@ -78,7 +78,7 @@
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.19.9",
+    "@types/node": "^20.19.29",
     "@types/pg": "^8.15.6",
     "@typescript-eslint/utils": "^8.40.0",
     "angular-eslint": "^20.3.0",

@@ -10,8 +10,8 @@ services:
     image: jc21/nginx-proxy-manager:latest
     restart: unless-stopped
     ports:
-      - "443:443"   # Public HTTPS
-      - "81:81"     # Admin UI
+      - "443:443" # Public HTTPS
+      - "81:81" # Admin UI
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
@@ -80,18 +80,18 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     depends_on:
-      - postgres
+      - flex_postgres
       - redis
     networks:
       - flex-erp-network
     restart: on-failure
 
-  postgres:
+  flex_postgres:
     image: postgres:18.0
-    container_name: postgres
-    hostname: postgres
+    container_name: flex_postgres
+    hostname: flex_postgres
     ports:
-      - "5432:5432"
+      - "55432:5432"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

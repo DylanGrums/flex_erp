@@ -1,8 +1,8 @@
 import { APP_INITIALIZER } from '@angular/core';
 import { of, throwError } from 'rxjs';
 import { appConfig } from './app.config';
-import { Refresh } from './core/auth/data-access/auth.actions';
-import { API_BASE_URL } from './tokens';
+import { Refresh } from '@flex-erp/auth/data-access';
+import { API_BASE_URL } from '@flex-erp/auth/util';
 import { environment } from '../environments/environment';
 
 describe('appConfig', () => {

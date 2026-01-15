@@ -6,15 +6,13 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { providePrimeNG } from 'primeng/config';
 import { FlexPreset } from '../themes/flex.preset';
 import { NgxsModule, Store } from '@ngxs/store';
-import { AuthState } from './core/auth/data-access/auth.state';
+import { AuthState, Refresh, authInterceptor } from '@flex-erp/auth/data-access';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { environment } from '../environments/environment';
 import { DynamicDialogModule, DialogService } from 'primeng/dynamicdialog';
-import { Refresh } from './core/auth/data-access/auth.actions';
-import { authInterceptor } from './core/auth/data-access/auth.interceptor';
 import { catchError, of, firstValueFrom } from 'rxjs';
-import { API_BASE_URL } from './tokens';
+import { API_BASE_URL } from '@flex-erp/auth/util';
 import { ThemeService } from './shared/theme/theme.service';
 import { STORE_NAV } from '@flex-erp/store/manifest';
 import { provideNavManifest } from '@flex-erp/shared/nav';

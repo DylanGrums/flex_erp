@@ -7,9 +7,9 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { ProgressBarModule } from 'primeng/progressbar';
 
-import { SidebarService } from './sidebar.service';
-import { BreadcrumbsService } from './breadcrumbs.service';
-import { NotificationsComponent } from '../notifications/notifications.component';
+import { SidebarService } from '../services/sidebar.service';
+import { BreadcrumbsService } from '../services/breadcrumbs.service';
+import { NotificationsComponent } from '../components/notifications/notifications.component';
 
 @Component({
   selector: 'app-shell',
