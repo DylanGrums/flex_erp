@@ -1,4 +1,6 @@
 {
+  "app.title": "Missing value for 'app.title'",
+  "demo.hello": "Missing value for 'demo.hello'",
   "app": {
     "title": "Flex ERP"
   },

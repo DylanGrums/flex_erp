@@ -74,13 +74,13 @@
     "i18n-extract": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "transloco-keys-manager extract --project client"
+        "command": "transloco-keys-manager extract --project apps/client"
       }
     },
     "i18n-find": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "transloco-keys-manager find --project client"
+        "command": "transloco-keys-manager find --project apps/client"
       }
     },
     "lint": {
