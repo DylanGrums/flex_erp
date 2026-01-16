@@ -19,10 +19,17 @@ export type NavItemWithMeta = Omit<NavItem, 'items'> & {
   items?: NavItemWithMeta[];
 };
 
+export type NavSection = {
+  label: string;
+  order?: number;
+  items: NavItem[];
+  dividerAfter?: boolean;
+};
+
 export type NavManifest = {
   id: string;
   order?: number;
-  items: NavItem[];
+  sections: NavSection[];
 };
 
 export const NAV_MANIFESTS = new InjectionToken<NavManifest[]>('NAV_MANIFESTS');

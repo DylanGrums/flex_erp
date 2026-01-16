@@ -1,5 +1,5 @@
 import type { Routes } from '@angular/router';
-import type { NavItem, NavItemWithMeta, NavManifest, NavRouteMeta } from './nav.registry';
+import type { NavItem, NavItemWithMeta, NavManifest, NavRouteMeta, NavSection } from './nav.registry';
 
 export type FeatureDefinition = {
   id: string;
@@ -8,6 +8,10 @@ export type FeatureDefinition = {
     manifest: NavManifest;
     metaByPath: Record<string, NavRouteMeta>;
   };
+};
+
+type NavSectionWithMeta = Omit<NavSection, 'items'> & {
+  items: NavItemWithMeta[];
 };
 
 function normalizeToPath(to: string): string {
@@ -25,6 +29,15 @@ function stripMeta(items: NavItemWithMeta[]): NavItem[] {
   }));
 }
 
+function stripMetaSections(sections: NavSectionWithMeta[]): NavSection[] {
+  return sections.map((section) => ({
+    label: section.label,
+    order: section.order,
+    dividerAfter: section.dividerAfter,
+    items: stripMeta(section.items),
+  }));
+}
+
 function collectMeta(items: NavItemWithMeta[], acc: Record<string, NavRouteMeta>): void {
   for (const item of items) {
     if (item.route) {
@@ -38,10 +51,12 @@ function collectMeta(items: NavItemWithMeta[], acc: Record<string, NavRouteMeta>
 export function defineFeatureNav(args: {
   id: string;
   order?: number;
-  items: NavItemWithMeta[];
+  sections: NavSectionWithMeta[];
 }): FeatureDefinition {
   const metaByPath: Record<string, NavRouteMeta> = {};
-  collectMeta(args.items, metaByPath);
+  for (const section of args.sections) {
+    collectMeta(section.items, metaByPath);
+  }
 
   return {
     id: args.id,
@@ -50,7 +65,7 @@ export function defineFeatureNav(args: {
       manifest: {
         id: args.id,
         order: args.order,
-        items: stripMeta(args.items),
+        sections: stripMetaSections(args.sections),
       },
       metaByPath,
     },

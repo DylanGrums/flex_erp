@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { DividerModule } from 'primeng/divider';
@@ -54,9 +54,16 @@ export class MainSidebarComponent {
 
   private readonly manifests = inject(NAV_MANIFESTS, { optional: true }) ?? [];
 
-  readonly coreRoutes = computed<NavItem[]>(() => {
-    const sorted = [...this.manifests].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-    return sorted.flatMap((m) => m.items as NavItem[]);
+  readonly coreSections = computed<{ label: string; items: NavItem[]; dividerAfter?: boolean }[]>(() => {
+    const sortedManifests = [...this.manifests].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    return sortedManifests.flatMap((manifest) => {
+      const sections = [...manifest.sections].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+      return sections.map((section) => ({
+        label: section.label,
+        items: section.items as NavItem[],
+        dividerAfter: section.dividerAfter,
+      }));
+    });
   });
 
 
