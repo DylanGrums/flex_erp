@@ -1,9 +1,9 @@
 <div class="w-[320px] bg-ui-bg-base border-l border-ui-border-base flex flex-col h-full">
   @if (!selectedSection) {
-    <div class="flex-1 flex items-center justify-center p-8">
+      <div class="flex-1 flex items-center justify-center p-8">
       <div class="text-center text-ui-fg-muted">
-        <p class="font-medium mb-1">No section selected</p>
-        <p class="text-sm">Click on a section in the preview or left panel to edit its settings</p>
+        <p class="font-medium mb-1">{{ 'cms.editor.noSectionSelected' | transloco }}</p>
+        <p class="text-sm">{{ 'cms.editor.selectSectionHint' | transloco }}</p>
       </div>
     </div>
   } @else {
@@ -53,7 +53,10 @@
                     <div class="space-y-2">
                       <div class="flex items-center justify-between">
                         <span class="text-sm">{{ field.label }}</span>
-                        <span class="text-xs text-ui-fg-muted">{{ ($any(selectedSection.settings[field.key]) || '').length }} characters</span>
+                        <span class="text-xs text-ui-fg-muted">
+                          {{ ($any(selectedSection.settings[field.key]) || '').length }}
+                          {{ 'cms.editor.characters' | transloco }}
+                        </span>
                       </div>
                       <cms-textarea
                         [value]="$any(selectedSection.settings[field.key])"
@@ -120,7 +123,7 @@
                             [class.ring-ui-border-interactive]="selectedSection.settings[field.key] === color"
                             [style.backgroundColor]="color"
                           >
-                            <span class="sr-only">Select color {{ color }}</span>
+                            <span class="sr-only">{{ 'cms.editor.selectColor' | transloco: { color } }}</span>
                           </button>
                         }
                       </div>
@@ -166,10 +169,10 @@
                           />
                           <div class="absolute inset-0 flex items-center justify-center gap-2 bg-ui-bg-base/70 opacity-0 transition-opacity group-hover:opacity-100">
                             <cms-button variant="secondary" size="sm" (click)="fileInput.click()">
-                              Replace
+                              {{ 'cms.editor.replace' | transloco }}
                             </cms-button>
                             <cms-button variant="ghost" size="sm" (click)="updateSetting(field.key, null)">
-                              Remove
+                              {{ 'cms.editor.remove' | transloco }}
                             </cms-button>
                           </div>
                         </div>
@@ -180,7 +183,7 @@
                             class="w-full aspect-video border-2 border-dashed rounded-lg flex flex-col items-center justify-center gap-2 text-ui-fg-muted hover:border-ui-border-interactive hover:text-ui-fg-base transition-colors cursor-pointer"
                           >
                             <i class="pi pi-image text-2xl"></i>
-                            <span class="text-sm">Click to upload</span>
+                            <span class="text-sm">{{ 'cms.editor.clickToUpload' | transloco }}</span>
                           </button>
                       }
                     </div>
@@ -195,7 +198,9 @@
                           </div>
                           <div class="flex-1 min-w-0">
                             <p class="font-medium text-sm truncate">{{ selectedCollection()?.name }}</p>
-                            <p class="text-xs text-ui-fg-muted">{{ selectedCollection()?.productCount }} products</p>
+                            <p class="text-xs text-ui-fg-muted">
+                              {{ selectedCollection()?.productCount }} {{ 'cms.editor.products' | transloco }}
+                            </p>
                           </div>
                           <cms-button variant="ghost" size="sm" (click)="clearCollection()">
                             <i class="pi pi-times text-sm"></i>
@@ -207,13 +212,13 @@
                           className="w-full justify-between"
                           (click)="collectionOpen = !collectionOpen"
                         >
-                          Select collection
+                          {{ 'cms.editor.selectCollection' | transloco }}
                           <i class="pi pi-chevron-down text-xs" [class.rotate-180]="collectionOpen"></i>
                         </cms-button>
                         @if (collectionOpen) {
                           <div class="mt-2 space-y-2">
                             <cms-input
-                              placeholder="Search collections..."
+                              [placeholder]="'cms.editor.searchCollections' | transloco"
                               [value]="collectionSearch"
                               (valueChange)="collectionSearch = $event"
                             ></cms-input>
@@ -228,7 +233,9 @@
                                     <i class="pi pi-image text-ui-fg-muted"></i>
                                   </div>
                                   <p class="font-medium text-sm truncate">{{ collection.name }}</p>
-                                  <p class="text-xs text-ui-fg-muted">{{ collection.productCount }} products</p>
+                                  <p class="text-xs text-ui-fg-muted">
+                                    {{ collection.productCount }} {{ 'cms.editor.products' | transloco }}
+                                  </p>
                                 </button>
                               }
                             </div>
@@ -248,7 +255,7 @@
     <div class="p-4 border-t border-ui-border-base">
       <cms-button variant="outline" size="sm" className="w-full gap-2 text-ui-fg-muted hover:text-ui-fg-base">
         <i class="pi pi-refresh text-sm"></i>
-        Reset Section
+        {{ 'cms.editor.resetSection' | transloco }}
       </cms-button>
     </div>
   }

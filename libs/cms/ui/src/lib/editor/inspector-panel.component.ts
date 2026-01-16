@@ -7,7 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { Collection, Section, SectionDefinition, SettingField } from '@flex-erp/types';
+import { Collection, Section, SectionDefinition, SettingField } from '@flex-erp/cms/types';
 import { CmsButtonComponent } from '../primitives/button/cms-button.component';
 import { CmsInputComponent } from '../primitives/input/cms-input.component';
 import { CmsTextareaComponent } from '../primitives/textarea/cms-textarea.component';
@@ -16,6 +16,7 @@ import { CmsSliderComponent } from '../primitives/slider/cms-slider.component';
 import { CmsSelectComponent } from '../primitives/select/cms-select.component';
 import { CmsScrollAreaComponent } from '../primitives/scroll-area/cms-scroll-area.component';
 import { RdxCollapsibleModule } from '@radix-ng/primitives/collapsible';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'cms-inspector-panel',
@@ -29,10 +30,11 @@ import { RdxCollapsibleModule } from '@radix-ng/primitives/collapsible';
     CmsSelectComponent,
     CmsScrollAreaComponent,
     RdxCollapsibleModule,
+    TranslocoModule,
   ],
   templateUrl: './inspector-panel.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-    styles: [
+  styles: [
     `
       :host {
         @apply h-full;

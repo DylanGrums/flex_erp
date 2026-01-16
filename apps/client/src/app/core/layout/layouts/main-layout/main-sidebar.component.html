@@ -22,7 +22,7 @@
           </div>
           <div class="block overflow-hidden text-start">
             <div class="font-medium font-sans txt-compact-small truncate">
-              Flex ERP
+              {{ 'app.title' | transloco }}
             </div>
           </div>
 
@@ -55,8 +55,8 @@
                 <span class="text-xs font-semibold"> F </span>
               </div>
               <div class="flex flex-col overflow-hidden">
-                <div class="truncate text-sm font-semibold">Flex ERP</div>
-                <div class="text-xs text-ui-fg-subtle">Store</div>
+                <div class="truncate text-sm font-semibold">{{ 'app.title' | transloco }}</div>
+                <div class="text-xs text-ui-fg-subtle">{{ 'nav.store' | transloco }}</div>
               </div>
             </div>
 
@@ -69,7 +69,7 @@
               [routerLink]="'/settings/store'"
             >
               <i class="pi pi-shop text-ui-fg-subtle"></i>
-              <span class="text-sm">Store Settings</span>
+              <span class="text-sm">{{ 'nav.storeSettings' | transloco }}</span>
             </button>
 
             <div class="my-2 h-px bg-ui-border-base"></div>
@@ -81,7 +81,7 @@
               [routerLink]="'/login'"
             >
               <i class="pi pi-sign-out text-ui-fg-subtle"></i>
-              <span class="text-sm">Logout</span>
+              <span class="text-sm">{{ 'common.logout' | transloco }}</span>
             </button>
           </div>
         </ng-template>
@@ -98,7 +98,7 @@
           <div class="py-3">
             <div class="px-3">
               <div class="text-ui-fg-muted flex h-7 items-center justify-between px-2">
-                <span class="text-sm">{{ section.label }}</span>
+                <span class="text-sm">{{ section.label | transloco }}</span>
               </div>
             </div>
 
@@ -121,7 +121,7 @@
         <app-nav-item
           [item]="{
             icon: 'pi pi-cog',
-            label: 'Settings',
+            label: 'nav.settings',
             to: '/settings',
             type: 'core'
           }"

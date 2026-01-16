@@ -1,4 +1,4 @@
-import { Collection, SectionDefinition, Template } from '@flex-erp/types';
+import { Collection, SectionDefinition, Template } from '@flex-erp/cms/types';
 
 export const sectionDefinitions: SectionDefinition[] = [
   {

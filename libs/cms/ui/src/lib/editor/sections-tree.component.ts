@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { NodeId, Section } from '@flex-erp/types';
+import { NodeId, Section } from '@flex-erp/cms/types';
 import { CmsButtonComponent } from '../primitives/button/cms-button.component';
 import { CmsScrollAreaComponent } from '../primitives/scroll-area/cms-scroll-area.component';
 import { CmsDialogComponent } from '../primitives/dialog/cms-dialog.component';
+import { TranslocoModule } from '@jsverse/transloco';
 
 import {
   LucideAngularModule, GripVertical, ChevronRight, LayoutTemplate, LucideIconData, Columns2, Grid3x3, Mail, PanelBottom, Megaphone, CreditCard, Quote, FolderKanban, ImageIcon
@@ -12,7 +13,7 @@ import {
 @Component({
   selector: 'cms-sections-tree',
   standalone: true,
-  imports: [CmsButtonComponent, CmsScrollAreaComponent, CmsDialogComponent, LucideAngularModule],
+  imports: [CmsButtonComponent, CmsScrollAreaComponent, CmsDialogComponent, LucideAngularModule, TranslocoModule],
   templateUrl: './sections-tree.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [

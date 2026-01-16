@@ -4,7 +4,7 @@ import { PublicLayoutComponent } from './core/layout/layouts/public-layout/publi
 import { SettingsLayoutComponent } from './core/layout/layouts/settings-layout/settings-layout.component';
 import { SettingsStorePage } from './pages/settings-store.page';
 import { SettingsProfilePage } from './pages/settings-profile.page';
-import { authGuard } from '@flex-erp/auth/feature';
+import { authGuard } from '@flex-erp/auth/data-access';
 
 export const routes: Routes = [
   {
@@ -19,7 +19,7 @@ export const routes: Routes = [
       },
       {
         path: 'cms',
-        loadChildren: () => import('@flex-erp/feature').then((m) => m.cmsFeatureRoutes),
+        loadChildren: () => import('@flex-erp/cms/feature').then((m) => m.cmsFeatureRoutes),
       },
     ],
   },

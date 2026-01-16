@@ -5,47 +5,47 @@ export const STORE_NAV = defineFeatureNav({
   order: 10,
   sections: [
     {
-      label: 'Store',
+      label: 'store.nav.section',
       items: [
         {
           icon: 'pi pi-shopping-cart',
-          label: 'Orders',
+          label: 'store.nav.orders',
           to: '/orders',
           type: 'core',
           route: {
-            breadcrumb: 'Orders',
-            title: 'Orders',
-            subtitle: 'Track orders, payments, and fulfillment.',
+            breadcrumb: 'store.routes.orders.breadcrumb',
+            title: 'store.routes.orders.title',
+            subtitle: 'store.routes.orders.subtitle',
           },
         },
 
         {
           icon: 'pi pi-tags',
-          label: 'Products',
+          label: 'store.nav.products',
           to: '/products',
           type: 'core',
           route: {
-            breadcrumb: 'Products',
-            title: 'Products',
-            subtitle: 'Manage products, variants, and availability.',
+            breadcrumb: 'store.routes.products.breadcrumb',
+            title: 'store.routes.products.title',
+            subtitle: 'store.routes.products.subtitle',
           },
           items: [
             {
-              label: 'Collections',
+              label: 'store.nav.collections',
               to: '/collections',
               route: {
-                breadcrumb: 'Collections',
-                title: 'Collections',
-                subtitle: 'Group products into curated collections.',
+                breadcrumb: 'store.routes.collections.breadcrumb',
+                title: 'store.routes.collections.title',
+                subtitle: 'store.routes.collections.subtitle',
               },
             },
             {
-              label: 'Categories',
+              label: 'store.nav.categories',
               to: '/categories',
               route: {
-                breadcrumb: 'Categories',
-                title: 'Categories',
-                subtitle: 'Organize products across your catalog.',
+                breadcrumb: 'store.routes.categories.breadcrumb',
+                title: 'store.routes.categories.title',
+                subtitle: 'store.routes.categories.subtitle',
               },
             },
           ],
@@ -53,55 +53,55 @@ export const STORE_NAV = defineFeatureNav({
 
         {
           icon: 'pi pi-building',
-          label: 'Inventory',
+          label: 'store.nav.inventory',
           to: '/inventory',
           type: 'core',
           route: {
-            breadcrumb: 'Inventory',
-            title: 'Inventory',
-            subtitle: 'Track stock levels across locations.',
+            breadcrumb: 'store.routes.inventory.breadcrumb',
+            title: 'store.routes.inventory.title',
+            subtitle: 'store.routes.inventory.subtitle',
           },
           items: [
             // You can later add /inventory/reservations and it will map to nested routes too
-            { label: 'Reservations', to: '/reservations' },
+            { label: 'store.nav.reservations', to: '/reservations' },
           ],
         },
 
         {
           icon: 'pi pi-users',
-          label: 'Customers',
+          label: 'store.nav.customers',
           to: '/customers',
           type: 'core',
           route: {
-            breadcrumb: 'Customers',
-            title: 'Customers',
-            subtitle: 'Manage customer profiles and history.',
+            breadcrumb: 'store.routes.customers.breadcrumb',
+            title: 'store.routes.customers.title',
+            subtitle: 'store.routes.customers.subtitle',
           },
-          items: [{ label: 'Customer Groups', to: '/customer-groups' }],
+          items: [{ label: 'store.nav.customerGroups', to: '/customer-groups' }],
         },
 
         {
           icon: 'pi pi-percentage',
-          label: 'Promotions',
+          label: 'store.nav.promotions',
           to: '/promotions',
           type: 'core',
           route: {
-            breadcrumb: 'Promotions',
-            title: 'Promotions',
-            subtitle: 'Create discounts and campaigns.',
+            breadcrumb: 'store.routes.promotions.breadcrumb',
+            title: 'store.routes.promotions.title',
+            subtitle: 'store.routes.promotions.subtitle',
           },
-          items: [{ label: 'Campaigns', to: '/campaigns' }],
+          items: [{ label: 'store.nav.campaigns', to: '/campaigns' }],
         },
 
         {
           icon: 'pi pi-dollar',
-          label: 'Price Lists',
+          label: 'store.nav.priceLists',
           to: '/price-lists',
           type: 'core',
           route: {
-            breadcrumb: 'Price Lists',
-            title: 'Price Lists',
-            subtitle: 'Configure price lists and overrides.',
+            breadcrumb: 'store.routes.priceLists.breadcrumb',
+            title: 'store.routes.priceLists.title',
+            subtitle: 'store.routes.priceLists.subtitle',
           },
         },
       ],

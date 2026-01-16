@@ -22,7 +22,7 @@
           </div>
         }
         <span class="font-medium font-sans txt-compact-small">{{
-          item().label
+          item().label | transloco
         }}</span>
       </div>
 
@@ -32,7 +32,7 @@
             rdxTooltipContentAttributes
             class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
           >
-            <span>{{ sc.label }}</span>
+            <span>{{ sc.label | transloco }}</span>
 
             <div class="flex items-center gap-x-1">
               @for (key of (sc.keys.Mac ?? []); track key; let i = $index) {
@@ -45,7 +45,7 @@
 
                   @if (i < (sc.keys.Mac?.length ?? 0) - 1) {
                     <span class="text-ui-fg-muted txt-compact-xsmall">
-                      {{ thenLabel() }}
+                      {{ thenLabel() | transloco }}
                     </span>
                   }
                 </div>
@@ -76,7 +76,7 @@
           <i class="text-base leading-none" [class]="item().icon"></i>
         </div>
       }
-      <span class="font-medium font-sans txt-compact-small">{{ item().label }}</span>
+      <span class="font-medium font-sans txt-compact-small">{{ item().label | transloco }}</span>
     </div>
   }
 
@@ -96,7 +96,7 @@
         <div class="flex size-6 items-center justify-center">
           <i class="text-base leading-none" [class]="item().icon"></i>
         </div>
-        <span class="font-medium font-sans txt-compact-small">{{ item().label }}</span>
+        <span class="font-medium font-sans txt-compact-small">{{ item().label | transloco }}</span>
       </button>
 
       <div rdxCollapsibleContent>
@@ -130,7 +130,7 @@
                           rdxTooltipContentAttributes
                           class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
                         >
-                          <span>{{ sc.label }}</span>
+                          <span>{{ sc.label | transloco }}</span>
                           <div class="flex items-center gap-1">
                             @for (key of (sc.keys.Mac ?? []); track key; let i = $index) {
                               <div class="flex items-center gap-x-1">
@@ -141,7 +141,7 @@
                                 </kbd>
                                 @if (i < (sc.keys.Mac?.length ?? 0) - 1) {
                                   <span class="text-ui-fg-muted txt-compact-xsmall">{{
-                                    thenLabel()
+                                    thenLabel() | transloco
                                   }}</span>
                                 }
                               </div>
@@ -164,9 +164,9 @@
                       })
                     "
                   >
-                    <span class="font-medium font-sans txt-compact-small">{{
-                      item().label
-                    }}</span>
+                      <span class="font-medium font-sans txt-compact-small">{{
+                        item().label | transloco
+                      }}</span>
                   </div>
                 }
               </div>
@@ -189,7 +189,7 @@
                         "
                       >
                         <span class="font-medium font-sans txt-compact-small">{{
-                          sub.label
+                          sub.label | transloco
                         }}</span>
                       </div>
 
@@ -199,7 +199,7 @@
                             rdxTooltipContentAttributes
                             class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
                           >
-                            <span>{{ sc.label }}</span>
+                            <span>{{ sc.label | transloco }}</span>
                             <div class="flex items-center gap-x-1">
                               @for (key of (sc.keys.Mac ?? []); track key; let i = $index) {
                                 <div class="flex items-center gap-x-1">
@@ -210,7 +210,7 @@
                                   </kbd>
                                   @if (i < (sc.keys.Mac?.length ?? 0) - 1) {
                                     <span class="text-ui-fg-muted txt-compact-xsmall">{{
-                                      thenLabel()
+                                    thenLabel() | transloco
                                     }}</span>
                                   }
                                 </div>
@@ -233,9 +233,9 @@
                         })
                       "
                     >
-                      <span class="font-medium font-sans txt-compact-small">{{
-                        sub.label
-                      }}</span>
+                    <span class="font-medium font-sans txt-compact-small">{{
+                      sub.label | transloco
+                    }}</span>
                     </div>
                   }
                 </div>

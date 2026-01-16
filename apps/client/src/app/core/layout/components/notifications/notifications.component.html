@@ -4,7 +4,7 @@
     type="button"
     class="p-button-text p-button-sm text-ui-fg-muted hover:text-ui-fg-subtle relative"
     icon="pi pi-bell"
-    aria-label="Notifications"
+    [attr.aria-label]="'layout.notifications.ariaLabel' | transloco"
     (click)="toggle()"
   ></button>
 
@@ -19,15 +19,17 @@
   [style]="{ width: '420px', maxWidth: 'calc(100vw - 24px)' }"
 >
   <div class="flex items-center justify-between">
-    <div class="text-base font-semibold">Notifications</div>
+    <div class="text-base font-semibold">{{ 'layout.notifications.title' | transloco }}</div>
   </div>
 
   <p-divider />
 
   <div *ngIf="items().length === 0" class="flex h-full flex-col items-center justify-center">
     <i class="pi pi-bell-slash text-2xl"></i>
-    <div class="mt-3 text-sm font-semibold">You're all caught up</div>
-    <div class="mt-1 max-w-[294px] text-center text-sm text-ui-fg-muted">No notifications to show.</div>
+    <div class="mt-3 text-sm font-semibold">{{ 'layout.notifications.allCaughtUp' | transloco }}</div>
+    <div class="mt-1 max-w-[294px] text-center text-sm text-ui-fg-muted">
+      {{ 'layout.notifications.empty' | transloco }}
+    </div>
   </div>
 
   <div *ngIf="items().length > 0" class="-mx-4">

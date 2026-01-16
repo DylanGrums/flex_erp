@@ -5,8 +5,8 @@
       @if (sections.length === 0) {
       <div class="flex items-center justify-center h-96 text-ui-fg-muted">
         <div class="text-center">
-          <p class="text-lg font-medium mb-2">No sections yet</p>
-          <p class="text-sm">Add sections from the left panel to start building your page</p>
+          <p class="text-lg font-medium mb-2">{{ 'cms.preview.emptyTitle' | transloco }}</p>
+          <p class="text-sm">{{ 'cms.preview.emptyDescription' | transloco }}</p>
         </div>
       </div>
       } @else {
@@ -33,14 +33,14 @@
         <div class="py-2 px-4 text-center text-sm"
           [style.backgroundColor]="section.settings['backgroundColor'] || '#6366F1'"
           [style.color]="section.settings['textColor'] || '#FFFFFF'">
-          {{ section.settings['text'] || 'Announcement text' }}
+          {{ section.settings['text'] || ('cms.preview.announcementText' | transloco) }}
         </div>
         }
         @case ('header') {
         <header class="bg-white border-b border-ui-border-base px-6 py-4">
           <div class="flex items-center justify-between max-w-6xl mx-auto">
             <div class="flex items-center gap-8">
-              <span class="text-xl font-bold">{{ section.settings['logoText'] || 'Store' }}</span>
+              <span class="text-xl font-bold">{{ section.settings['logoText'] || ('cms.preview.logoText' | transloco) }}</span>
               <nav class="hidden md:flex items-center gap-6">
                 @for (block of section.blocks; track block.id) {
                 <span class="text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
@@ -84,13 +84,13 @@
             [class.text-right]="section.settings['textAlign'] === 'right'"
           >
             <h1 class="text-4xl md:text-5xl font-bold mb-4">
-              {{ section.settings['heading'] || 'Welcome' }}
+              {{ section.settings['heading'] || ('cms.preview.heroWelcome' | transloco) }}
             </h1>
             <p class="text-lg md:text-xl opacity-90 mb-8">
-              {{ section.settings['subheading'] || 'Discover amazing products' }}
+              {{ section.settings['subheading'] || ('cms.preview.heroSubheading' | transloco) }}
             </p>
             <button class="bg-white text-indigo-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-              {{ section.settings['buttonText'] || 'Shop Now' }}
+              {{ section.settings['buttonText'] || ('cms.preview.heroCta' | transloco) }}
             </button>
           </div>
         </div>
@@ -110,10 +110,10 @@
           </div>
           <div class="flex-1 flex items-center justify-center p-8 md:p-12">
             <div class="max-w-md">
-              <h2 class="text-3xl font-bold mb-4">{{ section.settings['heading'] || 'New Collection' }}</h2>
-              <p class="text-gray-600 mb-6">{{ section.settings['description'] || 'Explore our latest arrivals' }}</p>
+              <h2 class="text-3xl font-bold mb-4">{{ section.settings['heading'] || ('cms.preview.splitHeroHeading' | transloco) }}</h2>
+              <p class="text-gray-600 mb-6">{{ section.settings['description'] || ('cms.preview.splitHeroDescription' | transloco) }}</p>
               <button class="bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition">
-                {{ section.settings['buttonText'] || 'Explore' }}
+                {{ section.settings['buttonText'] || ('cms.preview.splitHeroCta' | transloco) }}
               </button>
             </div>
           </div>
@@ -123,10 +123,10 @@
         <div class="py-16 px-6 bg-white">
           <div class="max-w-6xl mx-auto">
             <div class="flex items-center justify-between mb-8">
-              <h2 class="text-2xl font-bold">{{ section.settings['heading'] || 'Featured Products' }}</h2>
+              <h2 class="text-2xl font-bold">{{ section.settings['heading'] || ('cms.preview.featuredHeading' | transloco) }}</h2>
               @if (section.settings['showViewAll']) {
               <button class="text-sm text-indigo-600 hover:text-indigo-700 flex items-center gap-1">
-                View All <i class="pi pi-angle-right text-sm"></i>
+                {{ 'cms.preview.viewAll' | transloco }} <i class="pi pi-angle-right text-sm"></i>
               </button>
               }
             </div>
@@ -134,7 +134,7 @@
               @for (i of range(toNumber(section.settings['productsToShow'], 4)); track i) {
               <div class="group">
                 <div class="aspect-square bg-gray-100 rounded-lg mb-3 group-hover:bg-gray-200 transition"></div>
-                <h3 class="font-medium text-sm mb-1">Product Name</h3>
+                <h3 class="font-medium text-sm mb-1">{{ 'cms.preview.productName' | transloco }}</h3>
                 <p class="text-sm text-gray-600">$99.00</p>
               </div>
               }
@@ -145,7 +145,7 @@
         @case ('collection-tabs') {
         <div class="py-16 px-6 bg-gray-50">
           <div class="max-w-6xl mx-auto">
-            <h2 class="text-2xl font-bold text-center mb-8">{{ section.settings['heading'] || 'Shop by Category' }}</h2>
+            <h2 class="text-2xl font-bold text-center mb-8">{{ section.settings['heading'] || ('cms.preview.shopByCategory' | transloco) }}</h2>
             <div class="flex justify-center gap-4 mb-8">
               @for (block of section.blocks; track block.id; let i = $index) {
               <button class="px-4 py-2 rounded-full text-sm font-medium transition" [class.bg-gray-900]="i === 0"
@@ -159,7 +159,7 @@
               @for (_ of [1,2,3,4]; track $index) {
               <div class="group">
                 <div class="aspect-square bg-white rounded-lg mb-3 shadow-sm group-hover:shadow-md transition"></div>
-                <h3 class="font-medium text-sm mb-1">Product {{ $index + 1 }}</h3>
+                <h3 class="font-medium text-sm mb-1">{{ 'cms.preview.productItem' | transloco: { index: $index + 1 } }}</h3>
                 <p class="text-sm text-gray-600">$79.00</p>
               </div>
               }
@@ -170,19 +170,19 @@
         @case ('highlight-cards') {
         <div class="py-16 px-6 bg-white">
           <div class="max-w-6xl mx-auto">
-            <h2 class="text-2xl font-bold text-center mb-12">{{ section.settings['heading'] || 'Why Choose Us' }}</h2>
+            <h2 class="text-2xl font-bold text-center mb-12">{{ section.settings['heading'] || ('cms.preview.whyChooseUs' | transloco) }}</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-              @for (block of section.blocks.length ? section.blocks : [{ id: '1', name: 'Free Shipping', settings: {
-              icon: 'truck', description: 'On orders over $50' } }, { id: '2', name: 'Easy Returns', settings: { icon:
-              'refresh', description: '30-day return policy' } }, { id: '3', name: 'Secure Payment', settings: { icon:
-              'shield', description: 'Your data is safe' } }]; track block.id; let i = $index) {
+              @for (block of section.blocks.length ? section.blocks : [{ id: '1', name: 'cms.preview.highlight.freeShipping', settings: {
+              icon: 'truck', description: 'cms.preview.highlight.freeShippingDescription' } }, { id: '2', name: 'cms.preview.highlight.easyReturns', settings: { icon:
+              'refresh', description: 'cms.preview.highlight.easyReturnsDescription' } }, { id: '3', name: 'cms.preview.highlight.securePayment', settings: { icon:
+              'shield', description: 'cms.preview.highlight.securePaymentDescription' } }]; track block.id; let i = $index) {
               <div class="text-center">
                 <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mx-auto mb-4">
                   <i class="pi text-indigo-600" [class.pi-truck]="i % 3 === 0" [class.pi-refresh]="i % 3 === 1"
                     [class.pi-shield]="i % 3 === 2"></i>
                 </div>
-                <h3 class="font-semibold mb-2">{{ block.name }}</h3>
-                <p class="text-sm text-gray-600">{{ block.settings['description'] }}</p>
+                <h3 class="font-semibold mb-2">{{ block.name | transloco }}</h3>
+                <p class="text-sm text-gray-600">{{ ($any(block.settings['description']) || '') | transloco }}</p>
               </div>
               }
             </div>
@@ -192,7 +192,7 @@
         @case ('testimonials') {
         <div class="py-16 px-6 bg-gray-50">
           <div class="max-w-4xl mx-auto">
-            <h2 class="text-2xl font-bold text-center mb-12">{{ section.settings['heading'] || 'What Our Customers Say'
+            <h2 class="text-2xl font-bold text-center mb-12">{{ section.settings['heading'] || ('cms.preview.testimonialsHeading' | transloco)
               }}</h2>
             <div class="bg-white rounded-2xl p-8 shadow-sm">
               <div class="flex gap-1 mb-4">
@@ -200,13 +200,12 @@
                 <i class="pi pi-star-fill text-yellow-400"></i>
                 }
               </div>
-              <p class="text-lg text-gray-700 mb-6">"This is the best online shopping experience I've ever had. The
-                products are amazing and the service is top-notch!"</p>
+              <p class="text-lg text-gray-700 mb-6">{{ 'cms.preview.testimonialQuote' | transloco }}</p>
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-gray-200"></div>
                 <div>
-                  <p class="font-medium">Jane Doe</p>
-                  <p class="text-sm text-gray-600">Verified Customer</p>
+                  <p class="font-medium">{{ 'cms.preview.testimonialName' | transloco }}</p>
+                  <p class="text-sm text-gray-600">{{ 'cms.preview.testimonialRole' | transloco }}</p>
                 </div>
               </div>
             </div>
@@ -217,13 +216,13 @@
         <div class="py-16 px-6" [style.backgroundColor]="section.settings['backgroundColor'] || '#F8FAFC'">
           <div class="max-w-xl mx-auto text-center">
             <i class="pi pi-envelope text-indigo-600 text-3xl mb-4"></i>
-            <h2 class="text-2xl font-bold mb-2">{{ section.settings['heading'] || 'Stay Updated' }}</h2>
-            <p class="text-gray-600 mb-6">{{ section.settings['subheading'] || 'Subscribe to our newsletter' }}</p>
+            <h2 class="text-2xl font-bold mb-2">{{ section.settings['heading'] || ('cms.preview.newsletterHeading' | transloco) }}</h2>
+            <p class="text-gray-600 mb-6">{{ section.settings['subheading'] || ('cms.preview.newsletterSubheading' | transloco) }}</p>
             <div class="flex gap-2 max-w-md mx-auto">
-              <input type="email" placeholder="Enter your email"
+              <input type="email" [placeholder]="'cms.preview.newsletterEmailPlaceholder' | transloco"
                 class="flex-1 px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
               <button class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition">
-                {{ section.settings['buttonText'] || 'Subscribe' }}
+                {{ section.settings['buttonText'] || ('cms.preview.newsletterCta' | transloco) }}
               </button>
             </div>
           </div>
@@ -234,34 +233,34 @@
           <div class="max-w-6xl mx-auto">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
               <div>
-                <h3 class="font-semibold mb-4">Quick Links</h3>
+                <h3 class="font-semibold mb-4">{{ 'cms.preview.footer.quickLinks' | transloco }}</h3>
                 <ul class="space-y-2 text-sm text-gray-400">
-                  <li>Shop All</li>
-                  <li>New Arrivals</li>
-                  <li>Best Sellers</li>
-                  <li>Sale</li>
+                  <li>{{ 'cms.preview.footer.shopAll' | transloco }}</li>
+                  <li>{{ 'cms.preview.footer.newArrivals' | transloco }}</li>
+                  <li>{{ 'cms.preview.footer.bestSellers' | transloco }}</li>
+                  <li>{{ 'cms.preview.footer.sale' | transloco }}</li>
                 </ul>
               </div>
               <div>
-                <h3 class="font-semibold mb-4">Customer Service</h3>
+                <h3 class="font-semibold mb-4">{{ 'cms.preview.footer.customerService' | transloco }}</h3>
                 <ul class="space-y-2 text-sm text-gray-400">
-                  <li>Contact Us</li>
-                  <li>Shipping Info</li>
-                  <li>Returns</li>
-                  <li>FAQ</li>
+                  <li>{{ 'cms.preview.footer.contactUs' | transloco }}</li>
+                  <li>{{ 'cms.preview.footer.shippingInfo' | transloco }}</li>
+                  <li>{{ 'cms.preview.footer.returns' | transloco }}</li>
+                  <li>{{ 'cms.preview.footer.faq' | transloco }}</li>
                 </ul>
               </div>
               <div>
-                <h3 class="font-semibold mb-4">Company</h3>
+                <h3 class="font-semibold mb-4">{{ 'cms.preview.footer.company' | transloco }}</h3>
                 <ul class="space-y-2 text-sm text-gray-400">
-                  <li>About Us</li>
-                  <li>Careers</li>
-                  <li>Press</li>
-                  <li>Blog</li>
+                  <li>{{ 'cms.preview.footer.aboutUs' | transloco }}</li>
+                  <li>{{ 'cms.preview.footer.careers' | transloco }}</li>
+                  <li>{{ 'cms.preview.footer.press' | transloco }}</li>
+                  <li>{{ 'cms.preview.footer.blog' | transloco }}</li>
                 </ul>
               </div>
               <div>
-                <h3 class="font-semibold mb-4">Follow Us</h3>
+                <h3 class="font-semibold mb-4">{{ 'cms.preview.footer.followUs' | transloco }}</h3>
                 @if (section.settings['showSocialLinks']) {
                 <div class="flex gap-4">
                   <i class="pi pi-facebook text-gray-400 hover:text-white cursor-pointer"></i>
@@ -272,14 +271,14 @@
               </div>
             </div>
             <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-              {{ section.settings['copyrightText'] || '?? 2026 Your Store. All rights reserved.' }}
+              {{ section.settings['copyrightText'] || ('cms.preview.footer.copyright' | transloco) }}
             </div>
           </div>
         </footer>
         }
         @default {
         <div class="py-12 px-6 bg-gray-100 text-center text-gray-500">
-          Unknown section type: {{ section.type }}
+          {{ 'cms.preview.unknownSection' | transloco: { type: section.type } }}
         </div>
         }
         }

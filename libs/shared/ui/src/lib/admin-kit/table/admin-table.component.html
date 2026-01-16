@@ -29,7 +29,7 @@
           <ng-template #headerLabel>{{ column.header }}</ng-template>
         </th>
         <th *ngIf="rowActions?.length" class="px-4 py-3 text-right">
-          <span class="sr-only">Actions</span>
+          <span class="sr-only">{{ 'admin.table.actions' | transloco }}</span>
         </th>
       </tr>
     </ng-template>
@@ -46,7 +46,7 @@
             icon="pi pi-ellipsis-v"
             class="p-button-text"
             (click)="openRowMenu($event, row)"
-            aria-label="Row actions"
+            [attr.aria-label]="'admin.table.rowActions' | transloco"
           ></button>
         </td>
       </tr>
@@ -57,10 +57,10 @@
         <td [attr.colspan]="totalColumns">
           <div class="flex flex-col items-center justify-center py-10 text-sm text-gray-500 dark:text-zinc-400">
             <div class="text-base font-semibold text-gray-700 dark:text-zinc-200">
-              {{ emptyState?.title ?? 'No records found' }}
+              {{ emptyState?.title ?? ('admin.table.emptyTitle' | transloco) }}
             </div>
             <div class="mt-1">
-              {{ emptyState?.description ?? 'Try adjusting your filters or add new records.' }}
+              {{ emptyState?.description ?? ('admin.table.emptyDescription' | transloco) }}
             </div>
           </div>
         </td>

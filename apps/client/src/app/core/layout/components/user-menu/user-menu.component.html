@@ -29,7 +29,7 @@
       [routerLink]="'/settings/profile'"
     >
       <i class="pi pi-user text-ui-fg-subtle me-2"></i>
-      <span class="text-sm">Profile Settings</span>
+      <span class="text-sm">{{ 'layout.userMenu.profileSettings' | transloco }}</span>
     </a>
 
     <p-divider styleClass="my-2" />
@@ -41,7 +41,7 @@
       rel="noreferrer"
     >
       <i class="pi pi-book text-ui-fg-subtle me-2"></i>
-      <span class="text-sm">Documentation</span>
+      <span class="text-sm">{{ 'layout.userMenu.documentation' | transloco }}</span>
     </a>
 
     <a
@@ -51,7 +51,7 @@
       rel="noreferrer"
     >
       <i class="pi pi-clock text-ui-fg-subtle me-2"></i>
-      <span class="text-sm">Changelog</span>
+      <span class="text-sm">{{ 'layout.userMenu.changelog' | transloco }}</span>
     </a>
 
     <p-divider styleClass="my-2" />
@@ -62,11 +62,11 @@
       (click)="menuPanel.hide(); openShortcuts()"
     >
       <i class="pi pi-keyboard text-ui-fg-subtle me-2"></i>
-      <span class="text-sm">Shortcuts</span>
+      <span class="text-sm">{{ 'layout.userMenu.shortcuts' | transloco }}</span>
     </button>
 
     <div class="mt-1">
-      <div class="px-2 py-1 text-xs text-ui-fg-muted">Theme</div>
+      <div class="px-2 py-1 text-xs text-ui-fg-muted">{{ 'layout.userMenu.theme' | transloco }}</div>
 
       <button
         type="button"
@@ -78,7 +78,7 @@
           [class.pi-check]="isTheme('system')"
           [class.pi-circle]="!isTheme('system')"
         ></i>
-        <span class="text-sm">System</span>
+        <span class="text-sm">{{ 'layout.userMenu.themeSystem' | transloco }}</span>
       </button>
 
       <button
@@ -91,7 +91,7 @@
           [class.pi-check]="isTheme('light')"
           [class.pi-circle]="!isTheme('light')"
         ></i>
-        <span class="text-sm">Light</span>
+        <span class="text-sm">{{ 'layout.userMenu.themeLight' | transloco }}</span>
       </button>
 
       <button
@@ -104,7 +104,7 @@
           [class.pi-check]="isTheme('dark')"
           [class.pi-circle]="!isTheme('dark')"
         ></i>
-        <span class="text-sm">Dark</span>
+        <span class="text-sm">{{ 'layout.userMenu.themeDark' | transloco }}</span>
       </button>
     </div>
 
@@ -116,7 +116,7 @@
       (click)="logout()"
     >
       <i class="pi pi-sign-out text-ui-fg-subtle me-2"></i>
-      <span class="text-sm">Logout</span>
+      <span class="text-sm">{{ 'layout.userMenu.logout' | transloco }}</span>
     </button>
   </p-popover>
 
@@ -151,7 +151,7 @@
 >
   <ng-template pTemplate="header">
     <div class="flex w-full items-center justify-between">
-      <div class="text-base font-semibold">Shortcuts</div>
+      <div class="text-base font-semibold">{{ 'layout.userMenu.shortcuts' | transloco }}</div>
       <div class="flex items-center gap-x-2">
         <span class="px-2 py-1 rounded border text-xs">esc</span>
         <button
@@ -173,7 +173,7 @@
       type="search"
       [(ngModel)]="searchValue"
       class="w-full"
-      placeholder="Search shortcuts…"
+      [placeholder]="'layout.userMenu.searchShortcuts' | transloco"
     />
   </div>
 
@@ -190,7 +190,7 @@
           <span
             *ngIf="j < (s.keys.Mac?.length || 0) - 1"
             class="text-xs text-ui-fg-subtle"
-            >then</span
+            >{{ 'common.then' | transloco }}</span
           >
         </ng-container>
       </div>

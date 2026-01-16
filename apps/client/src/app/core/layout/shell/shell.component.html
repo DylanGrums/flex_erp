@@ -28,10 +28,10 @@
             type="button"
             class="p-button-text p-button-sm"
             icon="pi pi-times"
-            aria-label="Close navigation"
+            [attr.aria-label]="'layout.shell.closeNavigation' | transloco"
             (click)="closeMobile()"
           ></button>
-          <span class="sr-only">Navigation</span>
+          <span class="sr-only">{{ 'layout.shell.navigation' | transloco }}</span>
         </div>
       </ng-template>
 
@@ -59,7 +59,7 @@
             class="hidden p-button-text p-button-sm lg:flex"
             icon="pi pi-bars"
             size="small"
-            aria-label="Toggle navigation"
+            [attr.aria-label]="'layout.shell.toggleNavigation' | transloco"
             (click)="toggleDesktop()"
           ></button>
 
@@ -68,7 +68,7 @@
             type="button"
             class="flex p-button-text p-button-sm lg:hidden"
             icon="pi pi-bars"
-            aria-label="Open navigation"
+            [attr.aria-label]="'layout.shell.openNavigation' | transloco"
             size="small"
             (click)="toggleMobile()"
           ></button>

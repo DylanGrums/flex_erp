@@ -1,16 +1,407 @@
 {
+  "layout.shell.closeNavigation": "Missing value for 'layout.shell.closeNavigation'",
+  "layout.shell.navigation": "Missing value for 'layout.shell.navigation'",
+  "layout.shell.toggleNavigation": "Missing value for 'layout.shell.toggleNavigation'",
+  "layout.shell.openNavigation": "Missing value for 'layout.shell.openNavigation'",
   "app.title": "Missing value for 'app.title'",
   "demo.hello": "Missing value for 'demo.hello'",
+  "nav.settings": "Missing value for 'nav.settings'",
+  "settings.sections.general": "Missing value for 'settings.sections.general'",
+  "settings.sections.developer": "Missing value for 'settings.sections.developer'",
+  "settings.sections.account": "Missing value for 'settings.sections.account'",
+  "nav.store": "Missing value for 'nav.store'",
+  "nav.storeSettings": "Missing value for 'nav.storeSettings'",
+  "common.logout": "Missing value for 'common.logout'",
+  "layout.userMenu.profileSettings": "Missing value for 'layout.userMenu.profileSettings'",
+  "layout.userMenu.documentation": "Missing value for 'layout.userMenu.documentation'",
+  "layout.userMenu.changelog": "Missing value for 'layout.userMenu.changelog'",
+  "layout.userMenu.shortcuts": "Missing value for 'layout.userMenu.shortcuts'",
+  "layout.userMenu.theme": "Missing value for 'layout.userMenu.theme'",
+  "layout.userMenu.themeSystem": "Missing value for 'layout.userMenu.themeSystem'",
+  "layout.userMenu.themeLight": "Missing value for 'layout.userMenu.themeLight'",
+  "layout.userMenu.themeDark": "Missing value for 'layout.userMenu.themeDark'",
+  "layout.userMenu.logout": "Missing value for 'layout.userMenu.logout'",
+  "layout.userMenu.searchShortcuts": "Missing value for 'layout.userMenu.searchShortcuts'",
+  "common.then": "Missing value for 'common.then'",
+  "layout.notifications.ariaLabel": "Missing value for 'layout.notifications.ariaLabel'",
+  "layout.notifications.title": "Missing value for 'layout.notifications.title'",
+  "layout.notifications.allCaughtUp": "Missing value for 'layout.notifications.allCaughtUp'",
+  "layout.notifications.empty": "Missing value for 'layout.notifications.empty'",
+  "client.pages.storeSettings.title": "Missing value for 'client.pages.storeSettings.title'",
+  "common.placeholder": "Missing value for 'common.placeholder'",
+  "client.pages.profile.title": "Missing value for 'client.pages.profile.title'",
+  "client.pages.products.title": "Missing value for 'client.pages.products.title'",
+  "client.pages.orders.title": "Missing value for 'client.pages.orders.title'",
   "app": {
     "title": "Flex ERP"
   },
   "nav": {
     "dashboard": "Dashboard",
-    "settings": "Settings"
+    "settings": "Settings",
+    "store": "Store",
+    "storeSettings": "Store settings"
   },
   "common": {
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "placeholder": "Placeholder page.",
+    "logout": "Logout",
+    "then": "then",
+    "confirmTitle": "Confirm action",
+    "confirmDescription": "Are you sure you want to proceed?"
+  },
+  "auth": {
+    "login": {
+      "emailLabel": "Email",
+      "invalidCredentials": "Invalid credentials",
+      "emailPlaceholder": "you@example.com",
+      "emailInvalid": "Provide a valid email.",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "passwordInvalid": "Password must be at least 6 characters.",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "submit": "Log in"
+    }
+  },
+  "layout": {
+    "userMenu": {
+      "profileSettings": "Profile settings",
+      "documentation": "Documentation",
+      "changelog": "Changelog",
+      "shortcuts": "Shortcuts",
+      "theme": "Theme",
+      "themeSystem": "System",
+      "themeLight": "Light",
+      "themeDark": "Dark",
+      "logout": "Logout",
+      "searchShortcuts": "Search shortcuts"
+    },
+    "notifications": {
+      "ariaLabel": "Notifications",
+      "title": "Notifications",
+      "allCaughtUp": "You're all caught up",
+      "empty": "No notifications to show."
+    },
+    "shell": {
+      "navigation": "Navigation",
+      "closeNavigation": "Close navigation",
+      "toggleNavigation": "Toggle navigation",
+      "openNavigation": "Open navigation"
+    }
+  },
+  "settings": {
+    "sections": {
+      "general": "General",
+      "developer": "Developer",
+      "account": "My account"
+    },
+    "general": {
+      "store": "Store",
+      "users": "Users",
+      "regions": "Regions",
+      "taxRegions": "Tax regions",
+      "returnReasons": "Return reasons",
+      "refundReasons": "Refund reasons",
+      "salesChannels": "Sales channels",
+      "productTypes": "Product types",
+      "productTags": "Product tags",
+      "stockLocations": "Stock locations"
+    },
+    "developer": {
+      "publishableApiKeys": "Publishable API keys",
+      "secretApiKeys": "Secret API keys",
+      "workflowExecutions": "Workflow executions"
+    },
+    "account": {
+      "profile": "Profile"
+    }
+  },
+  "admin": {
+    "table": {
+      "actions": "Actions",
+      "rowActions": "Row actions",
+      "emptyTitle": "No records found",
+      "emptyDescription": "Try adjusting your filters or add new records."
+    },
+    "pagination": {
+      "results": "Showing {{start}} to {{end}} of {{total}} results"
+    },
+    "shell": {
+      "brand": "Flex ERP Store",
+      "user": "Admin user",
+      "userEmail": "admin@flex-erp.com"
+    },
+    "nav": {
+      "search": "Search",
+      "orders": "Orders",
+      "products": "Products",
+      "collections": "Collections",
+      "categories": "Categories",
+      "inventory": "Inventory",
+      "customers": "Customers",
+      "promotions": "Promotions",
+      "priceLists": "Price lists"
+    },
+    "dashboard": "Dashboard"
+  },
+  "store": {
+    "pages": {
+      "comingSoon": "Coming soon",
+      "orders": {
+        "title": "Orders",
+        "subtitle": "Track orders, payments, and fulfillment.",
+        "comingSoonTitle": "Coming soon",
+        "comingSoonDescription": "More tools for order management are on the way."
+      },
+      "inventory": {
+        "title": "Inventory",
+        "subtitle": "Track stock levels across locations.",
+        "comingSoonTitle": "Coming soon",
+        "comingSoonDescription": "More tools for inventory management are on the way."
+      },
+      "promotions": {
+        "title": "Promotions",
+        "subtitle": "Create discounts and campaigns.",
+        "comingSoonTitle": "Coming soon",
+        "comingSoonDescription": "More tools for promotion management are on the way."
+      },
+      "customers": {
+        "title": "Customers",
+        "subtitle": "Manage customer profiles and history.",
+        "comingSoonTitle": "Coming soon",
+        "comingSoonDescription": "More tools for customer management are on the way."
+      },
+      "products": {
+        "title": "Products",
+        "subtitle": "Manage products, variants, and availability.",
+        "comingSoonTitle": "Coming soon",
+        "comingSoonDescription": "More tools for product management are on the way."
+      },
+      "collections": {
+        "title": "Collections",
+        "subtitle": "Group products into curated collections.",
+        "comingSoonTitle": "Coming soon",
+        "comingSoonDescription": "More tools for collection management are on the way."
+      },
+      "categories": {
+        "title": "Categories",
+        "subtitle": "Organize products across your catalog.",
+        "comingSoonTitle": "Coming soon",
+        "comingSoonDescription": "More tools for category management are on the way."
+      },
+      "priceLists": {
+        "title": "Price lists",
+        "subtitle": "Configure price lists and overrides.",
+        "comingSoonTitle": "Coming soon",
+        "comingSoonDescription": "More tools for price list management are on the way."
+      }
+    },
+    "nav": {
+      "section": "Store",
+      "orders": "Orders",
+      "products": "Products",
+      "collections": "Collections",
+      "categories": "Categories",
+      "inventory": "Inventory",
+      "reservations": "Reservations",
+      "customers": "Customers",
+      "customerGroups": "Customer groups",
+      "promotions": "Promotions",
+      "campaigns": "Campaigns",
+      "priceLists": "Price lists"
+    },
+    "routes": {
+      "orders": {
+        "breadcrumb": "Orders",
+        "title": "Orders",
+        "subtitle": "Track orders, payments, and fulfillment."
+      },
+      "products": {
+        "breadcrumb": "Products",
+        "title": "Products",
+        "subtitle": "Manage products, variants, and availability."
+      },
+      "collections": {
+        "breadcrumb": "Collections",
+        "title": "Collections",
+        "subtitle": "Group products into curated collections."
+      },
+      "categories": {
+        "breadcrumb": "Categories",
+        "title": "Categories",
+        "subtitle": "Organize products across your catalog."
+      },
+      "inventory": {
+        "breadcrumb": "Inventory",
+        "title": "Inventory",
+        "subtitle": "Track stock levels across locations."
+      },
+      "customers": {
+        "breadcrumb": "Customers",
+        "title": "Customers",
+        "subtitle": "Manage customer profiles and history."
+      },
+      "promotions": {
+        "breadcrumb": "Promotions",
+        "title": "Promotions",
+        "subtitle": "Create discounts and campaigns."
+      },
+      "priceLists": {
+        "breadcrumb": "Price lists",
+        "title": "Price lists",
+        "subtitle": "Configure price lists and overrides."
+      }
+    },
+    "dataAccess": {
+      "ready": "Data access ready"
+    }
+  },
+  "client": {
+    "pages": {
+      "orders": {
+        "title": "Orders"
+      },
+      "products": {
+        "title": "Products"
+      },
+      "profile": {
+        "title": "Profile"
+      },
+      "storeSettings": {
+        "title": "Store settings"
+      }
+    }
+  },
+  "cms": {
+    "types": {
+      "ready": "CMS types ready"
+    },
+    "editor": {
+      "onboarding": {
+        "startBuilding": "Start building your store",
+        "chooseTemplate": "Choose your starting template",
+        "description": "Select a template that best matches your vision. You can customize everything later.",
+        "startWithTemplate": "Start with this template"
+      },
+      "pages": {
+        "home": "Home",
+        "collection": "Collection",
+        "product": "Product"
+      },
+      "devices": {
+        "desktop": "Desktop",
+        "tablet": "Tablet",
+        "mobile": "Mobile"
+      },
+      "actions": {
+        "undo": "Undo",
+        "redo": "Redo",
+        "save": "Save",
+        "publish": "Publish"
+      },
+      "noSectionSelected": "No section selected",
+      "selectSectionHint": "Click on a section in the preview or left panel to edit its settings",
+      "characters": "characters",
+      "selectColor": "Select color {{color}}",
+      "replace": "Replace",
+      "remove": "Remove",
+      "clickToUpload": "Click to upload",
+      "products": "products",
+      "selectCollection": "Select collection",
+      "searchCollections": "Search collections...",
+      "resetSection": "Reset section",
+      "sectionLibrary": {
+        "title": "Add section",
+        "searchPlaceholder": "Search sections...",
+        "emptyTitle": "No sections found",
+        "emptyDescription": "Try adjusting your search or category"
+      },
+      "categories": {
+        "all": "All",
+        "header": "Header",
+        "hero": "Hero",
+        "collections": "Collections",
+        "product": "Product",
+        "marketing": "Marketing",
+        "footer": "Footer"
+      },
+      "sections": {
+        "title": "Sections",
+        "dragToReorder": "Drag to reorder",
+        "emptyTitle": "No sections yet",
+        "emptyDescription": "Click below to add your first section",
+        "addSection": "Add section",
+        "deleteTitle": "Delete section",
+        "deleteDescription": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone."
+      }
+    },
+    "preview": {
+      "emptyTitle": "No sections yet",
+      "emptyDescription": "Add sections from the left panel to start building your page",
+      "announcementText": "Announcement text",
+      "logoText": "Store",
+      "heroWelcome": "Welcome",
+      "heroSubheading": "Discover amazing products",
+      "heroCta": "Shop now",
+      "splitHeroHeading": "New collection",
+      "splitHeroDescription": "Explore our latest arrivals",
+      "splitHeroCta": "Explore",
+      "featuredHeading": "Featured products",
+      "viewAll": "View all",
+      "productName": "Product name",
+      "shopByCategory": "Shop by category",
+      "productItem": "Product {{index}}",
+      "whyChooseUs": "Why choose us",
+      "highlight": {
+        "freeShipping": "Free shipping",
+        "freeShippingDescription": "On orders over $50",
+        "easyReturns": "Easy returns",
+        "easyReturnsDescription": "30-day return policy",
+        "securePayment": "Secure payment",
+        "securePaymentDescription": "Your data is safe"
+      },
+      "testimonialsHeading": "What our customers say",
+      "testimonialQuote": "This is the best online shopping experience I've ever had. The products are amazing and the service is top-notch!",
+      "testimonialName": "Jane Doe",
+      "testimonialRole": "Verified customer",
+      "newsletterHeading": "Stay updated",
+      "newsletterSubheading": "Subscribe to our newsletter",
+      "newsletterEmailPlaceholder": "Enter your email",
+      "newsletterCta": "Subscribe",
+      "footer": {
+        "quickLinks": "Quick links",
+        "shopAll": "Shop all",
+        "newArrivals": "New arrivals",
+        "bestSellers": "Best sellers",
+        "sale": "Sale",
+        "customerService": "Customer service",
+        "contactUs": "Contact us",
+        "shippingInfo": "Shipping info",
+        "returns": "Returns",
+        "faq": "FAQ",
+        "company": "Company",
+        "aboutUs": "About us",
+        "careers": "Careers",
+        "press": "Press",
+        "blog": "Blog",
+        "followUs": "Follow us",
+        "copyright": "(c) 2026 Your Store. All rights reserved."
+      },
+      "unknownSection": "Unknown section type: {{type}}"
+    },
+    "nav": {
+      "section": "CMS",
+      "editor": "Editor"
+    },
+    "routes": {
+      "editor": {
+        "breadcrumb": "Editor",
+        "title": "Editor",
+        "subtitle": "Design and manage your storefront."
+      }
+    }
   },
   "demo": {
     "hello": "Hello {{name}}"

@@ -6,13 +6,14 @@ import { DrawerModule } from 'primeng/drawer';
 import { DividerModule } from 'primeng/divider';
 
 import { NotificationsService, NotificationData } from './notifications.service';
+import { TranslocoModule } from '@jsverse/transloco';
 
 const LAST_READ_NOTIFICATION_KEY = 'notificationsLastReadAt';
 
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [CommonModule, ButtonModule, DrawerModule, DividerModule],
+  imports: [CommonModule, ButtonModule, DrawerModule, DividerModule, TranslocoModule],
   templateUrl: './notifications.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

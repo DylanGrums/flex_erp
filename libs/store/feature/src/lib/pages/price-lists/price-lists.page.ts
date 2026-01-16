@@ -1,21 +1,23 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'fe-store-price-lists-page',
   standalone: true,
+  imports: [TranslocoModule],
   template: `
     <section class="space-y-6">
       <header>
-        <h1 class="text-2xl font-semibold text-ui-fg-base">Price Lists</h1>
+        <h1 class="text-2xl font-semibold text-ui-fg-base">{{ 'store.pages.priceLists.title' | transloco }}</h1>
         <p class="mt-1 text-sm text-ui-fg-subtle">
-          Configure price lists and overrides.
+          {{ 'store.pages.priceLists.subtitle' | transloco }}
         </p>
       </header>
 
       <div class="medusa-panel p-6">
-        <p class="text-sm font-medium text-ui-fg-base">Coming soon</p>
+        <p class="text-sm font-medium text-ui-fg-base">{{ 'store.pages.priceLists.comingSoonTitle' | transloco }}</p>
         <p class="mt-1 text-xs text-ui-fg-subtle">
-          More tools for price list management are on the way.
+          {{ 'store.pages.priceLists.comingSoonDescription' | transloco }}
         </p>
       </div>
     </section>

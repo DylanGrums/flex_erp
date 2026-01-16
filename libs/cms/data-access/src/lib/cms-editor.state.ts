@@ -27,7 +27,7 @@ import {
   Section,
   SectionDefinition,
   Template,
-} from '@flex-erp/types';
+} from '@flex-erp/cms/types';
 import { classicStorefrontTemplate } from './mock-data';
 
 const DEFAULT_STATE: CmsEditorStateModel = {
@@ -234,7 +234,7 @@ export class CmsEditorState {
     const template: Template | undefined = action.template ?? classicStorefrontTemplate;
     ctx.setState({
       ...DEFAULT_STATE,
-      sections: cloneSections(template.sections),
+      sections: cloneSections(template ? template.sections : []),
       ui: {
         ...DEFAULT_STATE.ui,
         isOnboardingDone: true,

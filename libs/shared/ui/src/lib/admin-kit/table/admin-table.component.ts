@@ -20,11 +20,12 @@ import {
   AdminTableEmptyState,
   AdminTableSort,
 } from '../admin-kit.types';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'fe-admin-table',
   standalone: true,
-  imports: [CommonModule, TableModule, MenuModule, ButtonModule],
+  imports: [CommonModule, TableModule, MenuModule, ButtonModule, TranslocoModule],
   templateUrl: './admin-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

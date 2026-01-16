@@ -2,17 +2,17 @@
   class="w-[280px] bg-ui-bg-base border-r border-ui-border-base flex flex-col h-full"
 >
   <div class="px-4 py-3 border-b border-ui-border-base">
-    <h2 class="text-sm font-semibold text-ui-fg-base">Sections</h2>
-    <p class="text-xs text-ui-fg-muted mt-0.5">Drag to reorder</p>
+    <h2 class="text-sm font-semibold text-ui-fg-base">{{ 'cms.editor.sections.title' | transloco }}</h2>
+    <p class="text-xs text-ui-fg-muted mt-0.5">{{ 'cms.editor.sections.dragToReorder' | transloco }}</p>
   </div>
 
   <cms-scroll-area className="flex-1">
     <div class="py-2" (dragend)="onDragEnd()">
       @if (sections.length === 0) {
       <div class="px-4 py-8 text-center">
-        <p class="text-sm text-ui-fg-muted">No sections yet</p>
+        <p class="text-sm text-ui-fg-muted">{{ 'cms.editor.sections.emptyTitle' | transloco }}</p>
         <p class="text-xs text-ui-fg-muted mt-1">
-          Click below to add your first section
+          {{ 'cms.editor.sections.emptyDescription' | transloco }}
         </p>
       </div>
       } @else { @for (section of sections; track section.id; let index = $index)
@@ -151,7 +151,7 @@
       (click)="openSectionLibrary.emit()"
     >
       <i class="pi pi-plus text-xs"></i>
-      Add Section
+      {{ 'cms.editor.sections.addSection' | transloco }}
     </cms-button>
   </div>
 </div>
@@ -163,16 +163,15 @@
 >
   <div class="p-6 space-y-4">
     <div>
-      <h3 class="text-lg font-semibold text-ui-fg-base">Delete Section</h3>
+      <h3 class="text-lg font-semibold text-ui-fg-base">{{ 'cms.editor.sections.deleteTitle' | transloco }}</h3>
       <p class="text-sm text-ui-fg-muted mt-2">
-        Are you sure you want to delete "{{ pendingDelete?.name }}"? This action
-        cannot be undone.
+        {{ 'cms.editor.sections.deleteDescription' | transloco: { name: pendingDelete?.name } }}
       </p>
     </div>
     <div class="flex justify-end gap-2">
-      <cms-button variant="outline" (click)="cancelDelete()">Cancel</cms-button>
+      <cms-button variant="outline" (click)="cancelDelete()">{{ 'common.cancel' | transloco }}</cms-button>
       <cms-button variant="destructive" (click)="deleteSection()"
-        >Delete</cms-button
+        >{{ 'common.delete' | transloco }}</cms-button
       >
     </div>
   </div>

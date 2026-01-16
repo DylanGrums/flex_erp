@@ -14,6 +14,7 @@ import { filter } from 'rxjs/operators';
 
 import { RdxCollapsibleModule } from '@radix-ng/primitives/collapsible';
 import { RdxTooltipModule } from '@radix-ng/primitives/tooltip';
+import { TranslocoModule } from '@jsverse/transloco';
 
 export type ItemType = 'core' | 'extension' | 'setting';
 
@@ -50,7 +51,7 @@ const SETTING_NAV_LINK_CLASSES = 'pl-2 py-1';
 @Component({
   selector: 'app-nav-item',
   standalone: true,
-  imports: [RouterLink, RdxCollapsibleModule, RdxTooltipModule],
+  imports: [RouterLink, RdxCollapsibleModule, RdxTooltipModule, TranslocoModule],
   templateUrl: './nav-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -60,7 +61,7 @@ export class NavItemComponent {
 
   readonly item = input.required<NavItem>();
   readonly shortcuts = input<GlobalShortcut[]>([]);
-  readonly thenLabel = input<string>('then');
+  readonly thenLabel = input<string>('common.then');
   readonly openDelay = input<number>(1500);
 
   private readonly pathname = signal(this.router.url);

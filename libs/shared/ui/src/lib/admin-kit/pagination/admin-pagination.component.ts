@@ -2,15 +2,24 @@ import { Component, Input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { AdminPaginationChange } from '../admin-kit.types';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'fe-admin-pagination',
   standalone: true,
-  imports: [CommonModule, PaginatorModule],
+  imports: [CommonModule, PaginatorModule, TranslocoModule],
   template: `
     <div class="flex items-center justify-between px-4 py-3 border-t border-ui-border-base bg-ui-bg-base/50">
       <span class="text-xs text-ui-fg-muted">
-        Showing {{ first + 1 }} to {{ Math.min(first + pageSize, total) }} of {{ total }} results
+        {{
+          'admin.pagination.results'
+            | transloco
+              : {
+                  start: first + 1,
+                  end: Math.min(first + pageSize, total),
+                  total
+                }
+        }}
       </span>
       
       <p-paginator

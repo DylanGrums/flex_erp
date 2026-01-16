@@ -1,21 +1,23 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'fe-store-categories-page',
   standalone: true,
+  imports: [TranslocoModule],
   template: `
     <section class="space-y-6">
       <header>
-        <h1 class="text-2xl font-semibold text-ui-fg-base">Categories</h1>
+        <h1 class="text-2xl font-semibold text-ui-fg-base">{{ 'store.pages.categories.title' | transloco }}</h1>
         <p class="mt-1 text-sm text-ui-fg-subtle">
-          Organize products across your catalog.
+          {{ 'store.pages.categories.subtitle' | transloco }}
         </p>
       </header>
 
       <div class="medusa-panel p-6">
-        <p class="text-sm font-medium text-ui-fg-base">Coming soon</p>
+        <p class="text-sm font-medium text-ui-fg-base">{{ 'store.pages.categories.comingSoonTitle' | transloco }}</p>
         <p class="mt-1 text-xs text-ui-fg-subtle">
-          More tools for category management are on the way.
+          {{ 'store.pages.categories.comingSoonDescription' | transloco }}
         </p>
       </div>
     </section>

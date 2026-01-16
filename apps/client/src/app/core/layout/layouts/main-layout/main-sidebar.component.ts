@@ -14,14 +14,16 @@ import { SearchService } from '../../services/search.service';
 import { NavItem } from '../../types/nav.models';
 
 import { FlexDividerComponent } from '@flex-erp/shared/ui';
+import { TranslocoModule } from '@jsverse/transloco';
 
 import {
   RdxDropdownMenuTriggerDirective,
   RdxDropdownMenuContentDirective,
   RdxDropdownMenuItemDirective,
 } from '@radix-ng/primitives/dropdown-menu';
-import { NAV_MANIFESTS } from '@flex-erp/shared/nav';
 
+import { NAV_MANIFESTS } from '@flex-erp/shared/nav';
+import { CMS_NAV } from '@flex-erp/cms/manifest';
 
 @Component({
   selector: 'app-main-sidebar',
@@ -36,7 +38,8 @@ import { NAV_MANIFESTS } from '@flex-erp/shared/nav';
     RdxDropdownMenuTriggerDirective,
     RdxDropdownMenuContentDirective,
     RdxDropdownMenuItemDirective,
-    FlexDividerComponent
+    FlexDividerComponent,
+    TranslocoModule,
   ],
   templateUrl: './main-sidebar.component.html',
   styles: [
@@ -52,12 +55,31 @@ export class MainSidebarComponent {
   readonly search = inject(SearchService);
   readonly shortcuts = inject(ShortcutsService);
 
-  private readonly manifests = inject(NAV_MANIFESTS, { optional: true }) ?? [];
+  private readonly manifests = (() => {
+    const injected = inject(NAV_MANIFESTS, { optional: true }) ?? [];
+    const merged = [...injected];
 
-  readonly coreSections = computed<{ label: string; items: NavItem[]; dividerAfter?: boolean }[]>(() => {
-    const sortedManifests = [...this.manifests].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    // ✅ Ensure CMS is present (avoid duplicates)
+    const cmsManifest = CMS_NAV.nav.manifest;
+    if (!merged.some((m) => m.id === cmsManifest.id)) {
+      merged.push(cmsManifest);
+    }
+
+    return merged;
+  })();
+
+  readonly coreSections = computed<
+    { label: string; items: NavItem[]; dividerAfter?: boolean }[]
+  >(() => {
+    const sortedManifests = [...this.manifests].sort(
+      (a, b) => (a.order ?? 0) - (b.order ?? 0)
+    );
+
     return sortedManifests.flatMap((manifest) => {
-      const sections = [...manifest.sections].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+      const sections = [...manifest.sections].sort(
+        (a, b) => (a.order ?? 0) - (b.order ?? 0)
+      );
+
       return sections.map((section) => ({
         label: section.label,
         items: section.items as NavItem[],
@@ -65,7 +87,6 @@ export class MainSidebarComponent {
       }));
     });
   });
-
 
   toggleSearch(): void {
     this.search.toggle();

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { CmsEditorFacade, mockCollections, sectionDefinitions, templates } from '@flex-erp/data-access';
-import { Collection, DeviceType, PageType, SectionDefinition, Template } from '@flex-erp/types';
-import { CmsEditorShellComponent } from '@flex-erp/ui';
+import { CmsEditorFacade, mockCollections, sectionDefinitions, templates } from '@flex-erp/cms/data-access';
+import { Collection, DeviceType, PageType, SectionDefinition, Template } from '@flex-erp/cms/types';
+import { CmsEditorShellComponent } from '@flex-erp/cms/ui';
 
 @Component({
   selector: 'cms-editor-page',

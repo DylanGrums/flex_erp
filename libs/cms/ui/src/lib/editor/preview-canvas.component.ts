@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { DeviceType, NodeId, Section } from '@flex-erp/types';
+import { DeviceType, NodeId, Section } from '@flex-erp/cms/types';
+import { TranslocoModule } from '@jsverse/transloco';
 
 const DEVICE_WIDTHS: Record<DeviceType, string> = {
   desktop: '100%',
@@ -10,6 +11,7 @@ const DEVICE_WIDTHS: Record<DeviceType, string> = {
 @Component({
   selector: 'cms-preview-canvas',
   standalone: true,
+  imports: [TranslocoModule],
   templateUrl: './preview-canvas.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [

@@ -19,6 +19,7 @@ import { STORE_NAV } from '@flex-erp/store/manifest';
 import { provideNavManifest } from '@flex-erp/shared/nav';
 import { TranslocoHttpLoader } from './transloco-loader';
 import { I18nInitService } from './shared/i18n/i18n-init.service';
+import { CMS_NAV } from '@flex-erp/cms/manifest';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -87,5 +88,6 @@ export const appConfig: ApplicationConfig = {
     }),
     DialogService,
     provideNavManifest(STORE_NAV.nav.manifest),
+    provideNavManifest(CMS_NAV.nav.manifest),
   ],
 };

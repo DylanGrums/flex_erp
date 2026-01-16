@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { DeviceType, PageType } from '@flex-erp/types';
+import { DeviceType, PageType } from '@flex-erp/cms/types';
 import { CmsButtonComponent } from '../primitives/button/cms-button.component';
 import { CmsInputComponent } from '../primitives/input/cms-input.component';
 import {
@@ -8,6 +8,7 @@ import {
   RdxDropdownMenuTriggerDirective,
 } from '@radix-ng/primitives/dropdown-menu';
 import { RdxTooltipModule } from '@radix-ng/primitives/tooltip';
+import { TranslocoModule } from '@jsverse/transloco';
 import {
   LucideAngularModule,
   Monitor,
@@ -23,15 +24,15 @@ import {
 } from 'lucide-angular';
 
 const PAGES: { value: PageType; label: string }[] = [
-  { value: 'home', label: 'Home' },
-  { value: 'collection', label: 'Collection' },
-  { value: 'product', label: 'Product' },
+  { value: 'home', label: 'cms.editor.pages.home' },
+  { value: 'collection', label: 'cms.editor.pages.collection' },
+  { value: 'product', label: 'cms.editor.pages.product' },
 ];
 
 const DEVICES: { value: DeviceType; label: string; icon: string }[] = [
-  { value: 'desktop', label: 'Desktop', icon: 'pi pi-desktop' },
-  { value: 'tablet', label: 'Tablet', icon: 'pi pi-tablet' },
-  { value: 'mobile', label: 'Mobile', icon: 'pi pi-mobile' },
+  { value: 'desktop', label: 'cms.editor.devices.desktop', icon: 'pi pi-desktop' },
+  { value: 'tablet', label: 'cms.editor.devices.tablet', icon: 'pi pi-tablet' },
+  { value: 'mobile', label: 'cms.editor.devices.mobile', icon: 'pi pi-mobile' },
 ];
 
 
@@ -47,6 +48,7 @@ const DEVICES: { value: DeviceType; label: string; icon: string }[] = [
     RdxDropdownMenuItemDirective,
     RdxTooltipModule,
     LucideAngularModule,
+    TranslocoModule,
   ],
   templateUrl: './top-bar.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

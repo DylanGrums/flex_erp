@@ -2,8 +2,12 @@
   <form class="space-y-4" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
     <div class="flex flex-col gap-2">
       <div class="flex items-center justify-between">
-        <label for="email" class="text-sm font-medium text-ui-fg-base">Email</label>
-        <span [hidden]="!error" class="text-xs text-ui-fg-error">Invalid credentials</span>
+        <label for="email" class="text-sm font-medium text-ui-fg-base">{{
+          'auth.login.emailLabel' | transloco
+        }}</label>
+        <span [hidden]="!error" class="text-xs text-ui-fg-error">{{
+          'auth.login.invalidCredentials' | transloco
+        }}</span>
       </div>
       <span class="p-input-icon-left w-full">
         <i class="pi pi-envelope text-ui-fg-muted"></i>
@@ -14,27 +18,29 @@
           formControlName="email"
           autocomplete="email"
           class="w-full !bg-ui-bg-field !border-ui-border-base !text-ui-fg-base placeholder:!text-ui-fg-muted focus:!border-ui-border-strong focus:!ring-ui-border-strong"
-          placeholder="you@example.com"
+          [placeholder]="'auth.login.emailPlaceholder' | transloco"
         />
       </span>
       <small [hidden]="!(submitted && f['email'].errors)" class="text-xs text-ui-fg-error">
-        Provide a valid email.
+        {{ 'auth.login.emailInvalid' | transloco }}
       </small>
     </div>
 
     <div class="flex flex-col gap-2">
-      <label for="password" class="text-sm font-medium text-ui-fg-base">Password</label>
+      <label for="password" class="text-sm font-medium text-ui-fg-base">{{
+        'auth.login.passwordLabel' | transloco
+      }}</label>
       <p-password
         inputId="password"
         formControlName="password"
         [feedback]="false"
         toggleMask
-        placeholder="Enter your password"
+        [placeholder]="'auth.login.passwordPlaceholder' | transloco"
         inputStyleClass="w-full !bg-ui-bg-field !border-ui-border-base !text-ui-fg-base placeholder:!text-ui-fg-muted focus:!border-ui-border-strong focus:!ring-ui-border-strong"
       >
       </p-password>
       <small [hidden]="!(submitted && f['password'].errors)" class="text-xs text-ui-fg-error">
-        Password must be at least 6 characters.
+        {{ 'auth.login.passwordInvalid' | transloco }}
       </small>
     </div>
 
@@ -46,9 +52,13 @@
           [(ngModel)]="rememberMe"
           [ngModelOptions]="{ standalone: true }"
         ></p-checkbox>
-        <label for="rememberMe" class="cursor-pointer">Remember me</label>
+        <label for="rememberMe" class="cursor-pointer">{{
+          'auth.login.rememberMe' | transloco
+        }}</label>
       </div>
-      <a class="text-ui-fg-interactive hover:text-ui-fg-interactive-hover cursor-pointer">Forgot password?</a>
+      <a class="text-ui-fg-interactive hover:text-ui-fg-interactive-hover cursor-pointer">{{
+        'auth.login.forgotPassword' | transloco
+      }}</a>
     </div>
 
     <button
@@ -58,7 +68,7 @@
       [disabled]="loading"
       class="w-full !bg-ui-bg-interactive !border-ui-border-interactive !text-ui-fg-on-color hover:!bg-ui-bg-interactive/90"
     >
-      Log in
+      {{ 'auth.login.submit' | transloco }}
     </button>
   </form>
 </div>

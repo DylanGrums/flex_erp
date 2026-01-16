@@ -1,18 +1,40 @@
 import { Routes } from '@angular/router';
 import { importProvidersFrom } from '@angular/core';
 import { NgxsModule } from '@ngxs/store';
+import { applyRouteMeta } from '@flex-erp/shared/nav';
+import { CMS_NAV } from '@flex-erp/cms/manifest';
+
 import { CmsEditorPageComponent } from './cms-editor-page.component';
-import { CmsEditorState } from '@flex-erp/data-access';
+import { CmsEditorState } from '@flex-erp/cms/data-access';
 import { provideRdxDialog, provideRdxDialogConfig } from '@radix-ng/primitives/dialog';
 
-export const cmsFeatureRoutes: Routes = [
+const rawRoutes: Routes = [
   {
-    path: 'editor',
-    component: CmsEditorPageComponent,
-    providers: [
-      importProvidersFrom(NgxsModule.forFeature([CmsEditorState])),
-      provideRdxDialogConfig(),
-      provideRdxDialog(),
+    path: '',
+    children: [
+      {
+        path: 'editor',
+        component: CmsEditorPageComponent,
+        providers: [
+          importProvidersFrom(NgxsModule.forFeature([CmsEditorState])),
+          provideRdxDialogConfig(),
+          provideRdxDialog(),
+        ],
+      },
+      { path: '', redirectTo: 'editor', pathMatch: 'full' },
     ],
   },
 ];
+
+export const cmsFeatureRoutes: Routes = applyRouteMeta(
+  rawRoutes,
+  {
+    ...CMS_NAV.nav.metaByPath,
+    '/cms/editor': {
+      ...CMS_NAV.nav.metaByPath['/cms/editor'],
+      breadcrumb: Array.isArray(CMS_NAV.nav.metaByPath['/cms/editor']?.breadcrumb)
+        ? (CMS_NAV.nav.metaByPath['/cms/editor'].breadcrumb as string[]).join(' > ')
+        : CMS_NAV.nav.metaByPath['/cms/editor']?.breadcrumb,
+    },
+  }
+);

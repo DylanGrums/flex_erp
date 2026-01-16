@@ -33,7 +33,7 @@
       [rdxDropdownMenuTrigger]="pageMenu"
       class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-ui-border-base bg-ui-bg-base hover:bg-ui-bg-subtle-hover h-8 px-3 gap-2"
     >
-      {{ currentPageLabel }}
+      {{ currentPageLabel | transloco }}
       <i class="pi pi-chevron-down text-xs text-ui-fg-muted"></i>
     </button>
 
@@ -49,7 +49,7 @@
           (click)="currentPageChange.emit(page.value)"
           class="flex w-full items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-ui-bg-subtle-hover"
         >
-          {{ page.label }}
+          {{ page.label | transloco }}
           @if (currentPage === page.value) {
           <i class="pi pi-check ms-auto text-xs text-ui-fg-interactive"></i>
           }
@@ -82,7 +82,7 @@
             rdxTooltipContentAttributes
             class="rounded-md bg-ui-bg-base border border-ui-border-base px-2 py-1 text-xs shadow"
           >
-            {{ device.label }}
+            {{ device.label | transloco }}
           </div>
         </ng-template>
       </ng-container>
@@ -109,7 +109,7 @@
           rdxTooltipContentAttributes
           class="bg-ui-bg-base  px-2 py-1 text-xs shadow"
         >
-          Undo
+          {{ 'cms.editor.actions.undo' | transloco }}
         </div>
       </ng-template>
     </ng-container>
@@ -132,7 +132,7 @@
           rdxTooltipContentAttributes
           class="bg-ui-bg-base  px-2 py-1 text-xs shadow"
         >
-          Redo
+          {{ 'cms.editor.actions.redo' | transloco }}
         </div>
       </ng-template>
     </ng-container>
@@ -146,12 +146,12 @@
       className="gap-1.5"
     >
       <i class="pi pi-save text-sm"></i>
-      Save
+      {{ 'cms.editor.actions.save' | transloco }}
     </cms-button>
 
     <cms-button size="sm" (click)="publish.emit()" className="gap-1.5">
       <i class="pi pi-send text-sm"></i>
-      Publish
+      {{ 'cms.editor.actions.publish' | transloco }}
     </cms-button>
   </div>
 </header>

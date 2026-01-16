@@ -1,16 +1,407 @@
 {
+  "layout.shell.closeNavigation": "Missing value for 'layout.shell.closeNavigation'",
+  "layout.shell.navigation": "Missing value for 'layout.shell.navigation'",
+  "layout.shell.toggleNavigation": "Missing value for 'layout.shell.toggleNavigation'",
+  "layout.shell.openNavigation": "Missing value for 'layout.shell.openNavigation'",
   "app.title": "Missing value for 'app.title'",
   "demo.hello": "Missing value for 'demo.hello'",
+  "nav.settings": "Missing value for 'nav.settings'",
+  "settings.sections.general": "Missing value for 'settings.sections.general'",
+  "settings.sections.developer": "Missing value for 'settings.sections.developer'",
+  "settings.sections.account": "Missing value for 'settings.sections.account'",
+  "nav.store": "Missing value for 'nav.store'",
+  "nav.storeSettings": "Missing value for 'nav.storeSettings'",
+  "common.logout": "Missing value for 'common.logout'",
+  "layout.userMenu.profileSettings": "Missing value for 'layout.userMenu.profileSettings'",
+  "layout.userMenu.documentation": "Missing value for 'layout.userMenu.documentation'",
+  "layout.userMenu.changelog": "Missing value for 'layout.userMenu.changelog'",
+  "layout.userMenu.shortcuts": "Missing value for 'layout.userMenu.shortcuts'",
+  "layout.userMenu.theme": "Missing value for 'layout.userMenu.theme'",
+  "layout.userMenu.themeSystem": "Missing value for 'layout.userMenu.themeSystem'",
+  "layout.userMenu.themeLight": "Missing value for 'layout.userMenu.themeLight'",
+  "layout.userMenu.themeDark": "Missing value for 'layout.userMenu.themeDark'",
+  "layout.userMenu.logout": "Missing value for 'layout.userMenu.logout'",
+  "layout.userMenu.searchShortcuts": "Missing value for 'layout.userMenu.searchShortcuts'",
+  "common.then": "Missing value for 'common.then'",
+  "layout.notifications.ariaLabel": "Missing value for 'layout.notifications.ariaLabel'",
+  "layout.notifications.title": "Missing value for 'layout.notifications.title'",
+  "layout.notifications.allCaughtUp": "Missing value for 'layout.notifications.allCaughtUp'",
+  "layout.notifications.empty": "Missing value for 'layout.notifications.empty'",
+  "client.pages.storeSettings.title": "Missing value for 'client.pages.storeSettings.title'",
+  "common.placeholder": "Missing value for 'common.placeholder'",
+  "client.pages.profile.title": "Missing value for 'client.pages.profile.title'",
+  "client.pages.products.title": "Missing value for 'client.pages.products.title'",
+  "client.pages.orders.title": "Missing value for 'client.pages.orders.title'",
   "app": {
     "title": "Flex ERP"
   },
   "nav": {
     "dashboard": "Tableau de bord",
-    "settings": "Parametres"
+    "settings": "Parametres",
+    "store": "Boutique",
+    "storeSettings": "Parametres boutique"
   },
   "common": {
     "save": "Enregistrer",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "placeholder": "Page provisoire.",
+    "logout": "Deconnexion",
+    "then": "puis",
+    "confirmTitle": "Confirmer l'action",
+    "confirmDescription": "Etes-vous sur de vouloir continuer ?"
+  },
+  "auth": {
+    "login": {
+      "emailLabel": "Email",
+      "invalidCredentials": "Identifiants invalides",
+      "emailPlaceholder": "vous@exemple.com",
+      "emailInvalid": "Fournissez un email valide.",
+      "passwordLabel": "Mot de passe",
+      "passwordPlaceholder": "Entrez votre mot de passe",
+      "passwordInvalid": "Le mot de passe doit contenir au moins 6 caracteres.",
+      "rememberMe": "Se souvenir de moi",
+      "forgotPassword": "Mot de passe oublie ?",
+      "submit": "Se connecter"
+    }
+  },
+  "layout": {
+    "userMenu": {
+      "profileSettings": "Parametres du profil",
+      "documentation": "Documentation",
+      "changelog": "Historique des changements",
+      "shortcuts": "Raccourcis",
+      "theme": "Theme",
+      "themeSystem": "Systeme",
+      "themeLight": "Clair",
+      "themeDark": "Sombre",
+      "logout": "Deconnexion",
+      "searchShortcuts": "Rechercher des raccourcis"
+    },
+    "notifications": {
+      "ariaLabel": "Notifications",
+      "title": "Notifications",
+      "allCaughtUp": "Tout est a jour",
+      "empty": "Aucune notification a afficher."
+    },
+    "shell": {
+      "navigation": "Navigation",
+      "closeNavigation": "Fermer la navigation",
+      "toggleNavigation": "Afficher ou masquer la navigation",
+      "openNavigation": "Ouvrir la navigation"
+    }
+  },
+  "settings": {
+    "sections": {
+      "general": "General",
+      "developer": "Developpeur",
+      "account": "Mon compte"
+    },
+    "general": {
+      "store": "Boutique",
+      "users": "Utilisateurs",
+      "regions": "Regions",
+      "taxRegions": "Regions fiscales",
+      "returnReasons": "Motifs de retour",
+      "refundReasons": "Motifs de remboursement",
+      "salesChannels": "Canaux de vente",
+      "productTypes": "Types de produits",
+      "productTags": "Tags produits",
+      "stockLocations": "Lieux de stock"
+    },
+    "developer": {
+      "publishableApiKeys": "Cles API publiques",
+      "secretApiKeys": "Cles API secretes",
+      "workflowExecutions": "Executions de workflow"
+    },
+    "account": {
+      "profile": "Profil"
+    }
+  },
+  "admin": {
+    "table": {
+      "actions": "Actions",
+      "rowActions": "Actions de ligne",
+      "emptyTitle": "Aucun enregistrement",
+      "emptyDescription": "Essayez d'ajuster vos filtres ou ajoutez de nouveaux enregistrements."
+    },
+    "pagination": {
+      "results": "Affichage de {{start}} a {{end}} sur {{total}} resultats"
+    },
+    "shell": {
+      "brand": "Flex ERP Store",
+      "user": "Utilisateur admin",
+      "userEmail": "admin@flex-erp.com"
+    },
+    "nav": {
+      "search": "Recherche",
+      "orders": "Commandes",
+      "products": "Produits",
+      "collections": "Collections",
+      "categories": "Categories",
+      "inventory": "Inventaire",
+      "customers": "Clients",
+      "promotions": "Promotions",
+      "priceLists": "Listes de prix"
+    },
+    "dashboard": "Tableau de bord"
+  },
+  "store": {
+    "pages": {
+      "comingSoon": "Bientot disponible",
+      "orders": {
+        "title": "Commandes",
+        "subtitle": "Suivez les commandes, paiements et livraisons.",
+        "comingSoonTitle": "Bientot disponible",
+        "comingSoonDescription": "Plus d'outils pour la gestion des commandes arrivent bientot."
+      },
+      "inventory": {
+        "title": "Inventaire",
+        "subtitle": "Suivez les niveaux de stock par emplacement.",
+        "comingSoonTitle": "Bientot disponible",
+        "comingSoonDescription": "Plus d'outils pour la gestion des stocks arrivent bientot."
+      },
+      "promotions": {
+        "title": "Promotions",
+        "subtitle": "Creez des remises et des campagnes.",
+        "comingSoonTitle": "Bientot disponible",
+        "comingSoonDescription": "Plus d'outils pour la gestion des promotions arrivent bientot."
+      },
+      "customers": {
+        "title": "Clients",
+        "subtitle": "Gerez les profils clients et l'historique.",
+        "comingSoonTitle": "Bientot disponible",
+        "comingSoonDescription": "Plus d'outils pour la gestion des clients arrivent bientot."
+      },
+      "products": {
+        "title": "Produits",
+        "subtitle": "Gerez les produits, variantes et disponibilite.",
+        "comingSoonTitle": "Bientot disponible",
+        "comingSoonDescription": "Plus d'outils pour la gestion des produits arrivent bientot."
+      },
+      "collections": {
+        "title": "Collections",
+        "subtitle": "Regroupez les produits en collections.",
+        "comingSoonTitle": "Bientot disponible",
+        "comingSoonDescription": "Plus d'outils pour la gestion des collections arrivent bientot."
+      },
+      "categories": {
+        "title": "Categories",
+        "subtitle": "Organisez les produits dans votre catalogue.",
+        "comingSoonTitle": "Bientot disponible",
+        "comingSoonDescription": "Plus d'outils pour la gestion des categories arrivent bientot."
+      },
+      "priceLists": {
+        "title": "Listes de prix",
+        "subtitle": "Configurez les listes de prix et les remplacements.",
+        "comingSoonTitle": "Bientot disponible",
+        "comingSoonDescription": "Plus d'outils pour la gestion des listes de prix arrivent bientot."
+      }
+    },
+    "nav": {
+      "section": "Boutique",
+      "orders": "Commandes",
+      "products": "Produits",
+      "collections": "Collections",
+      "categories": "Categories",
+      "inventory": "Inventaire",
+      "reservations": "Reservations",
+      "customers": "Clients",
+      "customerGroups": "Groupes de clients",
+      "promotions": "Promotions",
+      "campaigns": "Campagnes",
+      "priceLists": "Listes de prix"
+    },
+    "routes": {
+      "orders": {
+        "breadcrumb": "Commandes",
+        "title": "Commandes",
+        "subtitle": "Suivez les commandes, paiements et livraisons."
+      },
+      "products": {
+        "breadcrumb": "Produits",
+        "title": "Produits",
+        "subtitle": "Gerez les produits, variantes et disponibilite."
+      },
+      "collections": {
+        "breadcrumb": "Collections",
+        "title": "Collections",
+        "subtitle": "Regroupez les produits en collections."
+      },
+      "categories": {
+        "breadcrumb": "Categories",
+        "title": "Categories",
+        "subtitle": "Organisez les produits dans votre catalogue."
+      },
+      "inventory": {
+        "breadcrumb": "Inventaire",
+        "title": "Inventaire",
+        "subtitle": "Suivez les niveaux de stock par emplacement."
+      },
+      "customers": {
+        "breadcrumb": "Clients",
+        "title": "Clients",
+        "subtitle": "Gerez les profils clients et l'historique."
+      },
+      "promotions": {
+        "breadcrumb": "Promotions",
+        "title": "Promotions",
+        "subtitle": "Creez des remises et des campagnes."
+      },
+      "priceLists": {
+        "breadcrumb": "Listes de prix",
+        "title": "Listes de prix",
+        "subtitle": "Configurez les listes de prix et les remplacements."
+      }
+    },
+    "dataAccess": {
+      "ready": "Acces donnees pret"
+    }
+  },
+  "client": {
+    "pages": {
+      "orders": {
+        "title": "Commandes"
+      },
+      "products": {
+        "title": "Produits"
+      },
+      "profile": {
+        "title": "Profil"
+      },
+      "storeSettings": {
+        "title": "Parametres boutique"
+      }
+    }
+  },
+  "cms": {
+    "types": {
+      "ready": "Types CMS prets"
+    },
+    "editor": {
+      "onboarding": {
+        "startBuilding": "Commencer a creer votre boutique",
+        "chooseTemplate": "Choisissez votre modele de depart",
+        "description": "Selectionnez un modele qui correspond a votre vision. Vous pourrez tout personnaliser plus tard.",
+        "startWithTemplate": "Commencer avec ce modele"
+      },
+      "pages": {
+        "home": "Accueil",
+        "collection": "Collection",
+        "product": "Produit"
+      },
+      "devices": {
+        "desktop": "Bureau",
+        "tablet": "Tablette",
+        "mobile": "Mobile"
+      },
+      "actions": {
+        "undo": "Annuler",
+        "redo": "Retablir",
+        "save": "Enregistrer",
+        "publish": "Publier"
+      },
+      "noSectionSelected": "Aucune section selectionnee",
+      "selectSectionHint": "Cliquez sur une section dans l'apercu ou le panneau gauche pour modifier ses reglages",
+      "characters": "caracteres",
+      "selectColor": "Selectionner la couleur {{color}}",
+      "replace": "Remplacer",
+      "remove": "Supprimer",
+      "clickToUpload": "Cliquer pour televerser",
+      "products": "produits",
+      "selectCollection": "Selectionner une collection",
+      "searchCollections": "Rechercher des collections...",
+      "resetSection": "Reinitialiser la section",
+      "sectionLibrary": {
+        "title": "Ajouter une section",
+        "searchPlaceholder": "Rechercher des sections...",
+        "emptyTitle": "Aucune section trouvee",
+        "emptyDescription": "Essayez d'ajuster votre recherche ou categorie"
+      },
+      "categories": {
+        "all": "Tout",
+        "header": "En-tete",
+        "hero": "Hero",
+        "collections": "Collections",
+        "product": "Produit",
+        "marketing": "Marketing",
+        "footer": "Pied de page"
+      },
+      "sections": {
+        "title": "Sections",
+        "dragToReorder": "Glisser pour reordonner",
+        "emptyTitle": "Aucune section pour l'instant",
+        "emptyDescription": "Cliquez ci-dessous pour ajouter votre premiere section",
+        "addSection": "Ajouter une section",
+        "deleteTitle": "Supprimer la section",
+        "deleteDescription": "Voulez-vous vraiment supprimer \"{{name}}\" ? Cette action est irreversible."
+      }
+    },
+    "preview": {
+      "emptyTitle": "Aucune section pour l'instant",
+      "emptyDescription": "Ajoutez des sections depuis le panneau gauche pour commencer a construire votre page",
+      "announcementText": "Texte d'annonce",
+      "logoText": "Boutique",
+      "heroWelcome": "Bienvenue",
+      "heroSubheading": "Decouvrez des produits incroyables",
+      "heroCta": "Acheter maintenant",
+      "splitHeroHeading": "Nouvelle collection",
+      "splitHeroDescription": "Decouvrez nos dernieres nouveautes",
+      "splitHeroCta": "Explorer",
+      "featuredHeading": "Produits en vedette",
+      "viewAll": "Voir tout",
+      "productName": "Nom du produit",
+      "shopByCategory": "Acheter par categorie",
+      "productItem": "Produit {{index}}",
+      "whyChooseUs": "Pourquoi nous choisir",
+      "highlight": {
+        "freeShipping": "Livraison gratuite",
+        "freeShippingDescription": "Pour les commandes de plus de $50",
+        "easyReturns": "Retours faciles",
+        "easyReturnsDescription": "Politique de retour 30 jours",
+        "securePayment": "Paiement securise",
+        "securePaymentDescription": "Vos donnees sont en securite"
+      },
+      "testimonialsHeading": "Ce que disent nos clients",
+      "testimonialQuote": "C'est la meilleure experience d'achat en ligne que j'ai eue. Les produits sont incroyables et le service est au top !",
+      "testimonialName": "Jane Doe",
+      "testimonialRole": "Client verifie",
+      "newsletterHeading": "Restez informe",
+      "newsletterSubheading": "Abonnez-vous a notre newsletter",
+      "newsletterEmailPlaceholder": "Entrez votre email",
+      "newsletterCta": "S'abonner",
+      "footer": {
+        "quickLinks": "Liens rapides",
+        "shopAll": "Tout acheter",
+        "newArrivals": "Nouveautes",
+        "bestSellers": "Meilleures ventes",
+        "sale": "Soldes",
+        "customerService": "Service client",
+        "contactUs": "Contactez-nous",
+        "shippingInfo": "Infos livraison",
+        "returns": "Retours",
+        "faq": "FAQ",
+        "company": "Entreprise",
+        "aboutUs": "A propos",
+        "careers": "Carrieres",
+        "press": "Presse",
+        "blog": "Blog",
+        "followUs": "Suivez-nous",
+        "copyright": "(c) 2026 Votre boutique. Tous droits reserves."
+      },
+      "unknownSection": "Type de section inconnu : {{type}}"
+    },
+    "nav": {
+      "section": "CMS",
+      "editor": "Editeur"
+    },
+    "routes": {
+      "editor": {
+        "breadcrumb": "Editeur",
+        "title": "Editeur",
+        "subtitle": "Concevez et gerez votre vitrine."
+      }
+    }
   },
   "demo": {
     "hello": "Bonjour {{name}}"

@@ -1,21 +1,23 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'fe-store-inventory-page',
   standalone: true,
+  imports: [TranslocoModule],
   template: `
     <section class="space-y-6">
       <header>
-        <h1 class="text-2xl font-semibold text-ui-fg-base">Inventory</h1>
+        <h1 class="text-2xl font-semibold text-ui-fg-base">{{ 'store.pages.inventory.title' | transloco }}</h1>
         <p class="mt-1 text-sm text-ui-fg-subtle">
-          Track stock levels across locations.
+          {{ 'store.pages.inventory.subtitle' | transloco }}
         </p>
       </header>
 
       <div class="medusa-panel p-6">
-        <p class="text-sm font-medium text-ui-fg-base">Coming soon</p>
+        <p class="text-sm font-medium text-ui-fg-base">{{ 'store.pages.inventory.comingSoonTitle' | transloco }}</p>
         <p class="mt-1 text-xs text-ui-fg-subtle">
-          More tools for inventory management are on the way.
+          {{ 'store.pages.inventory.comingSoonDescription' | transloco }}
         </p>
       </div>
     </section>

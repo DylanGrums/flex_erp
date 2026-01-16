@@ -1,25 +1,33 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { SectionDefinition } from '@flex-erp/types';
+import { SectionDefinition } from '@flex-erp/cms/types';
 import { CmsButtonComponent } from '../primitives/button/cms-button.component';
 import { CmsInputComponent } from '../primitives/input/cms-input.component';
 import { CmsScrollAreaComponent } from '../primitives/scroll-area/cms-scroll-area.component';
 import { CmsDialogComponent } from '../primitives/dialog/cms-dialog.component';
 import { CmsTabsComponent, CmsTabItem } from '../primitives/tabs/cms-tabs.component';
+import { TranslocoModule } from '@jsverse/transloco';
 
 const CATEGORIES: CmsTabItem[] = [
-  { value: 'all', label: 'All' },
-  { value: 'header', label: 'Header' },
-  { value: 'hero', label: 'Hero' },
-  { value: 'collections', label: 'Collections' },
-  { value: 'product', label: 'Product' },
-  { value: 'marketing', label: 'Marketing' },
-  { value: 'footer', label: 'Footer' },
+  { value: 'all', label: 'cms.editor.categories.all' },
+  { value: 'header', label: 'cms.editor.categories.header' },
+  { value: 'hero', label: 'cms.editor.categories.hero' },
+  { value: 'collections', label: 'cms.editor.categories.collections' },
+  { value: 'product', label: 'cms.editor.categories.product' },
+  { value: 'marketing', label: 'cms.editor.categories.marketing' },
+  { value: 'footer', label: 'cms.editor.categories.footer' },
 ];
 
 @Component({
   selector: 'cms-section-library-modal',
   standalone: true,
-  imports: [CmsButtonComponent, CmsInputComponent, CmsScrollAreaComponent, CmsDialogComponent, CmsTabsComponent],
+  imports: [
+    CmsButtonComponent,
+    CmsInputComponent,
+    CmsScrollAreaComponent,
+    CmsDialogComponent,
+    CmsTabsComponent,
+    TranslocoModule,
+  ],
   templateUrl: './section-library-modal.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 

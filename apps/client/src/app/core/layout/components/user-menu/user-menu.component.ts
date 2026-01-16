@@ -13,11 +13,22 @@ import { firstValueFrom } from 'rxjs';
 import { AuthFacade } from '@flex-erp/auth/data-access';
 import { ThemeService, ThemeMode } from './theme.service';
 import { ShortcutsService } from '../nav-item/shortcuts.service';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-user-menu',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ButtonModule, DividerModule, DialogModule, InputTextModule, PopoverModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    ButtonModule,
+    DividerModule,
+    DialogModule,
+    InputTextModule,
+    PopoverModule,
+    TranslocoModule,
+  ],
   templateUrl: './user-menu.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -7,6 +7,7 @@ import { DividerModule } from 'primeng/divider';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { AuthCredentials } from '@flex-erp/auth/types';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'auth-login-form',
@@ -22,6 +23,7 @@ import { AuthCredentials } from '@flex-erp/auth/types';
     PasswordModule,
     CheckboxModule,
     DividerModule,
+    TranslocoModule,
   ],
 })
 export class LoginFormComponent implements OnInit {

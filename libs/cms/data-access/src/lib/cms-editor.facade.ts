@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngxs/store';
-import { DeviceType, NodeId, PageType, SectionDefinition, Template } from '@flex-erp/types';
+import { DeviceType, NodeId, PageType, SectionDefinition, Template } from '@flex-erp/cms/types';
 import {
   AddSection,
   CloseSectionLibrary,

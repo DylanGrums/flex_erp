@@ -1,4 +1,4 @@
-import { DeviceType, EditorHistory, NodeId, PageType, Section } from '@flex-erp/types';
+import { DeviceType, EditorHistory, NodeId, PageType, Section } from '@flex-erp/cms/types';
 
 export type InspectorTab = 'content' | 'layout' | 'style';
 

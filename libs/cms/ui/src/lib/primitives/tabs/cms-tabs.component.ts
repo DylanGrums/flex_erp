@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { RdxTabsModule } from '@radix-ng/primitives/tabs';
+import { TranslocoModule } from '@jsverse/transloco';
 
 export interface CmsTabItem {
   value: string;
@@ -9,7 +10,7 @@ export interface CmsTabItem {
 @Component({
   selector: 'cms-tabs',
   standalone: true,
-  imports: [RdxTabsModule],
+  imports: [RdxTabsModule, TranslocoModule],
   template: `
     <div rdxTabsRoot [value]="value" (valueChange)="valueChange.emit($event)" [class]="rootClass">
       <div rdxTabsList class="flex flex-wrap gap-2">
@@ -20,7 +21,7 @@ export interface CmsTabItem {
             [value]="tab.value"
             class="px-3 py-1.5 rounded-full text-sm font-medium transition-colors data-[state=active]:bg-ui-bg-interactive data-[state=active]:text-ui-fg-on-color bg-ui-bg-subtle text-ui-fg-base hover:bg-ui-bg-subtle-hover"
           >
-            {{ tab.label }}
+            {{ tab.label | transloco }}
           </button>
         }
       </div>

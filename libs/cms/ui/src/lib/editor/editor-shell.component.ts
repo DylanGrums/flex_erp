@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { Collection, DeviceType, NodeId, PageType, Section, SectionDefinition, Template } from '@flex-erp/types';
+import { Collection, DeviceType, NodeId, PageType, Section, SectionDefinition, Template } from '@flex-erp/cms/types';
 import { CmsTopBarComponent } from './top-bar.component';
 import { CmsSectionsTreeComponent } from './sections-tree.component';
 import { CmsPreviewCanvasComponent } from './preview-canvas.component';

@@ -9,7 +9,9 @@
           <div class="flex items-center justify-center">
             <i class="pi pi-arrow-left text-ui-fg-subtle"></i>
           </div>
-          <span class="font-medium font-sans txt-compact-small">Settings</span>
+          <span class="font-medium font-sans txt-compact-small">{{
+            'nav.settings' | transloco
+          }}</span>
         </div>
       </div>
     </div>
@@ -26,7 +28,7 @@
           <div
             class="text-ui-fg-muted flex h-7 items-center justify-between px-2"
           >
-            <span class="text-sm">General</span>
+            <span class="text-sm">{{ 'settings.sections.general' | transloco }}</span>
           </div>
         </div>
 
@@ -48,7 +50,7 @@
           <div
             class="text-ui-fg-muted flex h-7 items-center justify-between px-2"
           >
-            <span class="text-sm">Developer</span>
+            <span class="text-sm">{{ 'settings.sections.developer' | transloco }}</span>
           </div>
         </div>
 
@@ -70,7 +72,7 @@
           <div
             class="text-ui-fg-muted flex h-7 items-center justify-between px-2"
           >
-            <span class="text-sm">My Account</span>
+            <span class="text-sm">{{ 'settings.sections.account' | transloco }}</span>
           </div>
         </div>
 

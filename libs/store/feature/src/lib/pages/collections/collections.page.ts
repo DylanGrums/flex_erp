@@ -1,21 +1,23 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'fe-store-collections-page',
   standalone: true,
+  imports: [TranslocoModule],
   template: `
     <section class="space-y-6">
       <header>
-        <h1 class="text-2xl font-semibold text-ui-fg-base">Collections</h1>
+        <h1 class="text-2xl font-semibold text-ui-fg-base">{{ 'store.pages.collections.title' | transloco }}</h1>
         <p class="mt-1 text-sm text-ui-fg-subtle">
-          Group products into curated collections.
+          {{ 'store.pages.collections.subtitle' | transloco }}
         </p>
       </header>
 
       <div class="medusa-panel p-6">
-        <p class="text-sm font-medium text-ui-fg-base">Coming soon</p>
+        <p class="text-sm font-medium text-ui-fg-base">{{ 'store.pages.collections.comingSoonTitle' | transloco }}</p>
         <p class="mt-1 text-xs text-ui-fg-subtle">
-          More tools for collection management are on the way.
+          {{ 'store.pages.collections.comingSoonDescription' | transloco }}
         </p>
       </div>
     </section>

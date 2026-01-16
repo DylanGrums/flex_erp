@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'cms-types',
-  imports: [],
+  standalone: true,
+  imports: [TranslocoModule],
   templateUrl: './types.html',
   styleUrl: './types.css',
 })

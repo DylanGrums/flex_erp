@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { Template } from '@flex-erp/types';
+import { Template } from '@flex-erp/cms/types';
 import { CmsButtonComponent } from '../primitives/button/cms-button.component';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'cms-onboarding-screen',
   standalone: true,
-  imports: [CmsButtonComponent],
+  imports: [CmsButtonComponent, TranslocoModule],
   templateUrl: './onboarding-screen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
