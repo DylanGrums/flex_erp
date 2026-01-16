@@ -1,0 +1,16 @@
+{
+  "app": {
+    "title": "Flex ERP"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "settings": "Settings"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "demo": {
+    "hello": "Hello {{name}}"
+  }
+}

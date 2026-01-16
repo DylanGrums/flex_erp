@@ -1,0 +1,16 @@
+{
+  "app": {
+    "title": "Flex ERP"
+  },
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "settings": "Parametres"
+  },
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler"
+  },
+  "demo": {
+    "hello": "Bonjour {{name}}"
+  }
+}

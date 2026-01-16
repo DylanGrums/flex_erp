@@ -6,15 +6,26 @@ import { filter } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { TranslocoModule } from '@jsverse/transloco';
 
 import { SidebarService } from '../services/sidebar.service';
 import { BreadcrumbsService } from '../services/breadcrumbs.service';
 import { NotificationsComponent } from '../components/notifications/notifications.component';
+import { LanguageSwitcherComponent } from '../../../shared/i18n/language-switcher.component';
 
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonModule, DialogModule, ProgressBarModule, NotificationsComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ButtonModule,
+    DialogModule,
+    ProgressBarModule,
+    TranslocoModule,
+    NotificationsComponent,
+    LanguageSwitcherComponent,
+  ],
   templateUrl: './shell.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

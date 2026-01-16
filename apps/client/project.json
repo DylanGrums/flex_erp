@@ -19,6 +19,11 @@
           {
             "glob": "**/*",
             "input": "apps/client/public"
+          },
+          {
+            "glob": "**/*",
+            "input": "apps/client/src/assets",
+            "output": "assets"
           }
         ],
         "styles": ["apps/client/src/styles.scss"]
@@ -64,6 +69,18 @@
       "executor": "@angular/build:extract-i18n",
       "options": {
         "buildTarget": "client:build"
+      }
+    },
+    "i18n-extract": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "transloco-keys-manager extract --project client"
+      }
+    },
+    "i18n-find": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "transloco-keys-manager find --project client"
       }
     },
     "lint": {
