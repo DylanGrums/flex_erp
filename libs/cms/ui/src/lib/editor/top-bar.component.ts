@@ -8,6 +8,19 @@ import {
   RdxDropdownMenuTriggerDirective,
 } from '@radix-ng/primitives/dropdown-menu';
 import { RdxTooltipModule } from '@radix-ng/primitives/tooltip';
+import {
+  LucideAngularModule,
+  Monitor,
+  Tablet,
+  Smartphone,
+  Undo2,
+  Redo2,
+  Save,
+  Rocket,
+  ChevronDown,
+  Check,
+  Palette
+} from 'lucide-angular';
 
 const PAGES: { value: PageType; label: string }[] = [
   { value: 'home', label: 'Home' },
@@ -21,6 +34,8 @@ const DEVICES: { value: DeviceType; label: string; icon: string }[] = [
   { value: 'mobile', label: 'Mobile', icon: 'pi pi-mobile' },
 ];
 
+
+
 @Component({
   selector: 'cms-top-bar',
   standalone: true,
@@ -31,6 +46,7 @@ const DEVICES: { value: DeviceType; label: string; icon: string }[] = [
     RdxDropdownMenuContentDirective,
     RdxDropdownMenuItemDirective,
     RdxTooltipModule,
+    LucideAngularModule,
   ],
   templateUrl: './top-bar.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,6 +65,14 @@ export class CmsTopBarComponent {
   @Output() redo = new EventEmitter<void>();
   @Output() save = new EventEmitter<void>();
   @Output() publish = new EventEmitter<void>();
+
+  public Undo2 = Undo2;
+  public Redo2 = Redo2;
+  public Save = Save;
+  public Rocket = Rocket;
+  public ChevronDown = ChevronDown;
+  public Check = Check;
+  public Palette = Palette;
 
   isEditingName = false;
   nameValue = '';

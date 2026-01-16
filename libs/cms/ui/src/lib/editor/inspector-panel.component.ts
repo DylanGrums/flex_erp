@@ -80,6 +80,11 @@ export class CmsInspectorPanelComponent implements OnChanges {
       this.groupedFields = this.groupFields(this.sectionDefinition);
       this.groupEntries = Object.entries(this.groupedFields).map(([key, value]) => ({ key, value }));
     }
+
+    if (changes['selectedSection']) {
+      this.collectionOpen = false;
+      this.collectionSearch = '';
+    }
   }
 
   resolveSectionDefinition(): SectionDefinition | null {
@@ -97,8 +102,8 @@ export class CmsInspectorPanelComponent implements OnChanges {
     }, {} as Record<string, SettingField[]>);
   }
 
-  toggleGroup(group: string): void {
-    this.openGroups[group] = !this.openGroups[group];
+  setGroupOpen(group: string, open: boolean): void {
+    this.openGroups[group] = open;
   }
 
   updateSetting(key: string, value: unknown): void {
@@ -108,6 +113,20 @@ export class CmsInspectorPanelComponent implements OnChanges {
       key,
       value,
     });
+  }
+
+  onImageSelected(event: Event, key: string): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.updateSetting(key, reader.result as string);
+    };
+    reader.readAsDataURL(file);
+
+    input.value = '';
   }
 
   toNumber(value: unknown, fallback: number): number {

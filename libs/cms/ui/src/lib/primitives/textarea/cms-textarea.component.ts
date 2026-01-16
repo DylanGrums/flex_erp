@@ -9,8 +9,9 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
       [rows]="rows"
       [disabled]="disabled"
       [class]="textareaClass"
+      [value]="value ?? ''"
       (input)="onInput($event)"
-    >{{ value ?? '' }}</textarea>
+    ></textarea>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

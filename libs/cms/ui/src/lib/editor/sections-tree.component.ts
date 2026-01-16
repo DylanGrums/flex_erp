@@ -4,19 +4,24 @@ import { CmsButtonComponent } from '../primitives/button/cms-button.component';
 import { CmsScrollAreaComponent } from '../primitives/scroll-area/cms-scroll-area.component';
 import { CmsDialogComponent } from '../primitives/dialog/cms-dialog.component';
 
+import {
+  LucideAngularModule, GripVertical, ChevronRight, LayoutTemplate, LucideIconData, Columns2, Grid3x3, Mail, PanelBottom, Megaphone, CreditCard, Quote, FolderKanban, ImageIcon
+
+} from 'lucide-angular';
+
 @Component({
   selector: 'cms-sections-tree',
   standalone: true,
-  imports: [CmsButtonComponent, CmsScrollAreaComponent, CmsDialogComponent],
+  imports: [CmsButtonComponent, CmsScrollAreaComponent, CmsDialogComponent, LucideAngularModule],
   templateUrl: './sections-tree.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-    styles: [
-      `
+  styles: [
+    `
         :host {
           @apply h-full;
         }
       `,
-    ],
+  ],
 })
 export class CmsSectionsTreeComponent {
   @Input() sections: Section[] = [];
@@ -35,20 +40,27 @@ export class CmsSectionsTreeComponent {
   expandedSections = new Set<string>();
   pendingDelete: Section | null = null;
 
-  iconClass(icon: string): string {
-    const map: Record<string, string> = {
-      'layout-template': 'pi pi-table',
-      image: 'pi pi-image',
-      columns: 'pi pi-sliders-h',
-      'grid-3x3': 'pi pi-th-large',
-      mail: 'pi pi-envelope',
-      'panel-bottom': 'pi pi-window-maximize',
-      megaphone: 'pi pi-megaphone',
-      'credit-card': 'pi pi-credit-card',
-      quote: 'pi pi-quote-left',
-      'folder-kanban': 'pi pi-sitemap',
+  GripVertical = GripVertical;
+  ChevronRight = ChevronRight;
+  LayoutTemplate = LayoutTemplate;
+
+
+
+
+  iconClass(icon: string): LucideIconData {
+    const map: Record<string, LucideIconData> = {
+      'layout-template': LayoutTemplate,
+      image: ImageIcon,
+      columns: Columns2,
+      'grid-3x3': Grid3x3,
+      mail: Mail,
+      'panel-bottom': PanelBottom,
+      megaphone: Megaphone,
+      'credit-card': CreditCard,
+      quote: Quote,
+      'folder-kanban': FolderKanban,
     };
-    return map[icon] || 'pi pi-table';
+    return map[icon] || LayoutTemplate;
   }
 
   isSectionSelected(section: Section): boolean {

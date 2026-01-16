@@ -1,25 +1,29 @@
-<header class="h-14 w-full justify-between bg-ui-bg-base border-b border-ui-border-base flex items-center px-4 gap-4 shrink-0">
+<header
+  class="h-14 w-full justify-between bg-ui-bg-base border-b border-ui-border-base flex items-center px-4 gap-4 shrink-0"
+>
   <div class="flex items-center gap-3 min-w-[400px]">
-    <div class="w-8 h-8 rounded-lg bg-ui-bg-interactive flex items-center justify-center">
+    <div
+      class="w-8 h-8 rounded-lg bg-ui-bg-interactive flex items-center justify-center"
+    >
       <i class="pi pi-palette text-ui-fg-on-color text-sm"></i>
     </div>
 
     @if (isEditingName) {
-      <cms-input
-        [value]="nameValue"
-        (valueChange)="nameValue = $event"
-        (blurred)="submitName()"
-        (enterPressed)="submitName()"
-        className="h-8 w-40 text-sm font-medium"
-      ></cms-input>
+    <cms-input
+      [value]="nameValue"
+      (valueChange)="nameValue = $event"
+      (blurred)="submitName()"
+      (enterPressed)="submitName()"
+      className="h-8 w-40 text-sm font-medium"
+    ></cms-input>
     } @else {
-      <button
-        type="button"
-        (click)="startEditing()"
-        class="text-sm font-medium text-ui-fg-base hover:text-ui-fg-interactive transition-colors"
-      >
-        {{ storeName }}
-      </button>
+    <button
+      type="button"
+      (click)="startEditing()"
+      class="text-sm font-medium text-ui-fg-base hover:text-ui-fg-interactive transition-colors"
+    >
+      {{ storeName }}
+    </button>
     }
   </div>
 
@@ -34,19 +38,22 @@
     </button>
 
     <ng-template #pageMenu>
-      <div rdxDropdownMenuContent class="rounded-md border border-ui-border-base bg-ui-bg-base p-1 shadow">
+      <div
+        rdxDropdownMenuContent
+        class="rounded-md border border-ui-border-base bg-ui-bg-base p-1 shadow"
+      >
         @for (page of pages; track page.value) {
-          <button
-            type="button"
-            rdxDropdownMenuItem
-            (click)="currentPageChange.emit(page.value)"
-            class="flex w-full items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-ui-bg-subtle-hover"
-          >
-            {{ page.label }}
-            @if (currentPage === page.value) {
-              <i class="pi pi-check ms-auto text-xs text-ui-fg-interactive"></i>
-            }
-          </button>
+        <button
+          type="button"
+          rdxDropdownMenuItem
+          (click)="currentPageChange.emit(page.value)"
+          class="flex w-full items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-ui-bg-subtle-hover"
+        >
+          {{ page.label }}
+          @if (currentPage === page.value) {
+          <i class="pi pi-check ms-auto text-xs text-ui-fg-interactive"></i>
+          }
+        </button>
         }
       </div>
     </ng-template>
@@ -55,28 +62,30 @@
   <div class="flex items-center gap-2 min-w-[400px] justify-end">
     <div class="flex items-center bg-ui-bg-subtle rounded-lg p-1 gap-0.5">
       @for (device of devices; track device.value) {
-        <ng-container rdxTooltipRoot>
-          <button
-            rdxTooltipTrigger
-            type="button"
-            (click)="viewportModeChange.emit(device.value)"
-            class="p-1.5 rounded-md transition-colors"
-            [class.bg-ui-bg-base]="viewportMode === device.value"
-            [class.text-ui-fg-base]="viewportMode === device.value"
-            [class.text-ui-fg-muted]="viewportMode !== device.value"
-            [class.shadow-sm]="viewportMode === device.value"
+      <ng-container rdxTooltipRoot>
+        <button
+          rdxTooltipTrigger
+          type="button"
+          (click)="viewportModeChange.emit(device.value)"
+          class="p-1.5 rounded-md transition-colors cursor-pointer"
+          [class.bg-ui-bg-base]="viewportMode === device.value"
+          [class.text-ui-fg-base]="viewportMode === device.value"
+          [class.text-ui-fg-muted]="viewportMode !== device.value"
+          [class.shadow-sm]="viewportMode === device.value"
+          [class.hover:bg-ui-bg-subtle-hover]="viewportMode !== device.value"
+          [class.border-none]="viewportMode !== device.value"
+        >
+          <i [class]="device.icon + ' text-sm'"></i>
+        </button>
+        <ng-template rdxTooltipContent>
+          <div
+            rdxTooltipContentAttributes
+            class="rounded-md bg-ui-bg-base border border-ui-border-base px-2 py-1 text-xs shadow"
           >
-            <i [class]="device.icon + ' text-sm'"></i>
-          </button>
-          <ng-template rdxTooltipContent>
-            <div
-              rdxTooltipContentAttributes
-              class="rounded-md bg-ui-bg-base border border-ui-border-base px-2 py-1 text-xs shadow"
-            >
-              {{ device.label }}
-            </div>
-          </ng-template>
-        </ng-container>
+            {{ device.label }}
+          </div>
+        </ng-template>
+      </ng-container>
       }
     </div>
 
@@ -88,14 +97,17 @@
         type="button"
         [disabled]="!canUndo"
         (click)="undo.emit()"
-        class="inline-flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-ui-bg-subtle-hover disabled:opacity-50"
+        class="inline-flex h-8 w-8 items-center justify-center text-sm font-medium border-none transition-colors hover:bg-ui-bg-subtle-hover cursor-pointer"
       >
-        <i class="pi pi-undo text-sm"></i>
+        <i-lucide
+          [img]="Undo2"
+          class="w-4 h-4 text-muted-foreground shrink-0 hover:text-ui-fg-base'"
+        ></i-lucide>
       </button>
       <ng-template rdxTooltipContent>
         <div
           rdxTooltipContentAttributes
-          class="rounded-md bg-ui-bg-base border border-ui-border-base px-2 py-1 text-xs shadow"
+          class="bg-ui-bg-base  px-2 py-1 text-xs shadow"
         >
           Undo
         </div>
@@ -108,14 +120,17 @@
         type="button"
         [disabled]="!canRedo"
         (click)="redo.emit()"
-        class="inline-flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-ui-bg-subtle-hover disabled:opacity-50"
+        class="inline-flex h-8 w-8 items-center justify-center text-sm font-medium border-none transition-colors hover:bg-ui-bg-subtle-hover cursor-pointer"
       >
-        <i class="pi pi-redo text-sm"></i>
+        <i-lucide
+          [img]="Redo2"
+          class="w-4 h-4 text-muted-foreground shrink-0 hover:text-ui-fg-base'"
+        ></i-lucide>
       </button>
       <ng-template rdxTooltipContent>
         <div
           rdxTooltipContentAttributes
-          class="rounded-md bg-ui-bg-base border border-ui-border-base px-2 py-1 text-xs shadow"
+          class="bg-ui-bg-base  px-2 py-1 text-xs shadow"
         >
           Redo
         </div>
@@ -124,7 +139,12 @@
 
     <div class="w-px h-6 bg-ui-border-base mx-1"></div>
 
-    <cms-button variant="outline" size="sm" (click)="save.emit()" className="gap-1.5">
+    <cms-button
+      variant="outline"
+      size="sm"
+      (click)="save.emit()"
+      className="gap-1.5"
+    >
       <i class="pi pi-save text-sm"></i>
       Save
     </cms-button>

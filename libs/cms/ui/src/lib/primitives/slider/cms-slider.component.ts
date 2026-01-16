@@ -12,7 +12,7 @@ import { RdxSliderModule } from '@radix-ng/primitives/slider';
       [step]="step"
       [modelValue]="[value]"
       (modelValueChange)="onValueChange($event)"
-      className="{{ rootClass }}"
+      [className]="rootClass"
     >
       <rdx-slider-track class="relative h-1 w-full rounded-full bg-ui-bg-subtle">
         <rdx-slider-range class="absolute h-full rounded-full bg-ui-bg-interactive"></rdx-slider-range>
@@ -32,7 +32,7 @@ export class CmsSliderComponent {
   @Output() valueChange = new EventEmitter<number>();
 
   get rootClass(): string {
-    const base = 'flex w-full touch-none select-none items-center';
+    const base = 'relative flex h-4 w-full touch-none select-none items-center';
     return [base, this.className].filter(Boolean).join(' ');
   }
 

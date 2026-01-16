@@ -18,12 +18,12 @@
           <div
             rdxCollapsibleRoot
             [open]="openGroups[group.key] !== false"
-            (openChange)="toggleGroup(group.key)"
+            (openChange)="setGroupOpen(group.key, $event)"
           >
             <button
               rdxCollapsibleTrigger
               type="button"
-              class="flex items-center justify-between w-full py-2 text-sm font-medium hover:text-ui-fg-base transition-colors"
+              class="flex items-center justify-between w-full py-2 text-sm font-medium hover:text-ui-fg-base transition-colors cursor-pointer"
             >
               {{ group.key }}
               @if (openGroups[group.key] !== false) {
@@ -115,7 +115,7 @@
                           <button
                             type="button"
                             (click)="updateSetting(field.key, color)"
-                            class="w-6 h-6 rounded border border-ui-border-base transition-transform hover:scale-110"
+                            class="w-6 h-6 rounded border border-ui-border-base transition-transform hover:scale-110 cursor-pointer"
                             [class.ring-2]="selectedSection.settings[field.key] === color"
                             [class.ring-ui-border-interactive]="selectedSection.settings[field.key] === color"
                             [style.backgroundColor]="color"
@@ -130,7 +130,9 @@
                     <div class="space-y-3">
                       <div class="flex items-center justify-between">
                         <span class="text-sm">{{ field.label }}</span>
-                        <span class="text-sm font-medium tabular-nums">{{ selectedSection.settings[field.key] || field.min || 0 }}</span>
+                        <span class="text-sm font-medium tabular-nums">{{
+                          toNumber($any(selectedSection.settings[field.key]), field.min ?? 0)
+                        }}</span>
                       </div>
                       <cms-slider
                         [value]="toNumber($any(selectedSection.settings[field.key]), field.min || 0)"
@@ -144,28 +146,42 @@
                   @case ('image') {
                     <div class="space-y-2">
                       <span class="text-sm">{{ field.label }}</span>
+                      <input
+                        #fileInput
+                        type="file"
+                        accept="image/*"
+                        class="hidden"
+                        (change)="onImageSelected($event, field.key)"
+                      />
                       @if (selectedSection.settings[field.key]) {
-                        <div class="relative aspect-video bg-ui-bg-subtle rounded-lg overflow-hidden group">
+                        <div class="relative aspect-video rounded-lg border border-ui-border-base bg-ui-bg-subtle overflow-hidden group">
                           <div class="absolute inset-0 flex items-center justify-center text-ui-fg-muted">
                             <i class="pi pi-image text-2xl"></i>
                           </div>
-                          <button
-                            type="button"
-                            (click)="updateSetting(field.key, null)"
-                            class="absolute top-2 right-2 p-1.5 bg-ui-bg-base/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-ui-button-danger hover:text-ui-fg-on-color"
-                          >
-                            <i class="pi pi-times text-xs"></i>
-                          </button>
+                          <img
+                            [src]="$any(selectedSection.settings[field.key])"
+                            alt=""
+                            loading="lazy"
+                            class="absolute inset-0 h-full w-full object-cover"
+                          />
+                          <div class="absolute inset-0 flex items-center justify-center gap-2 bg-ui-bg-base/70 opacity-0 transition-opacity group-hover:opacity-100">
+                            <cms-button variant="secondary" size="sm" (click)="fileInput.click()">
+                              Replace
+                            </cms-button>
+                            <cms-button variant="ghost" size="sm" (click)="updateSetting(field.key, null)">
+                              Remove
+                            </cms-button>
+                          </div>
                         </div>
                       } @else {
-                        <button
-                          type="button"
-                          (click)="updateSetting(field.key, 'placeholder-image')"
-                          class="w-full aspect-video border-2 border-dashed rounded-lg flex flex-col items-center justify-center gap-2 text-ui-fg-muted hover:border-ui-border-interactive hover:text-ui-fg-base transition-colors"
-                        >
-                          <i class="pi pi-image text-2xl"></i>
-                          <span class="text-sm">Click to upload</span>
-                        </button>
+                          <button
+                            type="button"
+                            (click)="fileInput.click()"
+                            class="w-full aspect-video border-2 border-dashed rounded-lg flex flex-col items-center justify-center gap-2 text-ui-fg-muted hover:border-ui-border-interactive hover:text-ui-fg-base transition-colors cursor-pointer"
+                          >
+                            <i class="pi pi-image text-2xl"></i>
+                            <span class="text-sm">Click to upload</span>
+                          </button>
                       }
                     </div>
                   }
@@ -203,11 +219,11 @@
                             ></cms-input>
                             <div class="grid grid-cols-2 gap-2 max-h-48 overflow-auto">
                               @for (collection of filteredCollections(); track collection.id) {
-                                <button
-                                  type="button"
-                                  (click)="selectCollection(collection.id)"
-                                  class="p-3 bg-ui-bg-subtle rounded-lg hover:bg-ui-bg-subtle-hover transition-colors text-left"
-                                >
+                              <button
+                                type="button"
+                                (click)="selectCollection(collection.id)"
+                                class="p-3 bg-ui-bg-subtle rounded-lg hover:bg-ui-bg-subtle-hover transition-colors text-left cursor-pointer"
+                              >
                                   <div class="w-full aspect-square bg-ui-bg-field rounded-lg mb-2 flex items-center justify-center">
                                     <i class="pi pi-image text-ui-fg-muted"></i>
                                   </div>

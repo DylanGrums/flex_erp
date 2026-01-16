@@ -62,8 +62,27 @@
         </header>
         }
         @case ('hero-banner') {
-        <div class="relative bg-gradient-to-br from-indigo-600 to-purple-700 text-white py-24 px-6">
-          <div class="max-w-4xl mx-auto text-center">
+        <div
+          class="relative text-white py-24 px-6 overflow-hidden"
+          [class.bg-gradient-to-br]="!section.settings['image']"
+          [class.from-indigo-600]="!section.settings['image']"
+          [class.to-purple-700]="!section.settings['image']"
+          [style.backgroundImage]="section.settings['image'] ? 'url(' + section.settings['image'] + ')' : null"
+          [style.backgroundSize]="section.settings['image'] ? 'cover' : null"
+          [style.backgroundPosition]="section.settings['image'] ? 'center' : null"
+        >
+          @if (section.settings['image']) {
+          <div
+            class="absolute inset-0"
+            [style.backgroundColor]="'rgba(0, 0, 0, ' + (toNumber(section.settings['overlayOpacity'], 40) / 100) + ')'"
+          ></div>
+          }
+          <div
+            class="relative max-w-4xl mx-auto"
+            [class.text-left]="section.settings['textAlign'] === 'left'"
+            [class.text-center]="!section.settings['textAlign'] || section.settings['textAlign'] === 'center'"
+            [class.text-right]="section.settings['textAlign'] === 'right'"
+          >
             <h1 class="text-4xl md:text-5xl font-bold mb-4">
               {{ section.settings['heading'] || 'Welcome' }}
             </h1>
@@ -79,7 +98,16 @@
         @case ('split-hero') {
         <div class="flex flex-col md:flex-row min-h-[400px]"
           [class.md:flex-row-reverse]="section.settings['imagePosition'] === 'right'">
-          <div class="flex-1 bg-gray-100"></div>
+          <div class="flex-1 bg-gray-100 relative overflow-hidden">
+            @if (section.settings['image']) {
+            <img
+              [src]="$any(section.settings['image'])"
+              alt=""
+              loading="lazy"
+              class="absolute inset-0 h-full w-full object-cover"
+            />
+            }
+          </div>
           <div class="flex-1 flex items-center justify-center p-8 md:p-12">
             <div class="max-w-md">
               <h2 class="text-3xl font-bold mb-4">{{ section.settings['heading'] || 'New Collection' }}</h2>
