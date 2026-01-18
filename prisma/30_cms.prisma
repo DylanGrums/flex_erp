@@ -99,7 +99,7 @@ model CmsPageVersion {
 
   page CmsPage @relation(fields: [tenantId, storeId, pageId], references: [tenantId, storeId, id], onDelete: Cascade)
 
-  createdByUser User? @relation(fields: [tenantId, createdByUserId], references: [tenantId, id], onDelete: SetNull)
+  createdByUser User? @relation(fields: [tenantId, createdByUserId], references: [tenantId, id], onDelete: Restrict)
 
   publishedByPage CmsPage? @relation("CmsPagePublishedVersion")
 
@@ -131,7 +131,7 @@ model CmsAsset {
   site  CmsSite @relation(fields: [tenantId, storeId, siteId], references: [tenantId, storeId, id], onDelete: Cascade)
   store Store   @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
 
-  createdByUser User? @relation(fields: [tenantId, createdByUserId], references: [tenantId, id], onDelete: SetNull)
+  createdByUser User? @relation(fields: [tenantId, createdByUserId], references: [tenantId, id], onDelete: Restrict)
 
   @@index([tenantId, storeId, siteId])
   @@schema("cms")
@@ -177,7 +177,7 @@ model CmsMenuItem {
   parent   CmsMenuItem?  @relation("CmsMenuItemParent", fields: [parentId], references: [id], onDelete: Cascade)
   children CmsMenuItem[] @relation("CmsMenuItemParent")
 
-  page CmsPage? @relation(fields: [tenantId, storeId, pageId], references: [tenantId, storeId, id], onDelete: SetNull)
+  page CmsPage? @relation(fields: [tenantId, storeId, pageId], references: [tenantId, storeId, id], onDelete: Restrict)
 
   @@index([tenantId, storeId, menuId])
   @@schema("cms")

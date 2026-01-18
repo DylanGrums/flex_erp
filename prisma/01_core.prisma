@@ -120,10 +120,10 @@ model BusinessUnit {
   vatNumber String?
 
   addressId String?  @db.Uuid
-  address   Address? @relation("BusinessUnitAddress", fields: [tenantId, addressId], references: [tenantId, id], onDelete: SetNull)
+  address   Address? @relation("BusinessUnitAddress", fields: [tenantId, addressId], references: [tenantId, id], onDelete: Restrict)
 
   orgUnitId String?  @db.Uuid
-  orgUnit   OrgUnit? @relation("OrgUnitBusinessUnits", fields: [tenantId, orgUnitId], references: [tenantId, id], onDelete: SetNull)
+  orgUnit   OrgUnit? @relation("OrgUnitBusinessUnits", fields: [tenantId, orgUnitId], references: [tenantId, id], onDelete: Restrict)
 
   tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
@@ -189,7 +189,7 @@ model OrgUnit {
   slug String
 
   parentId String?   @db.Uuid
-  parent   OrgUnit?  @relation("OrgUnitParent", fields: [tenantId, parentId], references: [tenantId, id], onDelete: SetNull)
+  parent   OrgUnit?  @relation("OrgUnitParent", fields: [tenantId, parentId], references: [tenantId, id], onDelete: Restrict)
   children OrgUnit[] @relation("OrgUnitParent")
 
   tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)

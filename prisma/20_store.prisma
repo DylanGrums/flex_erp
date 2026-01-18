@@ -285,7 +285,7 @@ model Cart {
   updatedAt DateTime @updatedAt
 
   store    Store     @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
-  customer Customer? @relation(fields: [tenantId, storeId, customerId], references: [tenantId, storeId, id], onDelete: SetNull)
+  customer Customer? @relation(fields: [tenantId, storeId, customerId], references: [tenantId, storeId, id], onDelete: Restrict)
 
   items       CartItem[]
   adjustments CartAdjustment[]
@@ -356,10 +356,10 @@ model Order {
   updatedAt DateTime @updatedAt
 
   store    Store     @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
-  customer Customer? @relation(fields: [tenantId, storeId, customerId], references: [tenantId, storeId, id], onDelete: SetNull)
+  customer Customer? @relation(fields: [tenantId, storeId, customerId], references: [tenantId, storeId, id], onDelete: Restrict)
 
-  shippingAddress Address? @relation("OrderShippingAddress", fields: [tenantId, shippingAddressId], references: [tenantId, id], onDelete: SetNull)
-  billingAddress  Address? @relation("OrderBillingAddress", fields: [tenantId, billingAddressId], references: [tenantId, id], onDelete: SetNull)
+  shippingAddress Address? @relation("OrderShippingAddress", fields: [tenantId, shippingAddressId], references: [tenantId, id], onDelete: Restrict)
+  billingAddress  Address? @relation("OrderBillingAddress", fields: [tenantId, billingAddressId], references: [tenantId, id], onDelete: Restrict)
 
   items       OrderItem[]
   adjustments OrderAdjustment[]
