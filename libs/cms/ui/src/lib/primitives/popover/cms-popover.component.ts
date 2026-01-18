@@ -1,17 +1,20 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { RdxPopoverModule } from '@radix-ng/primitives/popover';
+import {
+  FlexPopoverDirective,
+  FlexPopoverTriggerDirective,
+} from '@flex-erp/shared/ui';
 
 @Component({
   selector: 'cms-popover',
   standalone: true,
-  imports: [RdxPopoverModule],
+  imports: [FlexPopoverTriggerDirective, FlexPopoverDirective],
   template: `
-    <div rdxPopoverRoot>
-      <span rdxPopoverTrigger>
+    <div>
+      <span [flexPopoverTrigger]="popoverTemplate">
         <ng-content select="[cmsPopoverTrigger]"></ng-content>
       </span>
-      <ng-template rdxPopoverContent>
-        <div rdxPopoverContentAttributes [class]="contentClass">
+      <ng-template #popoverTemplate>
+        <div flexPopover [class]="contentClass">
           <ng-content select="[cmsPopoverContent]"></ng-content>
         </div>
       </ng-template>

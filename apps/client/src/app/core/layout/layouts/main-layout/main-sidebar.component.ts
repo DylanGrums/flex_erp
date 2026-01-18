@@ -17,10 +17,10 @@ import { FlexDividerComponent } from '@flex-erp/shared/ui';
 import { TranslocoModule } from '@jsverse/transloco';
 
 import {
-  RdxDropdownMenuTriggerDirective,
-  RdxDropdownMenuContentDirective,
-  RdxDropdownMenuItemDirective,
-} from '@radix-ng/primitives/dropdown-menu';
+  FlexDropdownMenuContentDirective,
+  FlexDropdownMenuItemDirective,
+  FlexDropdownMenuTriggerDirective,
+} from '@flex-erp/shared/ui';
 
 import { NAV_MANIFESTS } from '@flex-erp/shared/nav';
 import { CMS_NAV } from '@flex-erp/cms/manifest';
@@ -35,9 +35,9 @@ import { CMS_NAV } from '@flex-erp/cms/manifest';
     ButtonModule,
     NavItemComponent,
     UserMenuComponent,
-    RdxDropdownMenuTriggerDirective,
-    RdxDropdownMenuContentDirective,
-    RdxDropdownMenuItemDirective,
+    FlexDropdownMenuTriggerDirective,
+    FlexDropdownMenuContentDirective,
+    FlexDropdownMenuItemDirective,
     FlexDividerComponent,
     TranslocoModule,
   ],

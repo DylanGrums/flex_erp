@@ -30,7 +30,7 @@
   <div class="flex-1 flex justify-center">
     <button
       type="button"
-      [rdxDropdownMenuTrigger]="pageMenu"
+      [flexDropdownMenuTrigger]="pageMenu"
       class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-ui-border-base bg-ui-bg-base hover:bg-ui-bg-subtle-hover h-8 px-3 gap-2"
     >
       {{ currentPageLabel | transloco }}
@@ -39,13 +39,13 @@
 
     <ng-template #pageMenu>
       <div
-        rdxDropdownMenuContent
+        flexDropdownMenuContent
         class="rounded-md border border-ui-border-base bg-ui-bg-base p-1 shadow"
       >
         @for (page of pages; track page.value) {
         <button
           type="button"
-          rdxDropdownMenuItem
+          flexDropdownMenuItem
           (click)="currentPageChange.emit(page.value)"
           class="flex w-full items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-ui-bg-subtle-hover"
         >
@@ -62,80 +62,68 @@
   <div class="flex items-center gap-2 min-w-[400px] justify-end">
     <div class="flex items-center bg-ui-bg-subtle rounded-lg p-1 gap-0.5">
       @for (device of devices; track device.value) {
-      <ng-container rdxTooltipRoot>
-        <button
-          rdxTooltipTrigger
-          type="button"
-          (click)="viewportModeChange.emit(device.value)"
-          class="p-1.5 rounded-md transition-colors cursor-pointer"
-          [class.bg-ui-bg-base]="viewportMode === device.value"
-          [class.text-ui-fg-base]="viewportMode === device.value"
-          [class.text-ui-fg-muted]="viewportMode !== device.value"
-          [class.shadow-sm]="viewportMode === device.value"
-          [class.hover:bg-ui-bg-subtle-hover]="viewportMode !== device.value"
-          [class.border-none]="viewportMode !== device.value"
+      <button
+        type="button"
+        [flexTooltipTrigger]="deviceTooltip"
+        (click)="viewportModeChange.emit(device.value)"
+        class="p-1.5 rounded-md transition-colors cursor-pointer"
+        [class.bg-ui-bg-base]="viewportMode === device.value"
+        [class.text-ui-fg-base]="viewportMode === device.value"
+        [class.text-ui-fg-muted]="viewportMode !== device.value"
+        [class.shadow-sm]="viewportMode === device.value"
+        [class.hover:bg-ui-bg-subtle-hover]="viewportMode !== device.value"
+        [class.border-none]="viewportMode !== device.value"
+      >
+        <i [class]="device.icon + ' text-sm'"></i>
+      </button>
+      <ng-template #deviceTooltip>
+        <div
+          flexTooltip
+          class="rounded-md bg-ui-bg-base border border-ui-border-base px-2 py-1 text-xs shadow"
         >
-          <i [class]="device.icon + ' text-sm'"></i>
-        </button>
-        <ng-template rdxTooltipContent>
-          <div
-            rdxTooltipContentAttributes
-            class="rounded-md bg-ui-bg-base border border-ui-border-base px-2 py-1 text-xs shadow"
-          >
-            {{ device.label | transloco }}
-          </div>
-        </ng-template>
-      </ng-container>
+          {{ device.label | transloco }}
+        </div>
+      </ng-template>
       }
     </div>
 
     <div class="w-px h-6 bg-ui-border-base mx-1"></div>
 
-    <ng-container rdxTooltipRoot>
-      <button
-        rdxTooltipTrigger
-        type="button"
-        [disabled]="!canUndo"
-        (click)="undo.emit()"
-        class="inline-flex h-8 w-8 items-center justify-center text-sm font-medium border-none transition-colors hover:bg-ui-bg-subtle-hover cursor-pointer"
-      >
-        <i-lucide
-          [img]="Undo2"
-          class="w-4 h-4 text-muted-foreground shrink-0 hover:text-ui-fg-base'"
-        ></i-lucide>
-      </button>
-      <ng-template rdxTooltipContent>
-        <div
-          rdxTooltipContentAttributes
-          class="bg-ui-bg-base  px-2 py-1 text-xs shadow"
-        >
-          {{ 'cms.editor.actions.undo' | transloco }}
-        </div>
-      </ng-template>
-    </ng-container>
+    <button
+      type="button"
+      [flexTooltipTrigger]="undoTooltip"
+      [disabled]="!canUndo"
+      (click)="undo.emit()"
+      class="inline-flex h-8 w-8 items-center justify-center text-sm font-medium border-none transition-colors hover:bg-ui-bg-subtle-hover cursor-pointer"
+    >
+      <i-lucide
+        [img]="Undo2"
+        class="w-4 h-4 text-muted-foreground shrink-0 hover:text-ui-fg-base'"
+      ></i-lucide>
+    </button>
+    <ng-template #undoTooltip>
+      <div flexTooltip class="bg-ui-bg-base  px-2 py-1 text-xs shadow">
+        {{ 'cms.editor.actions.undo' | transloco }}
+      </div>
+    </ng-template>
 
-    <ng-container rdxTooltipRoot>
-      <button
-        rdxTooltipTrigger
-        type="button"
-        [disabled]="!canRedo"
-        (click)="redo.emit()"
-        class="inline-flex h-8 w-8 items-center justify-center text-sm font-medium border-none transition-colors hover:bg-ui-bg-subtle-hover cursor-pointer"
-      >
-        <i-lucide
-          [img]="Redo2"
-          class="w-4 h-4 text-muted-foreground shrink-0 hover:text-ui-fg-base'"
-        ></i-lucide>
-      </button>
-      <ng-template rdxTooltipContent>
-        <div
-          rdxTooltipContentAttributes
-          class="bg-ui-bg-base  px-2 py-1 text-xs shadow"
-        >
-          {{ 'cms.editor.actions.redo' | transloco }}
-        </div>
-      </ng-template>
-    </ng-container>
+    <button
+      type="button"
+      [flexTooltipTrigger]="redoTooltip"
+      [disabled]="!canRedo"
+      (click)="redo.emit()"
+      class="inline-flex h-8 w-8 items-center justify-center text-sm font-medium border-none transition-colors hover:bg-ui-bg-subtle-hover cursor-pointer"
+    >
+      <i-lucide
+        [img]="Redo2"
+        class="w-4 h-4 text-muted-foreground shrink-0 hover:text-ui-fg-base'"
+      ></i-lucide>
+    </button>
+    <ng-template #redoTooltip>
+      <div flexTooltip class="bg-ui-bg-base  px-2 py-1 text-xs shadow">
+        {{ 'cms.editor.actions.redo' | transloco }}
+      </div>
+    </ng-template>
 
     <div class="w-px h-6 bg-ui-border-base mx-1"></div>
 

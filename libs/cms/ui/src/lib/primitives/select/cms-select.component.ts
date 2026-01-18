@@ -1,5 +1,10 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { RdxSelectModule } from '@radix-ng/primitives/select';
+import {
+  FlexSelectDirective,
+  FlexSelectDropdownDirective,
+  FlexSelectOptionDirective,
+  FlexSelectPortalDirective,
+} from '@flex-erp/shared/ui';
 
 export interface CmsSelectOption {
   label: string;
@@ -9,33 +14,37 @@ export interface CmsSelectOption {
 @Component({
   selector: 'cms-select',
   standalone: true,
-  imports: [RdxSelectModule],
+  imports: [
+    FlexSelectDirective,
+    FlexSelectPortalDirective,
+    FlexSelectDropdownDirective,
+    FlexSelectOptionDirective,
+  ],
   template: `
     <div
-      rdxSelect
+      flexSelect
       [value]="value ?? ''"
-      (onValueChange)="valueChange.emit($event)"
+      (valueChange)="valueChange.emit($event)"
       [disabled]="disabled"
-      [matchTriggerWidth]="true"
-      class="w-full"
+      [class]="triggerClass"
     >
-      <button rdxSelectTrigger [class]="triggerClass">
-        <span rdxSelectValue [placeholder]="placeholder"></span>
-        <span rdxSelectIcon class="ms-auto text-ui-fg-muted">
-          <i class="pi pi-chevron-down"></i>
-        </span>
-      </button>
-      <div rdxSelectContent [class]="contentClass">
+      <span>{{ selectedLabel || placeholder }}</span>
+      <span class="ms-auto text-ui-fg-muted">
+        <i class="pi pi-chevron-down"></i>
+      </span>
+      <div *flexSelectPortal flexSelectDropdown [class]="contentClass">
         @for (option of options; track option.value) {
           <div
-            rdxSelectItem
-            [value]="option.value"
+            flexSelectOption
+            [flexSelectOptionValue]="option.value"
             [class]="itemClass"
           >
             <span>{{ option.label }}</span>
-            <span rdxSelectItemIndicator class="ms-auto text-ui-fg-interactive">
-              <i class="pi pi-check"></i>
-            </span>
+            @if (option.value === value) {
+              <span class="ms-auto text-ui-fg-interactive">
+                <i class="pi pi-check"></i>
+              </span>
+            }
           </div>
         }
       </div>
@@ -54,7 +63,7 @@ export class CmsSelectComponent {
 
   get triggerClass(): string {
     const base =
-      'flex h-9 w-full items-center justify-between rounded-md border border-ui-border-base bg-ui-bg-base px-3 text-sm text-ui-fg-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ui-border-interactive disabled:opacity-50';
+      'flex h-9 w-full items-center justify-between rounded-md border border-ui-border-base bg-ui-bg-base px-3 text-sm text-ui-fg-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ui-border-interactive data-[disabled]:pointer-events-none data-[disabled]:opacity-50';
     return [base, this.className].filter(Boolean).join(' ');
   }
 
@@ -63,6 +72,10 @@ export class CmsSelectComponent {
   }
 
   get itemClass(): string {
-    return 'flex cursor-pointer select-none items-center rounded px-2 py-1.5 text-sm text-ui-fg-base outline-none data-[highlighted]:bg-ui-bg-subtle-hover data-[state=checked]:bg-ui-bg-subtle';
+    return 'flex cursor-pointer select-none items-center rounded px-2 py-1.5 text-sm text-ui-fg-base outline-none data-[active]:bg-ui-bg-subtle-hover data-[selected]:bg-ui-bg-subtle';
+  }
+
+  get selectedLabel(): string | null {
+    return this.options.find((option) => option.value === this.value)?.label ?? null;
   }
 }

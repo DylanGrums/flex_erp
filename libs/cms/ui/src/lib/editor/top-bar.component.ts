@@ -2,13 +2,14 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { DeviceType, PageType } from '@flex-erp/cms/types';
 import { CmsButtonComponent } from '../primitives/button/cms-button.component';
 import { CmsInputComponent } from '../primitives/input/cms-input.component';
-import {
-  RdxDropdownMenuContentDirective,
-  RdxDropdownMenuItemDirective,
-  RdxDropdownMenuTriggerDirective,
-} from '@radix-ng/primitives/dropdown-menu';
-import { RdxTooltipModule } from '@radix-ng/primitives/tooltip';
 import { TranslocoModule } from '@jsverse/transloco';
+import {
+  FlexDropdownMenuContentDirective,
+  FlexDropdownMenuItemDirective,
+  FlexDropdownMenuTriggerDirective,
+  FlexTooltipDirective,
+  FlexTooltipTriggerDirective,
+} from '@flex-erp/shared/ui';
 import {
   LucideAngularModule,
   Monitor,
@@ -43,10 +44,11 @@ const DEVICES: { value: DeviceType; label: string; icon: string }[] = [
   imports: [
     CmsButtonComponent,
     CmsInputComponent,
-    RdxDropdownMenuTriggerDirective,
-    RdxDropdownMenuContentDirective,
-    RdxDropdownMenuItemDirective,
-    RdxTooltipModule,
+    FlexDropdownMenuTriggerDirective,
+    FlexDropdownMenuContentDirective,
+    FlexDropdownMenuItemDirective,
+    FlexTooltipTriggerDirective,
+    FlexTooltipDirective,
     LucideAngularModule,
     TranslocoModule,
   ],

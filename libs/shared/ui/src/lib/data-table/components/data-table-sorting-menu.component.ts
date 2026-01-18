@@ -1,19 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import {
-  RdxDropdownMenuContentDirective,
-  RdxDropdownMenuItemIndicatorDirective,
-  RdxDropdownMenuItemRadioDirective,
-  RdxDropdownMenuItemRadioGroupDirective,
-  RdxDropdownMenuSeparatorDirective,
-  RdxDropdownMenuTriggerDirective,
-} from '@radix-ng/primitives/dropdown-menu';
+  FlexDropdownMenuContentDirective,
+  FlexDropdownMenuItemIndicatorDirective,
+  FlexDropdownMenuItemRadioDirective,
+  FlexDropdownMenuItemRadioGroupDirective,
+  FlexDropdownMenuSeparatorDirective,
+  FlexDropdownMenuTriggerDirective,
+} from '../../primitives/dropdown-menu/dropdown-menu.directive';
 import {
-  RdxTooltipContentAttributesComponent,
-  RdxTooltipContentDirective,
-  RdxTooltipRootDirective,
-  RdxTooltipTriggerDirective,
-} from '@radix-ng/primitives/tooltip';
+  FlexTooltipDirective,
+  FlexTooltipTriggerDirective,
+} from '../../primitives/tooltip/tooltip.directive';
 
 import { injectDataTableContext } from '../data-table-context';
 import { DataTableColumn, DataTableSortableColumnDefMeta } from '../types';
@@ -27,58 +25,54 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
     CommonModule,
     DataTableIconButtonComponent,
     DataTableSkeletonComponent,
-    RdxDropdownMenuTriggerDirective,
-    RdxDropdownMenuContentDirective,
-    RdxDropdownMenuItemRadioGroupDirective,
-    RdxDropdownMenuItemRadioDirective,
-    RdxDropdownMenuItemIndicatorDirective,
-    RdxDropdownMenuSeparatorDirective,
-    RdxTooltipRootDirective,
-    RdxTooltipTriggerDirective,
-    RdxTooltipContentDirective,
-    RdxTooltipContentAttributesComponent,
+    FlexDropdownMenuTriggerDirective,
+    FlexDropdownMenuContentDirective,
+    FlexDropdownMenuItemRadioGroupDirective,
+    FlexDropdownMenuItemRadioDirective,
+    FlexDropdownMenuItemIndicatorDirective,
+    FlexDropdownMenuSeparatorDirective,
+    FlexTooltipTriggerDirective,
+    FlexTooltipDirective,
   ],
   template: `
     @if (instance.showSkeleton) {
       <flex-data-table-skeleton className="size-7"></flex-data-table-skeleton>
     } @else {
       @if (tooltip) {
-        <ng-container rdxTooltipRoot>
-          <button
-            flexDataTableIconButton
-            size="small"
-            [rdxDropdownMenuTrigger]="menu"
-            rdxTooltipTrigger
+        <button
+          flexDataTableIconButton
+          size="small"
+          [flexDropdownMenuTrigger]="menu"
+          [flexTooltipTrigger]="tooltipTemplate"
+        >
+          <i class="pi pi-sort-alt text-sm"></i>
+        </button>
+        <ng-template #tooltipTemplate>
+          <div
+            flexTooltip
+            class="rounded-md border border-ui-border-base bg-ui-bg-base px-2 py-1 text-xs shadow"
           >
-            <i class="pi pi-sort-alt text-sm"></i>
-          </button>
-          <ng-template rdxTooltipContent>
-            <div
-              rdxTooltipContentAttributes
-              class="rounded-md border border-ui-border-base bg-ui-bg-base px-2 py-1 text-xs shadow"
-            >
-              {{ tooltip }}
-            </div>
-          </ng-template>
-        </ng-container>
+            {{ tooltip }}
+          </div>
+        </ng-template>
       } @else {
-        <button flexDataTableIconButton size="small" [rdxDropdownMenuTrigger]="menu">
+        <button flexDataTableIconButton size="small" [flexDropdownMenuTrigger]="menu">
           <i class="pi pi-sort-alt text-sm"></i>
         </button>
       }
 
       <ng-template #menu>
-        <div rdxDropdownMenuContent class="min-w-[200px] rounded-md border border-ui-border-base bg-ui-bg-base p-1 shadow">
-          <div rdxDropdownMenuItemRadioGroup [value]="sorting?.id" (valueChange)="setKey($event)">
+        <div flexDropdownMenuContent class="min-w-[200px] rounded-md border border-ui-border-base bg-ui-bg-base p-1 shadow">
+          <div flexDropdownMenuItemRadioGroup [value]="sorting?.id" (valueChange)="setKey($event)">
             @for (column of sortableColumns; track column.id) {
               <button
                 type="button"
-                rdxDropdownMenuItemRadio
+                flexDropdownMenuItemRadio
                 [value]="column.id"
                 class="flex w-full items-center rounded px-2 py-1.5 text-sm text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover"
               >
                 {{ getSortLabel(column) }}
-                <span rdxDropdownMenuItemIndicator class="ms-auto text-ui-fg-interactive">
+                <span flexDropdownMenuItemIndicator class="ms-auto text-ui-fg-interactive">
                   <i class="pi pi-check text-xs"></i>
                 </span>
               </button>
@@ -86,15 +80,15 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
           </div>
 
           @if (sorting) {
-            <div rdxDropdownMenuSeparator class="my-1 h-px bg-ui-border-base"></div>
+            <div flexDropdownMenuSeparator class="my-1 h-px bg-ui-border-base"></div>
             <div
-              rdxDropdownMenuItemRadioGroup
+              flexDropdownMenuItemRadioGroup
               [value]="sorting.desc ? 'true' : 'false'"
               (valueChange)="setDesc($event)"
             >
               <button
                 type="button"
-                rdxDropdownMenuItemRadio
+                flexDropdownMenuItemRadio
                 value="false"
                 class="flex w-full items-center gap-2 rounded px-2 py-1.5 text-sm text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover"
               >
@@ -103,7 +97,7 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
               </button>
               <button
                 type="button"
-                rdxDropdownMenuItemRadio
+                flexDropdownMenuItemRadio
                 value="true"
                 class="flex w-full items-center gap-2 rounded px-2 py-1.5 text-sm text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover"
               >

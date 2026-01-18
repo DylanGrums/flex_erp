@@ -15,8 +15,12 @@ import { CmsSwitchComponent } from '../primitives/switch/cms-switch.component';
 import { CmsSliderComponent } from '../primitives/slider/cms-slider.component';
 import { CmsSelectComponent } from '../primitives/select/cms-select.component';
 import { CmsScrollAreaComponent } from '../primitives/scroll-area/cms-scroll-area.component';
-import { RdxCollapsibleModule } from '@radix-ng/primitives/collapsible';
 import { TranslocoModule } from '@jsverse/transloco';
+import {
+  FlexCollapsibleContentDirective,
+  FlexCollapsibleRootDirective,
+  FlexCollapsibleTriggerDirective,
+} from '@flex-erp/shared/ui';
 
 @Component({
   selector: 'cms-inspector-panel',
@@ -29,7 +33,9 @@ import { TranslocoModule } from '@jsverse/transloco';
     CmsSliderComponent,
     CmsSelectComponent,
     CmsScrollAreaComponent,
-    RdxCollapsibleModule,
+    FlexCollapsibleRootDirective,
+    FlexCollapsibleTriggerDirective,
+    FlexCollapsibleContentDirective,
     TranslocoModule,
   ],
   templateUrl: './inspector-panel.component.html',

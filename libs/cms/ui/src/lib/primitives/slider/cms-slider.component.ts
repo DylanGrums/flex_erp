@@ -1,24 +1,38 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { RdxSliderModule } from '@radix-ng/primitives/slider';
+import {
+  FlexSliderDirective,
+  FlexSliderRangeDirective,
+  FlexSliderThumbDirective,
+  FlexSliderTrackDirective,
+} from '@flex-erp/shared/ui';
 
 @Component({
   selector: 'cms-slider',
   standalone: true,
-  imports: [RdxSliderModule],
+  imports: [
+    FlexSliderDirective,
+    FlexSliderTrackDirective,
+    FlexSliderRangeDirective,
+    FlexSliderThumbDirective,
+  ],
   template: `
-    <rdx-slider
+    <div
+      flexSlider
       [min]="min"
       [max]="max"
       [step]="step"
-      [modelValue]="[value]"
-      (modelValueChange)="onValueChange($event)"
-      [className]="rootClass"
+      [value]="value"
+      (valueChange)="valueChange.emit($event)"
+      [class]="rootClass"
     >
-      <rdx-slider-track class="relative h-1 w-full rounded-full bg-ui-bg-subtle">
-        <rdx-slider-range class="absolute h-full rounded-full bg-ui-bg-interactive"></rdx-slider-range>
-      </rdx-slider-track>
-      <rdx-slider-thumb class="block h-4 w-4 rounded-full border border-ui-border-base bg-ui-bg-base shadow"></rdx-slider-thumb>
-    </rdx-slider>
+      <div flexSliderTrack class="relative h-1 w-full rounded-full bg-ui-bg-subtle">
+        <div flexSliderRange class="absolute h-full rounded-full bg-ui-bg-interactive"></div>
+      </div>
+      <div
+        flexSliderThumb
+        class="block h-4 w-4 rounded-full border border-ui-border-base bg-ui-bg-base shadow"
+      ></div>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -36,8 +50,4 @@ export class CmsSliderComponent {
     return [base, this.className].filter(Boolean).join(' ');
   }
 
-  onValueChange(values: number[]): void {
-    const next = values[0] ?? this.min;
-    this.valueChange.emit(next);
-  }
 }

@@ -12,9 +12,16 @@ import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs/operators';
 
-import { RdxCollapsibleModule } from '@radix-ng/primitives/collapsible';
-import { RdxTooltipModule } from '@radix-ng/primitives/tooltip';
 import { TranslocoModule } from '@jsverse/transloco';
+import {
+  FlexCollapsibleContentDirective,
+  FlexCollapsibleContentPresenceDirective,
+  FlexCollapsibleRootDirective,
+  FlexCollapsibleTriggerDirective,
+  FlexTooltipArrowDirective,
+  FlexTooltipDirective,
+  FlexTooltipTriggerDirective,
+} from '@flex-erp/shared/ui';
 
 export type ItemType = 'core' | 'extension' | 'setting';
 
@@ -51,7 +58,17 @@ const SETTING_NAV_LINK_CLASSES = 'pl-2 py-1';
 @Component({
   selector: 'app-nav-item',
   standalone: true,
-  imports: [RouterLink, RdxCollapsibleModule, RdxTooltipModule, TranslocoModule],
+  imports: [
+    RouterLink,
+    FlexCollapsibleRootDirective,
+    FlexCollapsibleTriggerDirective,
+    FlexCollapsibleContentDirective,
+    FlexCollapsibleContentPresenceDirective,
+    FlexTooltipTriggerDirective,
+    FlexTooltipDirective,
+    FlexTooltipArrowDirective,
+    TranslocoModule,
+  ],
   templateUrl: './nav-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

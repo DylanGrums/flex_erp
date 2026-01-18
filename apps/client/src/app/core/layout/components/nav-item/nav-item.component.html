@@ -1,62 +1,62 @@
 <div class="px-3 cursor-pointer">
   <!-- PARENT (desktop link; hidden on mobile if has subitems) -->
   @if (hasTooltipFor(item().to)) {
-    <ng-container rdxTooltipRoot [openDelay]="openDelay()">
-      <div
-        rdxTooltipTrigger
-        [routerLink]="item().to"
-        [state]="item().from ? { from: item().from } : undefined"
-        [class]="
-          navLinkClassNames({
-            to: item().to,
-            isActive: isActive(item().to),
-            isSetting: isSetting()
-          }) +
-          ' ' +
-          parentLinkExtraClasses()
-        "
-      >
-        @if (!isSetting()) {
-          <div class="flex size-6 items-center justify-center">
-            <i class="text-base leading-none" [class]="item().icon"></i>
+    <div
+      flexTooltipTrigger
+      [flexTooltipTrigger]="parentTooltip"
+      [openDelay]="openDelay()"
+      [routerLink]="item().to"
+      [state]="item().from ? { from: item().from } : undefined"
+      [class]="
+        navLinkClassNames({
+          to: item().to,
+          isActive: isActive(item().to),
+          isSetting: isSetting()
+        }) +
+        ' ' +
+        parentLinkExtraClasses()
+      "
+    >
+      @if (!isSetting()) {
+        <div class="flex size-6 items-center justify-center">
+          <i class="text-base leading-none" [class]="item().icon"></i>
+        </div>
+      }
+      <span class="font-medium font-sans txt-compact-small">{{
+        item().label | transloco
+      }}</span>
+    </div>
+
+    <ng-template #parentTooltip>
+      @if (shortcutFor(item().to); as sc) {
+        <div
+          flexTooltip
+          class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
+        >
+          <span>{{ sc.label | transloco }}</span>
+
+          <div class="flex items-center gap-x-1">
+            @for (key of (sc.keys.Mac ?? []); track key; let i = $index) {
+              <div class="flex items-center gap-x-1">
+                <kbd
+                  class="bg-ui-bg-field-component rounded px-1.5 py-0.5 text-[11px] font-medium leading-none"
+                >
+                  {{ key }}
+                </kbd>
+
+                @if (i < (sc.keys.Mac?.length ?? 0) - 1) {
+                  <span class="text-ui-fg-muted txt-compact-xsmall">
+                    {{ thenLabel() | transloco }}
+                  </span>
+                }
+              </div>
+            }
           </div>
-        }
-        <span class="font-medium font-sans txt-compact-small">{{
-          item().label | transloco
-        }}</span>
-      </div>
 
-      <ng-template rdxTooltipContent>
-        @if (shortcutFor(item().to); as sc) {
-          <div
-            rdxTooltipContentAttributes
-            class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
-          >
-            <span>{{ sc.label | transloco }}</span>
-
-            <div class="flex items-center gap-x-1">
-              @for (key of (sc.keys.Mac ?? []); track key; let i = $index) {
-                <div class="flex items-center gap-x-1">
-                  <kbd
-                    class="bg-ui-bg-field-component rounded px-1.5 py-0.5 text-[11px] font-medium leading-none"
-                  >
-                    {{ key }}
-                  </kbd>
-
-                  @if (i < (sc.keys.Mac?.length ?? 0) - 1) {
-                    <span class="text-ui-fg-muted txt-compact-xsmall">
-                      {{ thenLabel() | transloco }}
-                    </span>
-                  }
-                </div>
-              }
-            </div>
-
-            <div rdxTooltipArrow></div>
-          </div>
-        }
-      </ng-template>
-    </ng-container>
+          <div flexTooltipArrow></div>
+        </div>
+      }
+    </ng-template>
   } @else {
     <div
       [routerLink]="item().to"
@@ -82,9 +82,9 @@
 
   <!-- MOBILE: collapsible (shows parent + sub items) -->
   @if (resolvedItems().length > 0) {
-    <div rdxCollapsibleRoot [open]="open()" (openChange)="open.set($event)">
+    <div flexCollapsibleRoot [open]="open()" (openChange)="open.set($event)">
       <button
-        rdxCollapsibleTrigger
+        flexCollapsibleTrigger
         type="button"
         [class]="
           clx(
@@ -99,59 +99,59 @@
         <span class="font-medium font-sans txt-compact-small">{{ item().label | transloco }}</span>
       </button>
 
-      <div rdxCollapsibleContent>
-        <div *rdxCollapsibleContentPresence>
+      <div flexCollapsibleContent>
+        <div *flexCollapsibleContentPresence>
           <div class="flex flex-col pt-1">
             <div class="flex flex-col gap-1">
               <!-- parent entry inside collapsible -->
               <div class="flex w-full items-center gap-2 lg:hidden">
                 @if (hasTooltipFor(item().to)) {
-                  <ng-container rdxTooltipRoot [openDelay]="openDelay()">
-                    <div
-                      rdxTooltipTrigger
-                      [routerLink]="item().to"
-                      [class]="
-                        navLinkClassNames({
-                          to: item().to,
-                          isActive: isActive(item().to),
-                          isSetting: isSetting(),
-                          isNested: true
-                        })
-                      "
-                    >
-                      <span class="font-medium font-sans txt-compact-small">{{
-                        item().label
-                      }}</span>
-                    </div>
+                  <div
+                    flexTooltipTrigger
+                    [flexTooltipTrigger]="parentNestedTooltip"
+                    [openDelay]="openDelay()"
+                    [routerLink]="item().to"
+                    [class]="
+                      navLinkClassNames({
+                        to: item().to,
+                        isActive: isActive(item().to),
+                        isSetting: isSetting(),
+                        isNested: true
+                      })
+                    "
+                  >
+                    <span class="font-medium font-sans txt-compact-small">{{
+                      item().label
+                    }}</span>
+                  </div>
 
-                    <ng-template rdxTooltipContent>
-                      @if (shortcutFor(item().to); as sc) {
-                        <div
-                          rdxTooltipContentAttributes
-                          class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
-                        >
-                          <span>{{ sc.label | transloco }}</span>
-                          <div class="flex items-center gap-1">
-                            @for (key of (sc.keys.Mac ?? []); track key; let i = $index) {
-                              <div class="flex items-center gap-x-1">
-                                <kbd
-                                  class="bg-ui-bg-field-component rounded px-1.5 py-0.5 text-[11px] font-medium leading-none"
-                                >
-                                  {{ key }}
-                                </kbd>
-                                @if (i < (sc.keys.Mac?.length ?? 0) - 1) {
-                                  <span class="text-ui-fg-muted txt-compact-xsmall">{{
-                                    thenLabel() | transloco
-                                  }}</span>
-                                }
-                              </div>
-                            }
-                          </div>
-                          <div rdxTooltipArrow></div>
+                  <ng-template #parentNestedTooltip>
+                    @if (shortcutFor(item().to); as sc) {
+                      <div
+                        flexTooltip
+                        class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
+                      >
+                        <span>{{ sc.label | transloco }}</span>
+                        <div class="flex items-center gap-1">
+                          @for (key of (sc.keys.Mac ?? []); track key; let i = $index) {
+                            <div class="flex items-center gap-x-1">
+                              <kbd
+                                class="bg-ui-bg-field-component rounded px-1.5 py-0.5 text-[11px] font-medium leading-none"
+                              >
+                                {{ key }}
+                              </kbd>
+                              @if (i < (sc.keys.Mac?.length ?? 0) - 1) {
+                                <span class="text-ui-fg-muted txt-compact-xsmall">{{
+                                  thenLabel() | transloco
+                                }}</span>
+                              }
+                            </div>
+                          }
                         </div>
-                      }
-                    </ng-template>
-                  </ng-container>
+                        <div flexTooltipArrow></div>
+                      </div>
+                    }
+                  </ng-template>
                 } @else {
                   <div
                     [routerLink]="item().to"
@@ -175,52 +175,52 @@
               @for (sub of resolvedItems(); track sub.to) {
                 <div class="flex items-center">
                   @if (hasTooltipFor(sub.to)) {
-                    <ng-container rdxTooltipRoot [openDelay]="openDelay()">
-                      <div
-                        rdxTooltipTrigger
-                        [routerLink]="sub.to"
-                        [class]="
-                          navLinkClassNames({
-                            to: sub.to,
-                            isActive: isActive(sub.to),
-                            isSetting: isSetting(),
-                            isNested: true
-                          })
-                        "
-                      >
-                        <span class="font-medium font-sans txt-compact-small">{{
-                          sub.label | transloco
-                        }}</span>
-                      </div>
+                    <div
+                      flexTooltipTrigger
+                      [flexTooltipTrigger]="subTooltip"
+                      [openDelay]="openDelay()"
+                      [routerLink]="sub.to"
+                      [class]="
+                        navLinkClassNames({
+                          to: sub.to,
+                          isActive: isActive(sub.to),
+                          isSetting: isSetting(),
+                          isNested: true
+                        })
+                      "
+                    >
+                      <span class="font-medium font-sans txt-compact-small">{{
+                        sub.label | transloco
+                      }}</span>
+                    </div>
 
-                      <ng-template rdxTooltipContent>
-                        @if (shortcutFor(sub.to); as sc) {
-                          <div
-                            rdxTooltipContentAttributes
-                            class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
-                          >
-                            <span>{{ sc.label | transloco }}</span>
-                            <div class="flex items-center gap-x-1">
-                              @for (key of (sc.keys.Mac ?? []); track key; let i = $index) {
-                                <div class="flex items-center gap-x-1">
-                                  <kbd
-                                    class="bg-ui-bg-field-component rounded px-1.5 py-0.5 text-[11px] font-medium leading-none"
-                                  >
-                                    {{ key }}
-                                  </kbd>
-                                  @if (i < (sc.keys.Mac?.length ?? 0) - 1) {
-                                    <span class="text-ui-fg-muted txt-compact-xsmall">{{
-                                    thenLabel() | transloco
-                                    }}</span>
-                                  }
-                                </div>
-                              }
-                            </div>
-                            <div rdxTooltipArrow></div>
+                    <ng-template #subTooltip>
+                      @if (shortcutFor(sub.to); as sc) {
+                        <div
+                          flexTooltip
+                          class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
+                        >
+                          <span>{{ sc.label | transloco }}</span>
+                          <div class="flex items-center gap-x-1">
+                            @for (key of (sc.keys.Mac ?? []); track key; let i = $index) {
+                              <div class="flex items-center gap-x-1">
+                                <kbd
+                                  class="bg-ui-bg-field-component rounded px-1.5 py-0.5 text-[11px] font-medium leading-none"
+                                >
+                                  {{ key }}
+                                </kbd>
+                                @if (i < (sc.keys.Mac?.length ?? 0) - 1) {
+                                  <span class="text-ui-fg-muted txt-compact-xsmall">{{
+                                  thenLabel() | transloco
+                                  }}</span>
+                                }
+                              </div>
+                            }
                           </div>
-                        }
-                      </ng-template>
-                    </ng-container>
+                          <div flexTooltipArrow></div>
+                        </div>
+                      }
+                    </ng-template>
                   } @else {
                     <div
                       [routerLink]="sub.to"

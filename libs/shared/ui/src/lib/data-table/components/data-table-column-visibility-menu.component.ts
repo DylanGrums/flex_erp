@@ -1,18 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import {
-  RdxDropdownMenuContentDirective,
-  RdxDropdownMenuItemDirective,
-  RdxDropdownMenuLabelDirective,
-  RdxDropdownMenuSeparatorDirective,
-  RdxDropdownMenuTriggerDirective,
-} from '@radix-ng/primitives/dropdown-menu';
+  FlexDropdownMenuContentDirective,
+  FlexDropdownMenuItemDirective,
+  FlexDropdownMenuLabelDirective,
+  FlexDropdownMenuSeparatorDirective,
+  FlexDropdownMenuTriggerDirective,
+} from '../../primitives/dropdown-menu/dropdown-menu.directive';
 import {
-  RdxTooltipContentAttributesComponent,
-  RdxTooltipContentDirective,
-  RdxTooltipRootDirective,
-  RdxTooltipTriggerDirective,
-} from '@radix-ng/primitives/tooltip';
+  FlexTooltipDirective,
+  FlexTooltipTriggerDirective,
+} from '../../primitives/tooltip/tooltip.directive';
 
 import { injectDataTableContext } from '../data-table-context';
 import { DataTableColumn } from '../types';
@@ -26,67 +24,63 @@ import { DataTableIconButtonComponent } from '../primitives/data-table-icon-butt
     CommonModule,
     DataTableCheckboxComponent,
     DataTableIconButtonComponent,
-    RdxDropdownMenuTriggerDirective,
-    RdxDropdownMenuContentDirective,
-    RdxDropdownMenuItemDirective,
-    RdxDropdownMenuSeparatorDirective,
-    RdxDropdownMenuLabelDirective,
-    RdxTooltipRootDirective,
-    RdxTooltipTriggerDirective,
-    RdxTooltipContentDirective,
-    RdxTooltipContentAttributesComponent,
+    FlexDropdownMenuTriggerDirective,
+    FlexDropdownMenuContentDirective,
+    FlexDropdownMenuItemDirective,
+    FlexDropdownMenuSeparatorDirective,
+    FlexDropdownMenuLabelDirective,
+    FlexTooltipTriggerDirective,
+    FlexTooltipDirective,
   ],
   template: `
     @if (enableColumnVisibility) {
       @if (tooltip) {
-        <ng-container rdxTooltipRoot>
-          <button
-            flexDataTableIconButton
-            size="small"
-            [rdxDropdownMenuTrigger]="menu"
-            rdxTooltipTrigger
+        <button
+          flexDataTableIconButton
+          size="small"
+          [flexDropdownMenuTrigger]="menu"
+          [flexTooltipTrigger]="tooltipTemplate"
+        >
+          <i class="pi pi-sliders-h text-sm"></i>
+        </button>
+        <ng-template #tooltipTemplate>
+          <div
+            flexTooltip
+            class="rounded-md border border-ui-border-base bg-ui-bg-base px-2 py-1 text-xs shadow"
           >
-            <i class="pi pi-sliders-h text-sm"></i>
-          </button>
-          <ng-template rdxTooltipContent>
-            <div
-              rdxTooltipContentAttributes
-              class="rounded-md border border-ui-border-base bg-ui-bg-base px-2 py-1 text-xs shadow"
-            >
-              {{ tooltip }}
-            </div>
-          </ng-template>
-        </ng-container>
+            {{ tooltip }}
+          </div>
+        </ng-template>
       } @else {
-        <button flexDataTableIconButton size="small" [rdxDropdownMenuTrigger]="menu">
+        <button flexDataTableIconButton size="small" [flexDropdownMenuTrigger]="menu">
           <i class="pi pi-sliders-h text-sm"></i>
         </button>
       }
 
       <ng-template #menu>
         <div
-          rdxDropdownMenuContent
+          flexDropdownMenuContent
           class="min-w-[200px] max-h-[400px] overflow-hidden rounded-md border border-ui-border-base bg-ui-bg-base p-1 shadow"
         >
-          <div rdxDropdownMenuLabel class="px-2 py-1 text-xs text-ui-fg-muted">
+          <div flexDropdownMenuLabel class="px-2 py-1 text-xs text-ui-fg-muted">
             Toggle columns
           </div>
-          <div rdxDropdownMenuSeparator class="my-1 h-px bg-ui-border-base"></div>
+          <div flexDropdownMenuSeparator class="my-1 h-px bg-ui-border-base"></div>
           <button
             type="button"
-            rdxDropdownMenuItem
+            flexDropdownMenuItem
             class="flex w-full items-center gap-2 rounded px-2 py-1.5 text-sm text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover"
             (click)="toggleAll()"
           >
             <flex-data-table-checkbox [checked]="toggleAllState"></flex-data-table-checkbox>
             <span>Toggle all</span>
           </button>
-          <div rdxDropdownMenuSeparator class="my-1 h-px bg-ui-border-base"></div>
+          <div flexDropdownMenuSeparator class="my-1 h-px bg-ui-border-base"></div>
           <div class="max-h-[250px] overflow-y-auto">
             @for (column of columns; track column.id) {
               <button
                 type="button"
-                rdxDropdownMenuItem
+                flexDropdownMenuItem
                 class="flex w-full items-center gap-2 rounded px-2 py-1.5 text-sm text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover"
                 (click)="toggleColumn(column)"
               >

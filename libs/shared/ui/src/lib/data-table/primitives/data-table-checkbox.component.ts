@@ -5,33 +5,33 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { RdxCheckboxModule } from '@radix-ng/primitives/checkbox';
+import { FlexCheckboxDirective } from '../../primitives/checkbox/checkbox.directive';
 
 export type DataTableCheckboxState = boolean | 'indeterminate';
 
 @Component({
   selector: 'flex-data-table-checkbox',
   standalone: true,
-  imports: [RdxCheckboxModule],
+  imports: [FlexCheckboxDirective],
   template: `
-    <div
-      rdxCheckboxRoot
-      [checked]="checked"
-      (checkedChange)="checkedChange.emit($event)"
+    <button
+      flexCheckbox
+      type="button"
+      [checked]="checked === true"
+      [indeterminate]="checked === 'indeterminate'"
       [disabled]="disabled"
       [class]="classes"
+      (checkedChange)="onCheckedChange($event)"
+      (indeterminateChange)="onIndeterminateChange($event)"
     >
-      <button rdxCheckboxButton type="button" class="flex h-full w-full items-center justify-center">
-        <span rdxCheckboxIndicator class="text-ui-fg-on-color">
-          @if (checked === true) {
-            <i class="pi pi-check text-[10px]"></i>
-          } @else if (checked === 'indeterminate') {
-            <i class="pi pi-minus text-[10px]"></i>
-          }
-        </span>
-      </button>
-      <input rdxCheckboxInput type="checkbox" class="sr-only" />
-    </div>
+      <span class="text-ui-fg-on-color">
+        @if (checked === true) {
+          <i class="pi pi-check text-[10px]"></i>
+        } @else if (checked === 'indeterminate') {
+          <i class="pi pi-minus text-[10px]"></i>
+        }
+      </span>
+    </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,5 +50,20 @@ export class DataTableCheckboxComponent {
       : 'bg-ui-bg-base';
     const disabledClass = this.disabled ? 'opacity-50 pointer-events-none' : '';
     return [base, stateClass, disabledClass, this.className].filter(Boolean).join(' ');
+  }
+
+  onCheckedChange(next: boolean): void {
+    this.checkedChange.emit(next);
+  }
+
+  onIndeterminateChange(next: boolean): void {
+    if (next) {
+      this.checkedChange.emit('indeterminate');
+      return;
+    }
+
+    if (this.checked === 'indeterminate') {
+      this.checkedChange.emit(false);
+    }
   }
 }

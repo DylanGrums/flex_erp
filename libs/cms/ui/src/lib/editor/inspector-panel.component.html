@@ -16,12 +16,12 @@
       <div class="p-4 space-y-4">
         @for (group of groupEntries; track group.key) {
           <div
-            rdxCollapsibleRoot
+            flexCollapsibleRoot
             [open]="openGroups[group.key] !== false"
             (openChange)="setGroupOpen(group.key, $event)"
           >
             <button
-              rdxCollapsibleTrigger
+              flexCollapsibleTrigger
               type="button"
               class="flex items-center justify-between w-full py-2 text-sm font-medium hover:text-ui-fg-base transition-colors cursor-pointer"
             >
@@ -33,7 +33,7 @@
               }
             </button>
 
-            <div rdxCollapsibleContent class="space-y-4 pt-2">
+            <div flexCollapsibleContent class="space-y-4 pt-2">
               @for (field of group.value; track field.key) {
                 @switch (field.type) {
                   @case ('text') {

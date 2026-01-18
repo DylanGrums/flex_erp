@@ -10,13 +10,17 @@ import {
   signal,
 } from '@angular/core';
 import {
-  RdxPopoverContentAttributesComponent,
-  RdxPopoverContentDirective,
-  RdxPopoverRootDirective,
-  RdxPopoverTriggerDirective,
-} from '@radix-ng/primitives/popover';
-import { RdxSelectModule } from '@radix-ng/primitives/select';
-import { RdxPositionAlign, RdxPositionSide } from '@radix-ng/primitives/core';
+  FlexPopoverAlign,
+  FlexPopoverDirective,
+  FlexPopoverSide,
+  FlexPopoverTriggerDirective,
+} from '../../primitives/popover/popover.directive';
+import {
+  FlexSelectDirective,
+  FlexSelectDropdownDirective,
+  FlexSelectOptionDirective,
+  FlexSelectPortalDirective,
+} from '../../primitives/select/select.directive';
 
 import { injectDataTableContext } from '../data-table-context';
 import {
@@ -630,28 +634,43 @@ export class DataTableFilterStringContentComponent {
 @Component({
   selector: 'flex-data-table-filter-number-content',
   standalone: true,
-  imports: [CommonModule, RdxSelectModule],
+  imports: [
+    CommonModule,
+    FlexSelectDirective,
+    FlexSelectPortalDirective,
+    FlexSelectDropdownDirective,
+    FlexSelectOptionDirective,
+  ],
   template: `
     <div class="w-[250px] space-y-3 p-3">
       @if (includeOperators) {
-        <div rdxSelect [value]="operator()" (onValueChange)="handleOperatorChange($event)" class="w-full">
-          <button rdxSelectTrigger class="flex h-9 w-full items-center justify-between rounded-md border border-ui-border-base bg-ui-bg-base px-3 text-sm text-ui-fg-base shadow-borders-base">
-            <span rdxSelectValue></span>
-            <span rdxSelectIcon class="ms-auto text-ui-fg-muted">
-              <i class="pi pi-chevron-down text-xs"></i>
-            </span>
-          </button>
-          <div rdxSelectContent class="mt-2 max-h-60 w-full overflow-auto rounded-md border border-ui-border-base bg-ui-bg-base p-1 shadow">
+        <div
+          flexSelect
+          [value]="operator()"
+          (valueChange)="handleOperatorChange($event)"
+          class="flex h-9 w-full items-center justify-between rounded-md border border-ui-border-base bg-ui-bg-base px-3 text-sm text-ui-fg-base shadow-borders-base"
+        >
+          <span>{{ selectedOperatorLabel }}</span>
+          <span class="ms-auto text-ui-fg-muted">
+            <i class="pi pi-chevron-down text-xs"></i>
+          </span>
+          <div
+            *flexSelectPortal
+            flexSelectDropdown
+            class="mt-2 max-h-60 w-full overflow-auto rounded-md border border-ui-border-base bg-ui-bg-base p-1 shadow"
+          >
             @for (op of operators; track op.value) {
               <div
-                rdxSelectItem
-                [value]="op.value"
-                class="flex cursor-pointer select-none items-center rounded px-2 py-1.5 text-sm text-ui-fg-base outline-none transition-fg data-[highlighted]:bg-ui-bg-subtle-hover data-[state=checked]:bg-ui-bg-subtle"
+                flexSelectOption
+                [flexSelectOptionValue]="op.value"
+                class="flex cursor-pointer select-none items-center rounded px-2 py-1.5 text-sm text-ui-fg-base outline-none transition-fg data-[active]:bg-ui-bg-subtle-hover data-[selected]:bg-ui-bg-subtle"
               >
                 <span>{{ op.label }}</span>
-                <span rdxSelectItemIndicator class="ms-auto text-ui-fg-interactive">
-                  <i class="pi pi-check text-xs"></i>
-                </span>
+                @if (operator() === op.value) {
+                  <span class="ms-auto text-ui-fg-interactive">
+                    <i class="pi pi-check text-xs"></i>
+                  </span>
+                }
               </div>
             }
           </div>
@@ -696,6 +715,10 @@ export class DataTableFilterNumberContentComponent {
     { value: 'lt', label: 'Less than' },
     { value: 'lte', label: 'Less than or equal' },
   ];
+
+  get selectedOperatorLabel(): string {
+    return this.operators.find((op) => op.value === this.operator())?.label ?? 'Equals';
+  }
 
   ngOnInit(): void {
     this.syncFromFilter();
@@ -787,10 +810,8 @@ export class DataTableFilterNumberContentComponent {
   standalone: true,
   imports: [
     CommonModule,
-    RdxPopoverRootDirective,
-    RdxPopoverTriggerDirective,
-    RdxPopoverContentDirective,
-    RdxPopoverContentAttributesComponent,
+    FlexPopoverTriggerDirective,
+    FlexPopoverDirective,
     DataTableFilterSelectContentComponent,
     DataTableFilterRadioContentComponent,
     DataTableFilterDateContentComponent,
@@ -802,7 +823,7 @@ export class DataTableFilterNumberContentComponent {
     @if (!meta) {
       <ng-container></ng-container>
     } @else {
-      <div rdxPopoverRoot [defaultOpen]="isNew">
+      <div>
         <div
           class="bg-ui-bg-field flex h-8 flex-shrink-0 items-stretch overflow-hidden rounded-md text-xs text-ui-fg-base shadow-borders-base"
         >
@@ -818,7 +839,14 @@ export class DataTableFilterNumberContentComponent {
           @if (hasValue || isNew) {
             <button
               type="button"
-              rdxPopoverTrigger
+              [flexPopoverTrigger]="popover"
+              [side]="popoverSide"
+              [align]="popoverAlign"
+              sideOffset="8"
+              [defaultOpen]="isNew"
+              (onOpen)="handleOpen()"
+              (onClosed)="handleClosed()"
+              (onOverlayOutsideClick)="onInteractOutside($event)"
               class="flex min-w-[80px] flex-1 items-center truncate px-2 outline-none transition-fg hover:bg-ui-bg-base-hover active:bg-ui-bg-base-pressed"
               [ngClass]="valueButtonClass"
             >
@@ -836,17 +864,9 @@ export class DataTableFilterNumberContentComponent {
           }
         </div>
 
-        <ng-template
-          rdxPopoverContent
-          [side]="popoverSide"
-          [align]="popoverAlign"
-          sideOffset="8"
-          (onOpen)="handleOpen()"
-          (onClosed)="handleClosed()"
-          (onOverlayOutsideClick)="onInteractOutside($event)"
-        >
+        <ng-template #popover>
           <div
-            rdxPopoverContentAttributes
+            flexPopover
             class="bg-ui-bg-component rounded-md border border-ui-border-base p-0 outline-none shadow"
             [attr.data-filter-popover]="id"
           >
@@ -940,8 +960,8 @@ export class DataTableFilterComponent {
   readonly context = injectDataTableContext();
   readonly hasInteracted = signal(false);
 
-  readonly popoverSide = RdxPositionSide.Bottom;
-  readonly popoverAlign = RdxPositionAlign.Start;
+  readonly popoverSide: FlexPopoverSide = 'bottom';
+  readonly popoverAlign: FlexPopoverAlign = 'start';
 
   get instance() {
     return this.context.instance;
@@ -1254,7 +1274,7 @@ export class DataTableFilterComponent {
 
   onInteractOutside(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    if (target.closest('[role="menuitem"]')) {
+    if (target.closest('[role="menuitem"], [role="option"]')) {
       event.preventDefault();
     }
   }

@@ -5,7 +5,7 @@
         <button
           type="button"
           class="bg-ui-bg-subtle transition-fg grid w-full grid-cols-[24px_1fr_15px] items-center gap-x-3 rounded-md p-0.5 pe-2 outline-none hover:bg-ui-bg-subtle-hover data-[state=open]:bg-ui-bg-subtle-hover focus-visible:shadow-borders-focus border-none"
-          [rdxDropdownMenuTrigger]="storeMenu"
+          [flexDropdownMenuTrigger]="storeMenu"
           sideOffset="6"
         >
           <div
@@ -45,7 +45,7 @@
         <!-- Dropdown content -->
         <ng-template #storeMenu>
           <div
-            rdxDropdownMenuContent
+            flexDropdownMenuContent
             class="w-[195px] max-w-[195px] rounded-md border border-ui-border-base bg-ui-bg-base p-1 shadow-sm"
           >
             <div class="flex items-center gap-x-3 px-2 py-2">
@@ -64,7 +64,7 @@
 
             <button
               type="button"
-              rdxDropdownMenuItem
+              flexDropdownMenuItem
               class="flex w-full items-center gap-x-2 rounded-md px-2 py-2 text-start hover:bg-ui-bg-subtle-hover"
               [routerLink]="'/settings/store'"
             >
@@ -76,7 +76,7 @@
 
             <button
               type="button"
-              rdxDropdownMenuItem
+              flexDropdownMenuItem
               class="flex w-full items-center gap-x-2 rounded-md px-2 py-2 text-start hover:bg-ui-bg-subtle-hover"
               [routerLink]="'/login'"
             >

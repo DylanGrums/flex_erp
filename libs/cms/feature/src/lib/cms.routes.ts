@@ -6,7 +6,7 @@ import { CMS_NAV } from '@flex-erp/cms/manifest';
 
 import { CmsEditorPageComponent } from './cms-editor-page.component';
 import { CmsEditorState } from '@flex-erp/cms/data-access';
-import { provideRdxDialog, provideRdxDialogConfig } from '@radix-ng/primitives/dialog';
+import { provideDialogConfig } from 'ng-primitives/dialog';
 
 const rawRoutes: Routes = [
   {
@@ -17,8 +17,7 @@ const rawRoutes: Routes = [
         component: CmsEditorPageComponent,
         providers: [
           importProvidersFrom(NgxsModule.forFeature([CmsEditorState])),
-          provideRdxDialogConfig(),
-          provideRdxDialog(),
+          ...provideDialogConfig({}),
         ],
       },
       { path: '', redirectTo: 'editor', pathMatch: 'full' },

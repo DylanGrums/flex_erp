@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import {
-  RdxDropdownMenuContentDirective,
-  RdxDropdownMenuItemDirective,
-  RdxDropdownMenuSeparatorDirective,
-  RdxDropdownMenuTriggerDirective,
-} from '@radix-ng/primitives/dropdown-menu';
+  FlexDropdownMenuContentDirective,
+  FlexDropdownMenuItemDirective,
+  FlexDropdownMenuSeparatorDirective,
+  FlexDropdownMenuTriggerDirective,
+} from '../../primitives/dropdown-menu/dropdown-menu.directive';
 
 import { DataTableIconButtonComponent } from '../primitives/data-table-icon-button.component';
 import {
@@ -21,10 +21,10 @@ import {
   imports: [
     CommonModule,
     DataTableIconButtonComponent,
-    RdxDropdownMenuTriggerDirective,
-    RdxDropdownMenuContentDirective,
-    RdxDropdownMenuItemDirective,
-    RdxDropdownMenuSeparatorDirective,
+    FlexDropdownMenuTriggerDirective,
+    FlexDropdownMenuContentDirective,
+    FlexDropdownMenuItemDirective,
+    FlexDropdownMenuSeparatorDirective,
   ],
   template: `
     @if (hasActions) {
@@ -32,20 +32,20 @@ import {
         flexDataTableIconButton
         size="small"
         variant="transparent"
-        [rdxDropdownMenuTrigger]="menu"
+        [flexDropdownMenuTrigger]="menu"
         class="mx-auto"
       >
         <i class="pi pi-ellipsis-h text-sm"></i>
       </button>
 
       <ng-template #menu>
-        <div rdxDropdownMenuContent class="min-w-[180px] rounded-md border border-ui-border-base bg-ui-bg-base p-1 shadow">
+        <div flexDropdownMenuContent class="min-w-[180px] rounded-md border border-ui-border-base bg-ui-bg-base p-1 shadow">
           @for (actionOrGroup of resolvedActions; track $index) {
             @if (isGroup(actionOrGroup)) {
               @for (action of actionOrGroup; track action.label) {
                 <button
                   type="button"
-                  rdxDropdownMenuItem
+                  flexDropdownMenuItem
                   class="[&>i]:text-ui-fg-subtle flex w-full items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-ui-bg-subtle-hover"
                   (click)="onActionClick($event, action)"
                 >
@@ -56,12 +56,12 @@ import {
                 </button>
               }
               @if (!isLastGroup($index)) {
-                <div rdxDropdownMenuSeparator class="my-1 h-px bg-ui-border-base"></div>
+                <div flexDropdownMenuSeparator class="my-1 h-px bg-ui-border-base"></div>
               }
             } @else {
               <button
                 type="button"
-                rdxDropdownMenuItem
+                flexDropdownMenuItem
                 class="[&>i]:text-ui-fg-subtle flex w-full items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-ui-bg-subtle-hover"
                 (click)="onActionClick($event, actionOrGroup)"
               >

@@ -1,16 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import {
-  RdxDropdownMenuContentDirective,
-  RdxDropdownMenuItemDirective,
-  RdxDropdownMenuTriggerDirective,
-} from '@radix-ng/primitives/dropdown-menu';
+  FlexDropdownMenuContentDirective,
+  FlexDropdownMenuItemDirective,
+  FlexDropdownMenuTriggerDirective,
+} from '../../primitives/dropdown-menu/dropdown-menu.directive';
 import {
-  RdxTooltipContentAttributesComponent,
-  RdxTooltipContentDirective,
-  RdxTooltipRootDirective,
-  RdxTooltipTriggerDirective,
-} from '@radix-ng/primitives/tooltip';
+  FlexTooltipDirective,
+  FlexTooltipTriggerDirective,
+} from '../../primitives/tooltip/tooltip.directive';
 
 import { injectDataTableContext } from '../data-table-context';
 import { DataTableFilter } from '../types';
@@ -24,44 +22,40 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
     CommonModule,
     DataTableIconButtonComponent,
     DataTableSkeletonComponent,
-    RdxDropdownMenuTriggerDirective,
-    RdxDropdownMenuContentDirective,
-    RdxDropdownMenuItemDirective,
-    RdxTooltipRootDirective,
-    RdxTooltipTriggerDirective,
-    RdxTooltipContentDirective,
-    RdxTooltipContentAttributesComponent,
+    FlexDropdownMenuTriggerDirective,
+    FlexDropdownMenuContentDirective,
+    FlexDropdownMenuItemDirective,
+    FlexTooltipTriggerDirective,
+    FlexTooltipDirective,
   ],
   template: `
     @if (instance.showSkeleton) {
       <flex-data-table-skeleton className="size-7"></flex-data-table-skeleton>
     } @else {
       @if (tooltip) {
-        <ng-container rdxTooltipRoot>
-          <button
-            flexDataTableIconButton
-            size="small"
-            [disabled]="filterOptions.length === 0"
-            [rdxDropdownMenuTrigger]="menu"
-            rdxTooltipTrigger
+        <button
+          flexDataTableIconButton
+          size="small"
+          [disabled]="filterOptions.length === 0"
+          [flexDropdownMenuTrigger]="menu"
+          [flexTooltipTrigger]="tooltipTemplate"
+        >
+          <i class="pi pi-filter text-sm"></i>
+        </button>
+        <ng-template #tooltipTemplate>
+          <div
+            flexTooltip
+            class="rounded-md border border-ui-border-base bg-ui-bg-base px-2 py-1 text-xs shadow"
           >
-            <i class="pi pi-filter text-sm"></i>
-          </button>
-          <ng-template rdxTooltipContent>
-            <div
-              rdxTooltipContentAttributes
-              class="rounded-md border border-ui-border-base bg-ui-bg-base px-2 py-1 text-xs shadow"
-            >
-              {{ tooltip }}
-            </div>
-          </ng-template>
-        </ng-container>
+            {{ tooltip }}
+          </div>
+        </ng-template>
       } @else {
         <button
           flexDataTableIconButton
           size="small"
           [disabled]="filterOptions.length === 0"
-          [rdxDropdownMenuTrigger]="menu"
+          [flexDropdownMenuTrigger]="menu"
         >
           <i class="pi pi-filter text-sm"></i>
         </button>
@@ -69,13 +63,13 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
 
       <ng-template #menu>
         <div
-          rdxDropdownMenuContent
+          flexDropdownMenuContent
           class="rounded-md border border-ui-border-base bg-ui-bg-base p-1 shadow"
         >
           @for (filter of filterOptions; track filter.id) {
             <button
               type="button"
-              rdxDropdownMenuItem
+              flexDropdownMenuItem
               class="flex w-full items-center rounded px-2 py-1.5 text-sm text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover"
               (click)="addFilter($event, filter)"
             >
