@@ -1,0 +1,184 @@
+// -----------------------------
+// CMS (schema: cms)
+// -----------------------------
+
+enum CmsPageStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+
+  @@schema("cms")
+}
+
+enum CmsAssetKind {
+  IMAGE
+  VIDEO
+  FILE
+
+  @@schema("cms")
+}
+
+enum CmsMenuItemType {
+  URL
+  INTERNAL_PAGE
+
+  @@schema("cms")
+}
+
+model CmsSite {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  name   String
+  domain String?
+
+  locale String @default("fr-FR")
+
+  settingsSchemaVersion Int   @default(1)
+  settings              Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  store Store @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
+
+  pages  CmsPage[]
+  assets CmsAsset[]
+  menus  CmsMenu[]
+
+  @@unique([tenantId, storeId, id])
+  @@unique([tenantId, storeId, domain])
+  @@index([tenantId, storeId])
+  @@schema("cms")
+}
+
+model CmsPage {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+  siteId   String @db.Uuid
+
+  slug   String
+  title  String
+  status CmsPageStatus @default(DRAFT)
+
+  publishedVersionId String?   @unique @db.Uuid
+  publishedAt        DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  site CmsSite @relation(fields: [tenantId, storeId, siteId], references: [tenantId, storeId, id], onDelete: Cascade)
+
+  versions         CmsPageVersion[]
+  publishedVersion CmsPageVersion?  @relation("CmsPagePublishedVersion", fields: [publishedVersionId], references: [id], onDelete: SetNull)
+
+  // Opposite relation for menu items pointing to page
+  menuItems CmsMenuItem[]
+
+  @@unique([tenantId, storeId, id])
+  @@unique([tenantId, storeId, siteId, slug])
+  @@index([tenantId, storeId, status])
+  @@schema("cms")
+}
+
+model CmsPageVersion {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  pageId  String @db.Uuid
+  version Int
+
+  contentSchemaVersion Int  @default(1)
+  content              Json
+
+  createdByUserId String?  @db.Uuid
+  createdAt       DateTime @default(now())
+
+  page CmsPage @relation(fields: [tenantId, storeId, pageId], references: [tenantId, storeId, id], onDelete: Cascade)
+
+  createdByUser User? @relation(fields: [tenantId, createdByUserId], references: [tenantId, id], onDelete: SetNull)
+
+  publishedByPage CmsPage? @relation("CmsPagePublishedVersion")
+
+  @@unique([tenantId, storeId, pageId, version])
+  @@index([tenantId, storeId, pageId])
+  @@schema("cms")
+}
+
+model CmsAsset {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+  siteId   String @db.Uuid
+
+  kind      CmsAssetKind
+  filename  String
+  mimeType  String
+  sizeBytes Int
+
+  url      String
+  checksum String?
+
+  width  Int?
+  height Int?
+
+  createdByUserId String?  @db.Uuid
+  createdAt       DateTime @default(now())
+
+  site  CmsSite @relation(fields: [tenantId, storeId, siteId], references: [tenantId, storeId, id], onDelete: Cascade)
+  store Store   @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
+
+  createdByUser User? @relation(fields: [tenantId, createdByUserId], references: [tenantId, id], onDelete: SetNull)
+
+  @@index([tenantId, storeId, siteId])
+  @@schema("cms")
+}
+
+model CmsMenu {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+  siteId   String @db.Uuid
+
+  key   String
+  title String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  site  CmsSite       @relation(fields: [tenantId, storeId, siteId], references: [tenantId, storeId, id], onDelete: Cascade)
+  items CmsMenuItem[]
+
+  @@unique([tenantId, storeId, id])
+  @@unique([tenantId, storeId, siteId, key])
+  @@schema("cms")
+}
+
+model CmsMenuItem {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  menuId   String  @db.Uuid
+  parentId String? @db.Uuid
+
+  label String
+  type  CmsMenuItemType @default(URL)
+
+  href   String?
+  pageId String? @db.Uuid
+
+  position Int @default(0)
+
+  menu     CmsMenu       @relation(fields: [tenantId, storeId, menuId], references: [tenantId, storeId, id], onDelete: Cascade)
+  parent   CmsMenuItem?  @relation("CmsMenuItemParent", fields: [parentId], references: [id], onDelete: Cascade)
+  children CmsMenuItem[] @relation("CmsMenuItemParent")
+
+  page CmsPage? @relation(fields: [tenantId, storeId, pageId], references: [tenantId, storeId, id], onDelete: SetNull)
+
+  @@index([tenantId, storeId, menuId])
+  @@schema("cms")
+}

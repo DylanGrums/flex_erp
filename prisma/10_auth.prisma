@@ -1,0 +1,151 @@
+// -----------------------------
+// AUTH (schema: auth)
+// -----------------------------
+
+enum UserStatus {
+  ACTIVE
+  DISABLED
+
+  @@schema("auth")
+}
+
+enum PermissionEffect {
+  ALLOW
+  DENY
+
+  @@schema("auth")
+}
+
+model User {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+
+  email        String
+  passwordHash String
+  status       UserStatus @default(ACTIVE)
+
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  roles     UserRole[]
+  sessions  AuthSession[]
+  overrides UserPermission[]
+
+  // back relations from other schemas
+  cmsPageVersionsCreated CmsPageVersion[]
+  cmsAssetsCreated       CmsAsset[]
+  timeOffReviewed        TimeOffRequest[]
+  employee               Employee?        @relation("EmployeeToUser")
+
+  @@unique([tenantId, email])
+  @@unique([tenantId, id])
+  @@index([tenantId, status])
+  @@schema("auth")
+}
+
+model AuthSession {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  userId   String @db.Uuid
+
+  refreshTokenHash String
+  expiresAt        DateTime
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [tenantId, userId], references: [tenantId, id], onDelete: Cascade)
+
+  @@index([tenantId, userId])
+  @@schema("auth")
+}
+
+model Role {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+
+  key         String
+  name        String
+  description String?
+
+  createdAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  users       UserRole[]
+  permissions RolePermission[]
+
+  @@unique([tenantId, key])
+  @@unique([tenantId, id])
+  @@schema("auth")
+}
+
+model UserRole {
+  tenantId String @db.Uuid
+  userId   String @db.Uuid
+  roleId   String @db.Uuid
+
+  assignedAt DateTime @default(now())
+
+  user User @relation(fields: [tenantId, userId], references: [tenantId, id], onDelete: Cascade)
+  role Role @relation(fields: [tenantId, roleId], references: [tenantId, id], onDelete: Cascade)
+
+  @@id([tenantId, userId, roleId])
+  @@schema("auth")
+}
+
+model Permission {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+
+  key         String
+  description String?
+  createdAt   DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  roleGrants    RolePermission[]
+  userOverrides UserPermission[]
+
+  @@unique([tenantId, key])
+  @@unique([tenantId, id])
+  @@schema("auth")
+}
+
+model RolePermission {
+  tenantId     String @db.Uuid
+  roleId       String @db.Uuid
+  permissionId String @db.Uuid
+
+  grantedAt DateTime @default(now())
+
+  role       Role       @relation(fields: [tenantId, roleId], references: [tenantId, id], onDelete: Cascade)
+  permission Permission @relation(fields: [tenantId, permissionId], references: [tenantId, id], onDelete: Cascade)
+
+  @@id([tenantId, roleId, permissionId])
+  @@schema("auth")
+}
+
+model UserPermission {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+
+  userId       String @db.Uuid
+  permissionId String @db.Uuid
+
+  effect PermissionEffect
+
+  conditionSchemaVersion Int   @default(1)
+  condition              Json?
+
+  createdAt DateTime @default(now())
+
+  user       User       @relation(fields: [tenantId, userId], references: [tenantId, id], onDelete: Cascade)
+  permission Permission @relation(fields: [tenantId, permissionId], references: [tenantId, id], onDelete: Cascade)
+
+  @@index([tenantId, userId])
+  @@index([tenantId, permissionId])
+  @@schema("auth")
+}

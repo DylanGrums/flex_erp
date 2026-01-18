@@ -1,0 +1,141 @@
+// -----------------------------
+// EMPLOYEE (schema: employee)
+// -----------------------------
+
+enum EmployeeStatus {
+  ACTIVE
+  INACTIVE
+
+  @@schema("employee")
+}
+
+enum ShiftStatus {
+  PLANNED
+  CONFIRMED
+  CANCELLED
+
+  @@schema("employee")
+}
+
+enum TimeOffStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+
+  @@schema("employee")
+}
+
+enum TimeOffType {
+  VACATION
+  SICK
+  OTHER
+
+  @@schema("employee")
+}
+
+model Employee {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+
+  userId String?        @db.Uuid
+  status EmployeeStatus @default(ACTIVE)
+
+  firstName String
+  lastName  String
+  email     String?
+  phone     String?
+
+  hiredAt   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  user User? @relation("EmployeeToUser", fields: [tenantId, userId], references: [tenantId, id], onDelete: SetNull)
+
+  stores          EmployeeStore[]
+  shifts          Shift[]
+  timeOffRequests TimeOffRequest[]
+
+  orgUnitAssignments EmployeeOrgUnit[]
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, userId])
+  @@index([tenantId, status])
+  @@schema("employee")
+}
+
+model EmployeeStore {
+  tenantId   String @db.Uuid
+  storeId    String @db.Uuid
+  employeeId String @db.Uuid
+
+  isPrimary Boolean @default(false)
+  roleTitle String?
+
+  startAt DateTime?
+  endAt   DateTime?
+
+  employee Employee @relation(fields: [tenantId, employeeId], references: [tenantId, id], onDelete: Cascade)
+  store    Store    @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
+
+  @@id([tenantId, storeId, employeeId])
+  @@index([tenantId, employeeId])
+  @@schema("employee")
+}
+
+model Shift {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  employeeId String @db.Uuid
+
+  startAt DateTime
+  endAt   DateTime
+
+  status ShiftStatus @default(PLANNED)
+  notes  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  store    Store    @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
+  employee Employee @relation(fields: [tenantId, employeeId], references: [tenantId, id], onDelete: Cascade)
+
+  @@index([tenantId, storeId, startAt])
+  @@index([tenantId, employeeId, startAt])
+  @@schema("employee")
+}
+
+model TimeOffRequest {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+
+  employeeId String  @db.Uuid
+  storeId    String? @db.Uuid
+
+  startAt DateTime
+  endAt   DateTime
+
+  type   TimeOffType
+  status TimeOffStatus @default(PENDING)
+
+  reason String?
+
+  reviewedByUserId String?   @db.Uuid
+  reviewedAt       DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  employee Employee @relation(fields: [tenantId, employeeId], references: [tenantId, id], onDelete: Cascade)
+  store    Store?   @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: SetNull)
+
+  reviewedByUser User? @relation(fields: [tenantId, reviewedByUserId], references: [tenantId, id], onDelete: SetNull)
+
+  @@index([tenantId, employeeId, startAt])
+  @@index([tenantId, storeId, startAt])
+  @@schema("employee")
+}

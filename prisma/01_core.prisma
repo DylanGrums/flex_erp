@@ -1,0 +1,359 @@
+// -----------------------------
+// CORE (schema: core)
+// -----------------------------
+
+enum CurrencyCode {
+  EUR
+  USD
+  GBP
+
+  @@schema("core")
+}
+
+enum OrgUnitKind {
+  REGION
+  GROUP
+  FRANCHISEE
+  BRAND
+
+  @@schema("core")
+}
+
+enum ModuleKey {
+  STORE
+  CMS
+  EMPLOYEE
+
+  @@schema("core")
+}
+
+enum DomainEventSource {
+  SYSTEM
+  USER
+  INTEGRATION
+
+  @@schema("core")
+}
+
+model Tenant {
+  id        String   @id @default(uuid()) @db.Uuid
+  slug      String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Core
+  stores               Store[]
+  businessUnits        BusinessUnit[]
+  orgUnits             OrgUnit[]
+  modules              TenantModule[]
+  addresses            Address[]
+  events               DomainEvent[]
+  storeTags            StoreTag[]
+  storeClassifications StoreClassification[]
+
+  // Auth (auth schema)
+  users       User[]
+  roles       Role[]
+  permissions Permission[]
+  employees   Employee[]
+
+  @@schema("core")
+}
+
+model TenantModule {
+  id       String    @id @default(uuid()) @db.Uuid
+  tenantId String    @db.Uuid
+  key      ModuleKey
+  enabled  Boolean   @default(true)
+
+  configSchemaVersion Int   @default(1)
+  config              Json?
+
+  installedAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, key])
+  @@index([tenantId, enabled])
+  @@schema("core")
+}
+
+model Address {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+
+  label   String?
+  line1   String
+  line2   String?
+  zip     String
+  city    String
+  region  String?
+  country String  @db.VarChar(2)
+  phone   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Opposite relations (fixes your errors)
+  businessUnits          BusinessUnit[]    @relation("BusinessUnitAddress")
+  customerAddresses      CustomerAddress[]
+  orderShippingAddresses Order[]           @relation("OrderShippingAddress")
+  orderBillingAddresses  Order[]           @relation("OrderBillingAddress")
+
+  // Needed for composite refs from other schemas
+  @@unique([tenantId, id])
+  @@index([tenantId, city])
+  @@schema("core")
+}
+
+model BusinessUnit {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+
+  name      String
+  legalName String?
+  taxId     String?
+  vatNumber String?
+
+  addressId String?  @db.Uuid
+  address   Address? @relation("BusinessUnitAddress", fields: [tenantId, addressId], references: [tenantId, id], onDelete: SetNull)
+
+  orgUnitId String?  @db.Uuid
+  orgUnit   OrgUnit? @relation("OrgUnitBusinessUnits", fields: [tenantId, orgUnitId], references: [tenantId, id], onDelete: SetNull)
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  stores Store[]
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, name])
+  @@index([tenantId, orgUnitId])
+  @@schema("core")
+}
+
+model Store {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+
+  code String
+  name String
+
+  timezone String       @default("Europe/Paris")
+  currency CurrencyCode @default(EUR)
+
+  businessUnitId String?       @db.Uuid
+  businessUnit   BusinessUnit? @relation(fields: [businessUnitId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // groupings
+  orgUnitLinks StoreOrgUnit[]
+  tagLinks     StoreTagAssignment[]
+  classLinks   StoreClassificationAssignment[]
+
+  // Opposite relations for module schemas (fixes “missing opposite relation field on Store”)
+  customers   Customer[]
+  products    Product[]
+  collections Collection[]
+  discounts   Discount[]
+  carts       Cart[]
+  orders      Order[]
+  cmsAssets   CmsAsset[]
+
+  cmsSites CmsSite[]
+
+  employees       EmployeeStore[]
+  shifts          Shift[]
+  timeOffRequests TimeOffRequest[]
+
+  @@unique([tenantId, code])
+  // This is CRITICAL: cross-schema relations use (tenantId, id) uniqueness
+  @@unique([tenantId, id])
+  @@index([tenantId, name])
+  @@schema("core")
+}
+
+model OrgUnit {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+
+  kind OrgUnitKind
+  name String
+  slug String
+
+  parentId String?   @db.Uuid
+  parent   OrgUnit?  @relation("OrgUnitParent", fields: [tenantId, parentId], references: [tenantId, id], onDelete: SetNull)
+  children OrgUnit[] @relation("OrgUnitParent")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  storeLinks StoreOrgUnit[]
+
+  businessUnits BusinessUnit[] @relation("OrgUnitBusinessUnits")
+
+  ancestorClosures   OrgUnitClosure[] @relation("OrgUnitAncestor")
+  descendantClosures OrgUnitClosure[] @relation("OrgUnitDescendant")
+
+  employeeLinks EmployeeOrgUnit[]
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, kind, slug])
+  @@index([tenantId, kind])
+  @@schema("core")
+}
+
+model OrgUnitClosure {
+  tenantId     String @db.Uuid
+  ancestorId   String @db.Uuid
+  descendantId String @db.Uuid
+  depth        Int
+
+  ancestor   OrgUnit @relation("OrgUnitAncestor", fields: [tenantId, ancestorId], references: [tenantId, id], onDelete: Cascade)
+  descendant OrgUnit @relation("OrgUnitDescendant", fields: [tenantId, descendantId], references: [tenantId, id], onDelete: Cascade)
+
+  @@id([tenantId, ancestorId, descendantId])
+  @@index([tenantId, descendantId])
+  @@schema("core")
+}
+
+model StoreOrgUnit {
+  tenantId  String @db.Uuid
+  storeId   String @db.Uuid
+  orgUnitId String @db.Uuid
+
+  // only one REGION per store (your rule #2)
+  isPrimaryRegion Boolean @default(false)
+
+  assignedAt DateTime @default(now())
+
+  store   Store   @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
+  orgUnit OrgUnit @relation(fields: [tenantId, orgUnitId], references: [tenantId, id], onDelete: Cascade)
+
+  @@id([tenantId, storeId, orgUnitId])
+  @@index([tenantId, orgUnitId])
+  @@index([tenantId, storeId, isPrimaryRegion])
+  @@schema("core")
+}
+
+// -----------------------------
+// Store Tags (descriptifs)
+// -----------------------------
+
+model StoreTag {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+
+  name String
+  slug String
+
+  createdAt DateTime @default(now())
+
+  tenant Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  stores StoreTagAssignment[]
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, slug])
+  @@schema("core")
+}
+
+model StoreTagAssignment {
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+  tagId    String @db.Uuid
+
+  store Store    @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
+  tag   StoreTag @relation(fields: [tenantId, tagId], references: [tenantId, id], onDelete: Cascade)
+
+  @@id([tenantId, storeId, tagId])
+  @@schema("core")
+}
+
+// -----------------------------
+// Store Classification (structuré)
+// -----------------------------
+
+model StoreClassification {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+
+  category String
+  value    String
+  label    String?
+
+  createdAt DateTime @default(now())
+
+  tenant Tenant                          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  stores StoreClassificationAssignment[]
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, category, value])
+  @@index([tenantId, category])
+  @@schema("core")
+}
+
+model StoreClassificationAssignment {
+  tenantId         String @db.Uuid
+  storeId          String @db.Uuid
+  classificationId String @db.Uuid
+
+  store          Store               @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
+  classification StoreClassification @relation(fields: [tenantId, classificationId], references: [tenantId, id], onDelete: Cascade)
+
+  @@id([tenantId, storeId, classificationId])
+  @@schema("core")
+}
+
+// -----------------------------
+// Domain Events (workflows future)
+// -----------------------------
+
+model DomainEvent {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+
+  source     DomainEventSource @default(SYSTEM)
+  type       String
+  entityType String?
+  entityId   String?
+
+  payload Json
+
+  occurredAt  DateTime  @default(now())
+  processedAt DateTime?
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, occurredAt])
+  @@index([tenantId, type, occurredAt])
+  @@schema("core")
+}
+
+// -----------------------------
+// Cross-module pivot: Employee <-> OrgUnit
+// -----------------------------
+
+model EmployeeOrgUnit {
+  tenantId   String @db.Uuid
+  employeeId String @db.Uuid
+  orgUnitId  String @db.Uuid
+
+  assignmentRole String?
+  startAt        DateTime?
+  endAt          DateTime?
+
+  assignedAt DateTime @default(now())
+
+  employee Employee @relation(fields: [tenantId, employeeId], references: [tenantId, id], onDelete: Cascade)
+  orgUnit  OrgUnit  @relation(fields: [tenantId, orgUnitId], references: [tenantId, id], onDelete: Cascade)
+
+  @@id([tenantId, employeeId, orgUnitId])
+  @@index([tenantId, orgUnitId])
+  @@schema("core")
+}

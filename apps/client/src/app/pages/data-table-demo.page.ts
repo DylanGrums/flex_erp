@@ -7,7 +7,6 @@ import {
   computed,
   signal,
 } from '@angular/core';
-import { TranslocoModule } from '@jsverse/transloco';
 
 import {
   DataTableCommand,
@@ -37,50 +36,55 @@ import {
   DataTableToolbarComponent,
 } from '@flex-erp/shared/ui';
 
-type Product = {
+type Employee = {
   id: string;
   name: string;
-  sku: string;
-  category: string;
+  email: string;
+  department: string;
+  role: string;
   status: string;
-  price: number;
-  inventory: number;
-  createdAt: Date;
+  region: string;
+  age: number;
+  joinedAt: Date;
   tags: string[];
 };
 
-const CATEGORIES = ['Apparel', 'Accessories', 'Electronics', 'Home', 'Beauty'];
-const STATUSES = ['Active', 'Draft', 'Archived'];
-const TAGS = ['featured', 'promo', 'bestseller', 'limited', 'new'];
+const DEPARTMENTS = ['Operations', 'Product', 'Sales', 'Support'];
+const ROLES = ['Engineer', 'Designer', 'Manager', 'Analyst'];
+const STATUSES = ['Active', 'On Leave', 'Paused'];
+const REGIONS = ['AMER', 'EMEA', 'APAC'];
+const TAGS = ['remote', 'full-time', 'contract', 'on-call'];
 
-const buildProducts = (count: number): Product[] => {
+const buildEmployees = (count: number): Employee[] => {
   return Array.from({ length: count }, (_, index) => {
-    const category = CATEGORIES[index % CATEGORIES.length];
+    const department = DEPARTMENTS[index % DEPARTMENTS.length];
+    const role = ROLES[index % ROLES.length];
     const status = STATUSES[index % STATUSES.length];
-    const price = 25 + (index % 20) * 7 + (index % 4) * 0.99;
-    const inventory = 5 + (index * 3) % 120;
-    const createdAt = new Date(2023, (index * 2) % 12, (index * 5) % 28 + 1);
-    const id = `prod-${index + 1}`;
+    const region = REGIONS[index % REGIONS.length];
     const tags = TAGS.filter((_, tagIndex) => (index + tagIndex) % 2 === 0).slice(0, 3);
+    const age = 22 + (index % 28);
+    const joinedAt = new Date(2021, (index * 2) % 12, (index * 3) % 28 + 1);
+    const id = String(index + 1);
 
     return {
       id,
-      name: `Product ${index + 1}`,
-      sku: `SKU-${1000 + index}`,
-      category,
+      name: `Employee ${index + 1}`,
+      email: `employee${index + 1}@flex-erp.dev`,
+      department,
+      role,
       status,
-      price: Number(price.toFixed(2)),
-      inventory,
-      createdAt,
+      region,
+      age,
+      joinedAt,
       tags,
     };
   });
 };
 
-const PRODUCTS = buildProducts(64);
+const EMPLOYEES = buildEmployees(48);
 
-const columnHelper = createDataTableColumnHelper<Product>();
-const filterHelper = createDataTableFilterHelper<Product>();
+const columnHelper = createDataTableColumnHelper<Employee>();
+const filterHelper = createDataTableFilterHelper<Employee>();
 const commandHelper = createDataTableCommandHelper();
 
 const compareValues = (a: unknown, b: unknown, desc: boolean): number => {
@@ -98,9 +102,9 @@ const compareValues = (a: unknown, b: unknown, desc: boolean): number => {
 };
 
 const applyFilters = (
-  rows: Product[],
+  rows: Employee[],
   filters: DataTableFilteringState
-): Product[] => {
+): Employee[] => {
   return rows.filter((row) => {
     return Object.entries(filters ?? {}).every(([key, filter]) => {
       if (filter === null || filter === undefined) {
@@ -109,6 +113,10 @@ const applyFilters = (
 
       if (typeof filter === 'string' && filter.trim().length === 0) {
         return true;
+      }
+
+      if (key === 'region' && typeof filter === 'string') {
+        return row.region === filter;
       }
 
       const value = (row as Record<string, unknown>)[key];
@@ -189,11 +197,9 @@ const applyFilters = (
 };
 
 @Component({
-  selector: 'fe-store-products-page',
   standalone: true,
   imports: [
     CommonModule,
-    TranslocoModule,
     DataTableComponent,
     DataTableToolbarComponent,
     DataTableSearchComponent,
@@ -204,65 +210,55 @@ const applyFilters = (
     DataTableCommandBarComponent,
   ],
   template: `
-    <section class="space-y-6">
-      <header>
-        <h1 class="text-2xl font-semibold text-ui-fg-base">{{ 'store.pages.products.title' | transloco }}</h1>
-        <p class="mt-1 text-sm text-ui-fg-subtle">
-          {{ 'store.pages.products.subtitle' | transloco }}
-        </p>
-      </header>
-
-      <div class="medusa-panel p-6">
-        <div class="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div>
-            <div class="text-lg font-semibold">Catalog</div>
-            <div class="text-sm text-ui-fg-muted">Products overview with mock data.</div>
+    <div class="medusa-panel p-4">
+      <div class="mb-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+        <div>
+          <div class="text-lg font-semibold">Data table demo</div>
+          <div class="text-sm text-ui-fg-muted">
+            Manual sorting, filtering, and pagination wired to signals.
           </div>
-          <div class="text-xs text-ui-fg-muted">Total: {{ rowCount() }}</div>
         </div>
-
-        <flex-data-table [instance]="table">
-          <flex-data-table-toolbar
-            className="flex w-full flex-col items-start justify-between gap-3 md:flex-row md:items-center"
-          >
-            <div class="text-sm font-semibold">Inventory</div>
-            <div class="flex w-full flex-wrap items-center gap-2 md:w-auto">
-              <flex-data-table-search
-                placeholder="Search products"
-                className="min-w-[200px] flex-1 md:w-[240px]"
-              ></flex-data-table-search>
-              <flex-data-table-filter-menu tooltip="Filter"></flex-data-table-filter-menu>
-              <flex-data-table-sorting-menu tooltip="Sort"></flex-data-table-sorting-menu>
-            </div>
-          </flex-data-table-toolbar>
-
-          <flex-data-table-table [emptyState]="emptyState"></flex-data-table-table>
-          <flex-data-table-pagination></flex-data-table-pagination>
-          <flex-data-table-command-bar [selectedLabel]="selectedLabel"></flex-data-table-command-bar>
-        </flex-data-table>
+        <div class="text-xs text-ui-fg-muted">Total: {{ rowCount() }}</div>
       </div>
-    </section>
+
+      <flex-data-table [instance]="table">
+        <flex-data-table-toolbar
+          className="flex flex-col items-start justify-between gap-2 md:flex-row md:items-center"
+        >
+          <div class="text-sm font-semibold">Employees</div>
+          <div class="flex w-full items-center gap-2 md:w-auto">
+            <flex-data-table-search placeholder="Search" [autoFocus]="false"></flex-data-table-search>
+            <flex-data-table-filter-menu tooltip="Filter"></flex-data-table-filter-menu>
+            <flex-data-table-sorting-menu tooltip="Sort"></flex-data-table-sorting-menu>
+          </div>
+        </flex-data-table-toolbar>
+
+        <flex-data-table-table [emptyState]="emptyState"></flex-data-table-table>
+        <flex-data-table-pagination></flex-data-table-pagination>
+        <flex-data-table-command-bar [selectedLabel]="selectedLabel"></flex-data-table-command-bar>
+      </flex-data-table>
+    </div>
 
     <ng-template
-      #categoryFilter
+      #customFilter
       let-value="value"
       let-onChange="onChange"
       let-onRemove="onRemove"
     >
       <div class="w-[240px] p-3">
-        <div class="text-xs font-semibold text-ui-fg-muted">Category</div>
-        <div class="mt-2 flex flex-wrap gap-2">
-          @for (category of categories; track category) {
+        <div class="text-xs font-semibold text-ui-fg-muted">Region</div>
+        <div class="mt-2 grid grid-cols-3 gap-2">
+          @for (region of regions; track region) {
             <button
               type="button"
-              class="rounded-md border px-2 py-1 text-xs transition-fg"
+              class="rounded border px-2 py-1 text-xs transition-fg"
               [ngClass]="{
-                'border-ui-border-interactive bg-ui-bg-subtle text-ui-fg-base': value === category,
-                'border-ui-border-base bg-ui-bg-base text-ui-fg-muted hover:bg-ui-bg-base-hover': value !== category
+                'border-ui-border-interactive bg-ui-bg-subtle text-ui-fg-base': value === region,
+                'border-ui-border-base text-ui-fg-muted hover:bg-ui-bg-base-hover': value !== region
               }"
-              (click)="value === category ? onRemove() : onChange(category)"
+              (click)="value === region ? onRemove() : onChange(region)"
             >
-              {{ category }}
+              {{ region }}
             </button>
           }
         </div>
@@ -271,18 +267,18 @@ const applyFilters = (
           class="mt-3 text-xs text-ui-fg-muted hover:text-ui-fg-subtle"
           (click)="onRemove()"
         >
-          Clear category filter
+          Clear region filter
         </button>
       </div>
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StoreProductsPageComponent {
-  @ViewChild('categoryFilter', { static: true })
-  private categoryFilterTemplate!: TemplateRef<DataTableCustomFilterContext>;
+export class DataTableDemoPage {
+  @ViewChild('customFilter', { static: true })
+  private customFilterTemplate!: TemplateRef<DataTableCustomFilterContext>;
 
-  readonly categories = CATEGORIES;
+  readonly regions = REGIONS;
 
   readonly search = signal('');
   readonly sorting = signal<DataTableSortingState | null>(null);
@@ -297,14 +293,14 @@ export class StoreProductsPageComponent {
 
   readonly processedRows = computed(() => {
     const query = this.search().trim().toLowerCase();
-    let rows = applyFilters(PRODUCTS, this.filtering());
+    let rows = applyFilters(EMPLOYEES, this.filtering());
 
     if (query) {
       rows = rows.filter((row) => {
         return (
           row.name.toLowerCase().includes(query) ||
-          row.sku.toLowerCase().includes(query) ||
-          row.category.toLowerCase().includes(query)
+          row.email.toLowerCase().includes(query) ||
+          row.role.toLowerCase().includes(query)
         );
       });
     }
@@ -312,7 +308,7 @@ export class StoreProductsPageComponent {
     const sorting = this.sorting();
     if (sorting) {
       rows = [...rows].sort((a, b) => {
-        const key = sorting.id as keyof Product;
+        const key = sorting.id as keyof Employee;
         return compareValues(a[key], b[key], sorting.desc);
       });
     }
@@ -328,7 +324,7 @@ export class StoreProductsPageComponent {
 
   readonly rowCount = computed(() => this.processedRows().length);
 
-  readonly columns: DataTableColumnDef<Product>[] = [
+  readonly columns: DataTableColumnDef<Employee>[] = [
     columnHelper.select(),
     columnHelper.accessor('name', {
       header: 'Name',
@@ -336,41 +332,47 @@ export class StoreProductsPageComponent {
       sortAscLabel: 'A-Z',
       sortDescLabel: 'Z-A',
     }),
-    columnHelper.accessor('sku', {
-      header: 'SKU',
+    columnHelper.accessor('email', {
+      header: 'Email',
       enableSorting: true,
-      maxSize: 140,
+      sortAscLabel: 'A-Z',
+      sortDescLabel: 'Z-A',
+      maxSize: 240,
     }),
-    columnHelper.accessor('category', {
-      header: 'Category',
+    columnHelper.accessor('department', {
+      header: 'Department',
+      enableSorting: true,
+    }),
+    columnHelper.accessor('role', {
+      header: 'Role',
       enableSorting: true,
     }),
     columnHelper.accessor('status', {
       header: 'Status',
       enableSorting: true,
     }),
-    columnHelper.accessor('price', {
-      header: 'Price',
+    columnHelper.accessor('region', {
+      header: 'Region',
       enableSorting: true,
-      sortLabel: 'Price',
+      sortAscLabel: 'A-Z',
+      sortDescLabel: 'Z-A',
+    }),
+    columnHelper.accessor('age', {
+      header: 'Age',
+      enableSorting: true,
+      sortLabel: 'Age',
       sortAscLabel: 'Low to High',
       sortDescLabel: 'High to Low',
       headerAlign: 'right',
-      cell: ({ row }) => `$${row.original.price.toFixed(2)}`,
+      cell: ({ row }) => row.original.age,
     }),
-    columnHelper.accessor('inventory', {
-      header: 'Inventory',
-      enableSorting: true,
-      headerAlign: 'right',
-      cell: ({ row }) => row.original.inventory,
-    }),
-    columnHelper.accessor('createdAt', {
-      header: 'Created',
+    columnHelper.accessor('joinedAt', {
+      header: 'Joined',
       enableSorting: true,
       sortAscLabel: 'Oldest',
       sortDescLabel: 'Newest',
       cell: ({ row }) =>
-        row.original.createdAt.toLocaleDateString('en-US', {
+        row.original.joinedAt.toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'short',
           day: 'numeric',
@@ -407,8 +409,8 @@ export class StoreProductsPageComponent {
 
   readonly emptyState: DataTableEmptyStateProps = {
     empty: {
-      heading: 'No products',
-      description: 'There are no products to display.',
+      heading: 'No employees',
+      description: 'There are no employees to display.',
     },
     filtered: {
       heading: 'No results',
@@ -418,7 +420,7 @@ export class StoreProductsPageComponent {
 
   readonly selectedLabel = (count: number) => `${count} selected`;
 
-  readonly table = createDataTable<Product>({
+  readonly table = createDataTable<Employee>({
     data: this.pageData,
     columns: this.columns,
     filters: this.filters,
@@ -426,7 +428,7 @@ export class StoreProductsPageComponent {
     rowCount: this.rowCount,
     getRowId: (row) => row.id,
     onRowClick: (_event, row) => {
-      alert(`Open ${row.name}`);
+      alert(`Navigate to ${row.name}`);
     },
     search: {
       state: this.search,
@@ -448,7 +450,7 @@ export class StoreProductsPageComponent {
     rowSelection: {
       state: this.rowSelection,
       onRowSelectionChange: (state) => this.rowSelection.set(state),
-      enableRowSelection: (row) => row.original.status !== 'Archived',
+      enableRowSelection: (row) => Number(row.original.id) % 4 !== 0,
     },
     columnVisibility: {
       state: this.columnVisibility,
@@ -470,10 +472,13 @@ export class StoreProductsPageComponent {
         type: 'select',
         options: STATUSES.map((status) => ({ label: status, value: status })),
       }),
-      filterHelper.accessor('category', {
-        label: 'Category',
-        type: 'custom',
-        template: this.categoryFilterTemplate,
+      filterHelper.accessor('department', {
+        label: 'Department',
+        type: 'radio',
+        options: DEPARTMENTS.map((department) => ({
+          label: department,
+          value: department,
+        })),
       }),
       filterHelper.accessor('tags', {
         label: 'Tags',
@@ -484,16 +489,16 @@ export class StoreProductsPageComponent {
       filterHelper.accessor('name', {
         label: 'Name',
         type: 'string',
-        placeholder: 'Search name...'
+        placeholder: 'Search name...',
       }),
-      filterHelper.accessor('price', {
-        label: 'Price',
+      filterHelper.accessor('age', {
+        label: 'Age',
         type: 'number',
         includeOperators: true,
-        placeholder: 'Price...'
+        placeholder: 'Age...',
       }),
-      filterHelper.accessor('createdAt', {
-        label: 'Created',
+      filterHelper.accessor('joinedAt', {
+        label: 'Joined',
         type: 'date',
         format: 'date',
         rangeOptionLabel: 'Custom range',
@@ -509,10 +514,15 @@ export class StoreProductsPageComponent {
             value: { $gte: ninetyDaysAgo.toISOString() },
           },
           {
-            label: 'Before 2024',
-            value: { $lt: new Date('2024-01-01').toISOString() },
+            label: 'Before 2022',
+            value: { $lt: new Date('2022-01-01').toISOString() },
           },
         ],
+      }),
+      filterHelper.accessor('region', {
+        label: 'Region',
+        type: 'custom',
+        template: this.customFilterTemplate,
       }),
     ]);
 
@@ -521,14 +531,14 @@ export class StoreProductsPageComponent {
         label: 'Archive',
         shortcut: 'A',
         action: (selection) => {
-          alert(`Archive ${Object.keys(selection).length} products`);
+          alert(`Archive ${Object.keys(selection).length} rows`);
         },
       }),
       commandHelper.command({
         label: 'Delete',
         shortcut: 'D',
         action: (selection) => {
-          alert(`Delete ${Object.keys(selection).length} products`);
+          alert(`Delete ${Object.keys(selection).length} rows`);
         },
       }),
     ]);

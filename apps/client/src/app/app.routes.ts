@@ -4,6 +4,7 @@ import { PublicLayoutComponent } from './core/layout/layouts/public-layout/publi
 import { SettingsLayoutComponent } from './core/layout/layouts/settings-layout/settings-layout.component';
 import { SettingsStorePage } from './pages/settings-store.page';
 import { SettingsProfilePage } from './pages/settings-profile.page';
+import { DataTableDemoPage } from './pages/data-table-demo.page';
 import { authGuard } from '@flex-erp/auth/data-access';
 
 export const routes: Routes = [
@@ -13,6 +14,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'orders' },
+      { path: 'data-table', component: DataTableDemoPage },
       {
         path: '',
         loadChildren: () => import('@flex-erp/store/feature').then((m) => m.storeFeatureRoutes),

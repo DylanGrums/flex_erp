@@ -1,0 +1,411 @@
+// -----------------------------
+// STORE (schema: store)
+// -----------------------------
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+
+  @@schema("store")
+}
+
+enum CartStatus {
+  ACTIVE
+  ORDERED
+  ABANDONED
+
+  @@schema("store")
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  CANCELLED
+  REFUNDED
+
+  @@schema("store")
+}
+
+enum DiscountKind {
+  PERCENT
+  FIXED
+
+  @@schema("store")
+}
+
+enum CustomerAddressKind {
+  SHIPPING
+  BILLING
+
+  @@schema("store")
+}
+
+model Customer {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  email     String?
+  phone     String?
+  firstName String?
+  lastName  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  store Store @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
+
+  addresses CustomerAddress[]
+  carts     Cart[]
+  orders    Order[]
+
+  @@unique([tenantId, storeId, id])
+  @@index([tenantId, storeId])
+  @@index([tenantId, storeId, email])
+  @@schema("store")
+}
+
+model CustomerAddress {
+  tenantId   String @db.Uuid
+  storeId    String @db.Uuid
+  customerId String @db.Uuid
+  addressId  String @db.Uuid
+  kind       CustomerAddressKind
+
+  customer Customer @relation(fields: [tenantId, storeId, customerId], references: [tenantId, storeId, id], onDelete: Cascade)
+  address  Address  @relation(fields: [tenantId, addressId], references: [tenantId, id], onDelete: Cascade)
+
+  @@id([tenantId, storeId, customerId, addressId, kind])
+  @@schema("store")
+}
+
+model Product {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  title       String
+  handle      String
+  description String?
+  status      ProductStatus @default(DRAFT)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  store Store @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
+
+  images   ProductImage[]
+  options  ProductOption[]
+  variants ProductVariant[]
+  collections CollectionProduct[]
+
+  @@unique([tenantId, storeId, id])
+  @@unique([tenantId, storeId, handle])
+  @@index([tenantId, storeId, status])
+  @@schema("store")
+}
+
+model ProductImage {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+  productId String @db.Uuid
+
+  url      String
+  alt      String?
+  position Int @default(0)
+
+  product Product @relation(fields: [tenantId, storeId, productId], references: [tenantId, storeId, id], onDelete: Cascade)
+
+  @@index([tenantId, storeId, productId])
+  @@schema("store")
+}
+
+model ProductOption {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+  productId String @db.Uuid
+
+  name     String
+  position Int @default(0)
+
+  product Product @relation(fields: [tenantId, storeId, productId], references: [tenantId, storeId, id], onDelete: Cascade)
+  values  ProductOptionValue[]
+
+  // REQUIRED for relations referencing (tenantId, storeId, id)
+  @@unique([tenantId, storeId, id])
+  @@index([tenantId, storeId, productId])
+  @@schema("store")
+}
+
+model ProductOptionValue {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+  optionId String @db.Uuid
+
+  value    String
+  position Int @default(0)
+
+  option ProductOption @relation(fields: [tenantId, storeId, optionId], references: [tenantId, storeId, id], onDelete: Cascade)
+  variants VariantOptionValue[]
+
+  @@unique([tenantId, storeId, id])
+  @@unique([tenantId, storeId, optionId, value])
+  @@schema("store")
+}
+
+model ProductVariant {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+  productId String @db.Uuid
+
+  title    String
+  sku      String?
+
+  priceAmount Int
+  currency    CurrencyCode @default(EUR)
+
+  compareAtAmount Int?
+
+  inventoryQuantity Int @default(0)
+  allowBackorder   Boolean @default(false)
+
+  position Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [tenantId, storeId, productId], references: [tenantId, storeId, id], onDelete: Cascade)
+
+  optionValues VariantOptionValue[]
+
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+
+  @@unique([tenantId, storeId, id])
+  @@unique([tenantId, storeId, sku])
+  @@index([tenantId, storeId, productId])
+  @@schema("store")
+}
+
+model VariantOptionValue {
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+  variantId String @db.Uuid
+  optionValueId String @db.Uuid
+
+  variant ProductVariant @relation(fields: [tenantId, storeId, variantId], references: [tenantId, storeId, id], onDelete: Cascade)
+  optionValue ProductOptionValue @relation(fields: [tenantId, storeId, optionValueId], references: [tenantId, storeId, id], onDelete: Cascade)
+
+  @@id([tenantId, storeId, variantId, optionValueId])
+  @@schema("store")
+}
+
+model Collection {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  title       String
+  handle      String
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  store Store @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
+
+  products CollectionProduct[]
+
+  @@unique([tenantId, storeId, id])
+  @@unique([tenantId, storeId, handle])
+  @@schema("store")
+}
+
+model CollectionProduct {
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+  collectionId String @db.Uuid
+  productId String @db.Uuid
+
+  collection Collection @relation(fields: [tenantId, storeId, collectionId], references: [tenantId, storeId, id], onDelete: Cascade)
+  product    Product    @relation(fields: [tenantId, storeId, productId], references: [tenantId, storeId, id], onDelete: Cascade)
+
+  @@id([tenantId, storeId, collectionId, productId])
+  @@schema("store")
+}
+
+model Discount {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  code     String
+  kind     DiscountKind
+  value    Int
+
+  startsAt DateTime?
+  endsAt   DateTime?
+  isActive Boolean @default(true)
+
+  metadataSchemaVersion Int @default(1)
+  metadata Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  store Store @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
+
+  cartAdjustments  CartAdjustment[]
+  orderAdjustments OrderAdjustment[]
+
+  @@unique([tenantId, storeId, id])
+  @@unique([tenantId, storeId, code])
+  @@schema("store")
+}
+
+model Cart {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  customerId String? @db.Uuid
+
+  status   CartStatus @default(ACTIVE)
+  currency CurrencyCode @default(EUR)
+
+  subtotalAmount Int @default(0)
+  discountAmount Int @default(0)
+  totalAmount    Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  store    Store     @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
+  customer Customer? @relation(fields: [tenantId, storeId, customerId], references: [tenantId, storeId, id], onDelete: SetNull)
+
+  items       CartItem[]
+  adjustments CartAdjustment[]
+
+  @@unique([tenantId, storeId, id])
+  @@index([tenantId, storeId, status])
+  @@schema("store")
+}
+
+model CartItem {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  cartId    String @db.Uuid
+  variantId String @db.Uuid
+
+  quantity        Int
+  unitPriceAmount Int
+  totalAmount     Int
+
+  cart    Cart           @relation(fields: [tenantId, storeId, cartId], references: [tenantId, storeId, id], onDelete: Cascade)
+  variant ProductVariant @relation(fields: [tenantId, storeId, variantId], references: [tenantId, storeId, id], onDelete: Restrict)
+
+  @@index([tenantId, storeId, cartId])
+  @@schema("store")
+}
+
+model CartAdjustment {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  cartId     String @db.Uuid
+  discountId String @db.Uuid
+
+  amount     Int
+  description String?
+
+  cart     Cart     @relation(fields: [tenantId, storeId, cartId], references: [tenantId, storeId, id], onDelete: Cascade)
+  discount Discount @relation(fields: [tenantId, storeId, discountId], references: [tenantId, storeId, id], onDelete: Restrict)
+
+  @@index([tenantId, storeId, cartId])
+  @@schema("store")
+}
+
+model Order {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  number   Int
+  status   OrderStatus @default(PENDING)
+  currency CurrencyCode @default(EUR)
+
+  customerId String? @db.Uuid
+  email      String?
+
+  shippingAddressId String? @db.Uuid
+  billingAddressId  String? @db.Uuid
+
+  subtotalAmount Int @default(0)
+  discountAmount Int @default(0)
+  totalAmount    Int @default(0)
+
+  placedAt  DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  store    Store     @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
+  customer Customer? @relation(fields: [tenantId, storeId, customerId], references: [tenantId, storeId, id], onDelete: SetNull)
+
+  shippingAddress Address? @relation("OrderShippingAddress", fields: [tenantId, shippingAddressId], references: [tenantId, id], onDelete: SetNull)
+  billingAddress  Address? @relation("OrderBillingAddress", fields: [tenantId, billingAddressId], references: [tenantId, id], onDelete: SetNull)
+
+  items       OrderItem[]
+  adjustments OrderAdjustment[]
+
+  @@unique([tenantId, storeId, id])
+  @@unique([tenantId, storeId, number])
+  @@index([tenantId, storeId, status])
+  @@schema("store")
+}
+
+model OrderItem {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  orderId   String @db.Uuid
+  variantId String @db.Uuid
+
+  titleSnapshot String
+  skuSnapshot   String?
+
+  quantity        Int
+  unitPriceAmount Int
+  totalAmount     Int
+
+  order   Order         @relation(fields: [tenantId, storeId, orderId], references: [tenantId, storeId, id], onDelete: Cascade)
+  variant ProductVariant @relation(fields: [tenantId, storeId, variantId], references: [tenantId, storeId, id], onDelete: Restrict)
+
+  @@index([tenantId, storeId, orderId])
+  @@schema("store")
+}
+
+model OrderAdjustment {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  orderId    String @db.Uuid
+  discountId String @db.Uuid
+
+  amount      Int
+  description String?
+
+  order    Order    @relation(fields: [tenantId, storeId, orderId], references: [tenantId, storeId, id], onDelete: Cascade)
+  discount Discount @relation(fields: [tenantId, storeId, discountId], references: [tenantId, storeId, id], onDelete: Restrict)
+
+  @@index([tenantId, storeId, orderId])
+  @@schema("store")
+}

@@ -8,3 +8,5 @@ export * from './lib/admin-kit/inputs/textarea.component';
 export * from './lib/admin-kit/shell/admin-shell.component';
 
 export * from './lib/components/divider/divider.component';
+
+export * from './lib/data-table';
