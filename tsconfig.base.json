@@ -21,17 +21,14 @@
       "@flex-erp/store/util": ["libs/store/util/src/index.ts"],
       "@flex-erp/store/ui": ["libs/store/ui/src/index.ts"],
       "@flex-erp/store/manifest": ["libs/store/manifest/src/index.ts"],
-
       "@flex-erp/shared/ui": ["libs/shared/ui/src/index.ts"],
       "@flex-erp/shared/nav": ["libs/shared/nav/src/index.ts"],
-
       "@flex-erp/auth/types": ["libs/auth/types/src/index.ts"],
       "@flex-erp/auth/util": ["libs/auth/util/src/index.ts"],
       "@flex-erp/auth/ui": ["libs/auth/ui/src/index.ts"],
       "@flex-erp/auth/data-access": ["libs/auth/data-access/src/index.ts"],
       "@flex-erp/auth/feature": ["libs/auth/feature/src/index.ts"],
       "@flex-erp/auth/api": ["libs/auth/api/src/index.ts"],
-      
       "@flex-erp/cms/ui": ["libs/cms/ui/src/index.ts"],
       "@flex-erp/cms/types": ["libs/cms/types/src/index.ts"],
       "@flex-erp/cms/util": ["libs/cms/util/src/index.ts"],

@@ -11,7 +11,9 @@
     "src/test-setup.ts",
     "jest.config.ts",
     "src/**/*.test.ts",
-    "jest.config.cts"
+    "jest.config.cts",
+    "**/*.stories.ts",
+    "**/*.stories.js"
   ],
   "include": ["src/**/*.ts"]
 }
