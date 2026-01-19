@@ -4,7 +4,7 @@ import { DataTableInstance } from '../create-data-table';
 import { DATA_TABLE_CONTEXT, DataTableContextValue } from '../data-table-context';
 import { DataTableEmptyState, DataTableRowData } from '../types';
 
-const EMPTY_DATA_TABLE_INSTANCE: DataTableInstance<any> = {
+export const EMPTY_DATA_TABLE_INSTANCE: DataTableInstance<any> = {
   getHeaderGroups: () => [],
   getRowModel: () => ({ rows: [] }),
   getAllColumns: () => [],

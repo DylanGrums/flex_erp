@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { DataTableRenderOutletComponent } from './data-table-render-outlet.component';
-import { expect } from 'storybook/test';
+import { expect, within } from 'storybook/test';
 
-const meta: Meta<DataTableRenderOutletComponent> = {
+const meta: Meta<DataTableRenderOutletComponent<any>> = {
   component: DataTableRenderOutletComponent,
   title: 'DataTableRenderOutletComponent',
 };
 export default meta;
 
-type Story = StoryObj<DataTableRenderOutletComponent>;
+type Story = StoryObj<DataTableRenderOutletComponent<any>>;
 
 export const Primary: Story = {
   args: {},
@@ -16,7 +16,8 @@ export const Primary: Story = {
 
 export const Heading: Story = {
   args: {},
-  play: async ({ canvas }) => {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
     await expect(canvas.getByText(/data-table-render-outlet/gi)).toBeTruthy();
   },
 };

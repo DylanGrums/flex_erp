@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { DataTableSortableHeaderCellComponent } from './data-table-sortable-header-cell.component';
-import { expect } from 'storybook/test';
+import { expect, within } from 'storybook/test';
 
 const meta: Meta<DataTableSortableHeaderCellComponent> = {
   component: DataTableSortableHeaderCellComponent,
@@ -12,27 +12,22 @@ type Story = StoryObj<DataTableSortableHeaderCellComponent>;
 
 export const Primary: Story = {
   args: {
-    id: '',
+    id: 'test-header',
     className: '',
     style: null,
     isFirstColumn: false,
-    id: '',
-    className: '',
-    style: null,
   },
 };
 
 export const Heading: Story = {
   args: {
-    id: '',
-    className: '',
+    id: 'test-header-heading',
+    className: 'font-bold',
     style: null,
-    isFirstColumn: false,
-    id: '',
-    className: '',
-    style: null,
+    isFirstColumn: true,
   },
-  play: async ({ canvas }) => {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
     await expect(
       canvas.getByText(/data-table-sortable-header-cell/gi),
     ).toBeTruthy();
