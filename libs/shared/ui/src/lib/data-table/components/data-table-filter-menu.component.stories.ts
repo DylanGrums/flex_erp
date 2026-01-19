@@ -1,26 +1,69 @@
 import type { Meta, StoryObj } from '@storybook/angular';
+import { moduleMetadata } from '@storybook/angular';
+import { DataTableComponent } from './data-table.component';
 import { DataTableFilterMenuComponent } from './data-table-filter-menu.component';
-import { expect } from 'storybook/test';
+import { createStoryTable } from '../storybook/data-table-story-helpers';
+import { expect } from '@storybook/jest';
+import { screen, userEvent, within } from '@storybook/testing-library';
 
-const meta: Meta<DataTableFilterMenuComponent> = {
+type FilterMenuArgs = {
+  tooltip?: string;
+};
+
+const meta = {
   component: DataTableFilterMenuComponent,
   title: 'DataTableFilterMenuComponent',
-};
+  decorators: [
+    moduleMetadata({
+      imports: [DataTableComponent, DataTableFilterMenuComponent],
+    }),
+  ],
+} satisfies Meta<FilterMenuArgs>;
 export default meta;
 
-type Story = StoryObj<DataTableFilterMenuComponent>;
+type Story = StoryObj<FilterMenuArgs>;
+
+const renderStory = (args: { tooltip?: string }) => {
+  const { instance } = createStoryTable();
+
+  return {
+    props: { ...args, instance },
+    template: `
+      <flex-data-table [instance]="instance">
+        <div class="p-4">
+          <flex-data-table-filter-menu [tooltip]="tooltip"></flex-data-table-filter-menu>
+        </div>
+      </flex-data-table>
+    `,
+  };
+};
 
 export const Primary: Story = {
   args: {
-    tooltip: '',
+    tooltip: 'Add filters',
   },
+  render: renderStory,
 };
 
-export const Heading: Story = {
+export const WithArgs: Story = {
   args: {
-    tooltip: '',
+    tooltip: 'Filters',
   },
-  play: async ({ canvas }) => {
-    await expect(canvas.getByText(/data-table-filter-menu/gi)).toBeTruthy();
+  render: renderStory,
+};
+
+export const FilterMenuInteraction: Story = {
+  args: {
+    tooltip: 'Add filters',
+  },
+  render: renderStory,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+
+    const trigger = canvas.getByRole('button');
+    await user.click(trigger);
+    // Filter menu renders in a portal attached to document.body.
+    await expect(screen.getByText('Status')).toBeTruthy();
   },
 };

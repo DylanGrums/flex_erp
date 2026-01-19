@@ -1,14 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { DataTableSortingIconComponent } from './data-table-sorting-icon.component';
-import { expect } from 'storybook/test';
+import { DataTableSortDirection } from '../types';
+import { expect } from '@storybook/jest';
 
-const meta: Meta<DataTableSortingIconComponent> = {
+type SortingIconArgs = {
+  direction: DataTableSortDirection | false;
+};
+
+const meta = {
   component: DataTableSortingIconComponent,
   title: 'DataTableSortingIconComponent',
-};
+} satisfies Meta<SortingIconArgs>;
 export default meta;
 
-type Story = StoryObj<DataTableSortingIconComponent>;
+type Story = StoryObj<SortingIconArgs>;
 
 export const Primary: Story = {
   args: {
@@ -16,11 +21,23 @@ export const Primary: Story = {
   },
 };
 
-export const Heading: Story = {
+export const Ascending: Story = {
   args: {
-    direction: false,
+    direction: 'asc',
   },
-  play: async ({ canvas }) => {
-    await expect(canvas.getByText(/data-table-sorting-icon/gi)).toBeTruthy();
+};
+
+export const Descending: Story = {
+  args: {
+    direction: 'desc',
+  },
+};
+
+export const RenderCheck: Story = {
+  args: {
+    direction: 'asc',
+  },
+  play: async ({ canvasElement }) => {
+    await expect(Boolean(canvasElement.querySelector('svg'))).toBe(true);
   },
 };

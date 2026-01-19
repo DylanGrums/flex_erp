@@ -22,7 +22,7 @@
       "options": {
         "port": 4400,
         "configDir": "libs/shared/ui/.storybook",
-        "browserTarget": "shared-ui:build-storybook",
+        "browserTarget": "client:build",
         "compodoc": false
       },
       "configurations": {
@@ -37,7 +37,7 @@
       "options": {
         "outputDir": "dist/storybook/shared-ui",
         "configDir": "libs/shared/ui/.storybook",
-        "browserTarget": "shared-ui:build-storybook",
+        "browserTarget": "client:build",
         "compodoc": false
       },
       "configurations": {

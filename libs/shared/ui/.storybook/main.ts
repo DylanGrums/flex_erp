@@ -3,10 +3,10 @@ import { dirname } from "node:path";
 import type { StorybookConfig } from '@storybook/angular';
 
 const config: StorybookConfig = {
-  stories: ['../**/*.@(mdx|stories.@(js|jsx|ts|tsx))'],
+  stories: ['../src/**/*.stories.@(ts|tsx|js|jsx|mdx)'],
   addons: [],
   framework: {
-    name: getAbsolutePath("@storybook/angular"),
+    name: getAbsolutePath('@storybook/angular'),
     options: {},
   },
 };

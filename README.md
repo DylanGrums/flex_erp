@@ -25,6 +25,24 @@ To create a production bundle:
 npx nx build client
 ```
 
+To run Storybook for shared UI components:
+
+```sh
+npx nx storybook shared-ui
+```
+
+To build the Storybook static bundle:
+
+```sh
+npx nx build-storybook shared-ui
+```
+
+To run Storybook interaction tests:
+
+```sh
+npx nx test-storybook shared-ui
+```
+
 To see all available targets to run for a project, run:
 
 ```sh
