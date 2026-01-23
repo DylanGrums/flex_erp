@@ -63,7 +63,18 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
 
       <ng-template #menu>
         <div flexDropdownMenuContent class="min-w-[200px] rounded-md border border-ui-border-base bg-ui-bg-base p-1 shadow">
-          <div flexDropdownMenuItemRadioGroup [value]="sorting?.id" (valueChange)="setKey($event)">
+          <div flexDropdownMenuItemRadioGroup [value]="sortingKey" (valueChange)="setKey($event)">
+            <button
+              type="button"
+              flexDropdownMenuItemRadio
+              [value]="noneValue"
+              class="flex w-full items-center rounded px-2 py-1.5 text-sm text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover"
+            >
+              No sorting
+              <span flexDropdownMenuItemIndicator class="ms-auto text-ui-fg-interactive">
+                <i class="pi pi-check text-xs"></i>
+              </span>
+            </button>
             @for (column of sortableColumns; track column.id) {
               <button
                 type="button"
@@ -116,6 +127,7 @@ export class DataTableSortingMenuComponent {
   @Input() tooltip?: string;
 
   readonly context = injectDataTableContext();
+  readonly noneValue = '__none__';
 
   get instance() {
     return this.context.instance;
@@ -129,11 +141,20 @@ export class DataTableSortingMenuComponent {
     return this.instance.getSorting();
   }
 
+  get sortingKey(): string {
+    return this.sorting?.id ?? this.noneValue;
+  }
+
   get selectedColumn(): DataTableColumn<any, unknown> | undefined {
     return this.sortableColumns.find((column) => column.id === this.sorting?.id);
   }
 
   setKey(id: string): void {
+    if (id === this.noneValue) {
+      this.instance.setSorting(() => null);
+      return;
+    }
+
     this.instance.setSorting((prev) => ({
       id,
       desc: prev?.desc ?? false,

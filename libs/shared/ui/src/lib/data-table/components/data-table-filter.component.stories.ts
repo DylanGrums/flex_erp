@@ -47,7 +47,7 @@ const renderStory = (args: FilterArgs) => {
 export const Primary: Story = {
   args: {
     id: 'status',
-    filter: ['Active'],
+    filter: 'Active',
     isNew: false,
   },
   render: renderStory,
@@ -65,7 +65,7 @@ export const WithArgs: Story = {
 export const FilterInteraction: Story = {
   args: {
     id: 'status',
-    filter: ['Active'],
+    filter: 'Active',
     isNew: false,
   },
   render: renderStory,

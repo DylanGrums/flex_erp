@@ -68,7 +68,7 @@ export const WithArgs: Story = {
     alwaysShow: true,
     sortingTooltip: 'Sort rows',
     columnsTooltip: 'Show columns',
-    initialFiltering: { status: ['Active'] },
+    initialFiltering: { status: 'Active' },
   },
 };
 

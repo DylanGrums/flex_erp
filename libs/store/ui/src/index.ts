@@ -1,2 +1,1 @@
-export * from './lib/admin-shell/admin-shell.component';
-export * from './lib/store-ui/store-ui';
+export * from './lib/store-shell/store-shell.component';

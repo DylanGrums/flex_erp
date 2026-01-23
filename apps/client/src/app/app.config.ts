@@ -1,4 +1,10 @@
-import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom, inject, isDevMode } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  ApplicationConfig,
+  importProvidersFrom,
+  inject,
+  isDevMode,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -7,7 +13,12 @@ import { providePrimeNG } from 'primeng/config';
 import { provideTransloco, translocoConfig } from '@jsverse/transloco';
 import { FlexPreset } from '../themes/flex.preset';
 import { NgxsModule, Store } from '@ngxs/store';
-import { AuthState, Refresh, authInterceptor } from '@flex-erp/auth/data-access';
+import {
+  AuthState,
+  Refresh,
+  authInterceptor,
+} from '@flex-erp/auth/data-access';
+import { ProductsState } from '@flex-erp/store/data-access';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { environment } from '../environments/environment';
@@ -39,9 +50,13 @@ export const appConfig: ApplicationConfig = {
 
     // NGXS via functional providers
     importProvidersFrom(
-      NgxsModule.forRoot([AuthState], { developmentMode: !environment.production }),
+      NgxsModule.forRoot([AuthState, ProductsState], {
+        developmentMode: !environment.production,
+      }),
       NgxsLoggerPluginModule.forRoot({ disabled: environment.production }),
-      NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production }),
+      NgxsReduxDevtoolsPluginModule.forRoot({
+        disabled: environment.production,
+      }),
       DynamicDialogModule,
     ),
 
@@ -52,9 +67,7 @@ export const appConfig: ApplicationConfig = {
       deps: [Store],
       useFactory: (store: Store) => () =>
         firstValueFrom(
-          store.dispatch(new Refresh()).pipe(
-            catchError(() => of(null))
-          )
+          store.dispatch(new Refresh()).pipe(catchError(() => of(null))),
         ),
     },
     {
@@ -81,10 +94,10 @@ export const appConfig: ApplicationConfig = {
           darkModeSelector: '.dark',
           cssLayer: {
             name: 'primeng',
-            order: 'app-styles, primeng'
-          }
-        }
-      }
+            order: 'app-styles, primeng',
+          },
+        },
+      },
     }),
     DialogService,
     provideNavManifest(STORE_NAV.nav.manifest),

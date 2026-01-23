@@ -91,7 +91,7 @@ interface DataTableFilterUpdateEvent {
 })
 export class DataTableFilterSelectContentComponent {
   @Input({ required: true }) id!: string;
-  @Input() filter: string[] | undefined = [];
+  @Input() filter: string | undefined;
   @Input() options: DataTableFilterOption<string>[] = [];
 
   @Output() update = new EventEmitter<DataTableFilterUpdateEvent>();
@@ -120,12 +120,7 @@ export class DataTableFilterSelectContentComponent {
   }
 
   toggleValue(value: string): void {
-    const current = this.filter ?? [];
-    const next = current.includes(value)
-      ? current.filter((item) => item !== value)
-      : [...current, value];
-
-    const updateValue = next.length ? next : undefined;
+    const updateValue = this.filter === value ? undefined : value;
     if (this.update.observed) {
       this.update.emit({ value: updateValue });
     } else {
@@ -134,7 +129,7 @@ export class DataTableFilterSelectContentComponent {
   }
 
   isSelected(value: string): boolean {
-    return (this.filter ?? []).includes(value);
+    return this.filter === value;
   }
 }
 
@@ -532,7 +527,7 @@ export class DataTableFilterMultiselectContentComponent {
   toggleValue(value: string): void {
     const current = this.filter ?? [];
     const next = current.includes(value)
-      ? current.filter((item) => item !== value)
+      ? current.filter((item: string) => item !== value)
       : [...current, value];
 
     const updateValue = next.length ? next : undefined;
@@ -958,7 +953,6 @@ export class DataTableFilterComponent {
   @Output() remove = new EventEmitter<void>();
 
   readonly context = injectDataTableContext();
-  readonly hasInteracted = signal(false);
 
   readonly popoverSide: FlexPopoverSide = 'bottom';
   readonly popoverAlign: FlexPopoverAlign = 'start';
@@ -971,8 +965,8 @@ export class DataTableFilterComponent {
     return this.instance.getFilterMeta(this.id) as DataTableFilterProps | null;
   }
 
-  get selectFilterValue(): string[] {
-    return Array.isArray(this.filter) ? (this.filter as string[]) : [];
+  get selectFilterValue(): string | undefined {
+    return typeof this.filter === 'string' ? this.filter : undefined;
   }
 
   get multiSelectFilterValue(): string[] {
@@ -1095,7 +1089,7 @@ export class DataTableFilterComponent {
       'text-ui-fg-subtle': Boolean(this.displayValue),
       'text-ui-fg-muted': !this.displayValue,
       'min-w-[80px] justify-center': !this.displayValue,
-      'border-r': true,
+      'border-r': this.hasValue,
     };
   }
 
@@ -1260,16 +1254,9 @@ export class DataTableFilterComponent {
   }
 
   handleClosed(): void {
-    const hasValue = this.hasValue;
-    const hasInteracted = this.hasInteracted();
-
-    if (!hasValue) {
-      if ((this.isNew && !hasInteracted) || !this.isNew) {
-        this.removeFilter();
-      }
+    if (!this.hasValue) {
+      this.removeFilter();
     }
-
-    this.hasInteracted.set(true);
   }
 
   onInteractOutside(event: MouseEvent): void {

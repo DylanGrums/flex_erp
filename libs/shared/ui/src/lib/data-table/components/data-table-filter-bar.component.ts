@@ -50,7 +50,10 @@ interface LocalFilter {
               ></flex-data-table-filter>
             }
             @if (hasAvailableFilters) {
-              <flex-data-table-filter-menu [onAddFilter]="addLocalFilter"></flex-data-table-filter-menu>
+              <flex-data-table-filter-menu
+                [onAddFilter]="addLocalFilter"
+                [activeFilterIds]="activeFilterIds"
+              ></flex-data-table-filter-menu>
             }
           </div>
           <div class="flex flex-shrink-0 items-center gap-2">
@@ -61,6 +64,15 @@ interface LocalFilter {
               <flex-data-table-column-visibility-menu
                 [tooltip]="columnsTooltip"
               ></flex-data-table-column-visibility-menu>
+            }
+            @if (filterCount > 0) {
+              <button
+                type="button"
+                class="rounded-md px-2 py-1 text-xs text-ui-fg-muted transition-fg hover:text-ui-fg-base"
+                (click)="clearFilters()"
+              >
+                {{ clearAllFiltersLabel }}
+              </button>
             }
             <ng-content></ng-content>
           </div>
@@ -113,6 +125,10 @@ export class DataTableFilterBarComponent {
     return this.localFilters().length;
   }
 
+  get activeFilterIds(): string[] {
+    return this.localFilters().map((filter) => filter.id);
+  }
+
   get hasAvailableFilters(): boolean {
     return this.instance.getFilters().length > 0;
   }
@@ -143,7 +159,12 @@ export class DataTableFilterBarComponent {
   }
 
   readonly addLocalFilter = (id: string, value: unknown): void => {
-    this.localFilters.update((prev) => [...prev, { id, value, isNew: true }]);
+    this.localFilters.update((prev) => {
+      if (prev.some((filter) => filter.id === id)) {
+        return prev;
+      }
+      return [...prev, { id, value, isNew: true }];
+    });
   };
 
   updateLocalFilter(id: string, value: unknown): void {
@@ -155,6 +176,12 @@ export class DataTableFilterBarComponent {
 
     if (this.hasMeaningfulValue(value)) {
       this.instance.updateFilter({ id, value });
+      return;
+    }
+
+    const parentFilters = this.instance.getFiltering() ?? {};
+    if (parentFilters[id] !== undefined) {
+      this.instance.removeFilter(id);
     }
   }
 

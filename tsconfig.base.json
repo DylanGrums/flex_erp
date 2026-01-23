@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@flex-erp/ui-preset": ["packages/ui-preset/src/index.ts"],
       "@flex-erp/store/feature": ["libs/store/feature/src/index.ts"],
       "@flex-erp/store/data-access": ["libs/store/data-access/src/index.ts"],
       "@flex-erp/store/types": ["libs/store/types/src/index.ts"],
@@ -34,7 +35,8 @@
       "@flex-erp/cms/util": ["libs/cms/util/src/index.ts"],
       "@flex-erp/cms/data-access": ["libs/cms/data-access/src/index.ts"],
       "@flex-erp/cms/feature": ["libs/cms/feature/src/index.ts"],
-      "@flex-erp/cms/manifest": ["libs/cms/manifest/src/index.ts"]
+      "@flex-erp/cms/manifest": ["libs/cms/manifest/src/index.ts"],
+      "@flex-erp/store/api": ["libs/store/api/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

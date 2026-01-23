@@ -85,6 +85,7 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
 export class DataTableFilterMenuComponent {
   @Input() tooltip?: string;
   @Input() onAddFilter?: (id: string, value: unknown) => void;
+  @Input() activeFilterIds: string[] = [];
 
   readonly context = injectDataTableContext();
 
@@ -97,9 +98,11 @@ export class DataTableFilterMenuComponent {
   }
 
   get filterOptions(): DataTableFilter[] {
-    return this.instance
-      .getFilters()
-      .filter((filter) => !this.enabledFilters.includes(filter.id));
+    const active = new Set([
+      ...this.enabledFilters,
+      ...(this.activeFilterIds ?? []),
+    ]);
+    return this.instance.getFilters().filter((filter) => !active.has(filter.id));
   }
 
   addFilter(event: MouseEvent, filter: DataTableFilter): void {
@@ -117,6 +120,7 @@ export class DataTableFilterMenuComponent {
   private getDefaultValue(filter: DataTableFilter): unknown {
     switch (filter.type) {
       case 'select':
+        return undefined;
       case 'multiselect':
         return [];
       case 'string':

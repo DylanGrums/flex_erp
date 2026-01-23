@@ -1,4 +1,4 @@
-import { computed, effect, isSignal, signal } from '@angular/core';
+import { computed, isSignal, signal } from '@angular/core';
 
 import {
   DataTableCell,
@@ -44,7 +44,7 @@ export interface DataTableOptions<TData extends DataTableRowData> {
   };
   sorting?: {
     state: MaybeSignal<DataTableSortingState | null>;
-    onSortingChange: (state: DataTableSortingState) => void;
+    onSortingChange: (state: DataTableSortingState | null) => void;
   };
   search?: {
     state: MaybeSignal<string>;
@@ -75,7 +75,8 @@ export interface DataTableInstance<TData extends DataTableRowData>
   setSorting(
     sortingOrUpdater:
       | DataTableSortingState
-      | ((prev: DataTableSortingState | null) => DataTableSortingState)
+      | null
+      | ((prev: DataTableSortingState | null) => DataTableSortingState | null)
   ): void;
   getSorting(): DataTableSortingState | null;
   addFilter(filter: DataTableColumnFilter): void;
@@ -182,12 +183,16 @@ export function createDataTable<TData extends DataTableRowData>(
     }
     return dataSignal().length;
   });
-
-  const localSearch = signal(searchState());
-
-  effect(() => {
-    localSearch.set(searchState());
+  const pageCountSignal = computed(() => {
+    const total = rowCountSignal();
+    const size = paginationState().pageSize || DEFAULT_PAGE_SIZE;
+    if (size <= 0) {
+      return 1;
+    }
+    return Math.max(1, Math.ceil(total / size));
   });
+
+  const localSearch = signal<string | null>(null);
 
   let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -271,10 +276,14 @@ export function createDataTable<TData extends DataTableRowData>(
           return () => {
             const current = sortingState();
             const isActive = current?.id === id;
-            const next: DataTableSortingState = {
-              id,
-              desc: isActive ? !current?.desc : false,
-            };
+            let next: DataTableSortingState | null;
+            if (!isActive) {
+              next = { id, desc: false };
+            } else if (!current?.desc) {
+              next = { id, desc: true };
+            } else {
+              next = null;
+            }
 
             resetPageIndex();
             options.sorting?.onSortingChange(next);
@@ -317,12 +326,21 @@ export function createDataTable<TData extends DataTableRowData>(
   const orderedColumnsSignal = computed<RenderColumnOrder>(() => {
     const columns = allColumnsSignal();
     const order = columnOrderState();
-    const orderedIds = order.length ? order : columns.map((column) => column.id);
+    const allIds = columns.map((column) => column.id);
+    const baseOrder = order.length ? order : allIds;
+    const hasSelect = allIds.includes('select');
+    const hasAction = allIds.includes('action');
+    const orderedIds = [
+      ...(hasSelect ? ['select'] : []),
+      ...baseOrder.filter((id) => id !== 'select' && id !== 'action'),
+      ...(hasAction ? ['action'] : []),
+    ];
+    const uniqueOrder = Array.from(new Set(orderedIds));
 
     const lookup = new Map(columns.map((column) => [column.id, column]));
     const ordered: DataTableColumn<TData>[] = [];
 
-    orderedIds.forEach((id) => {
+    uniqueOrder.forEach((id) => {
       const column = lookup.get(id);
       if (column) {
         ordered.push(column);
@@ -504,7 +522,8 @@ export function createDataTable<TData extends DataTableRowData>(
   const setSorting = (
     sortingOrUpdater:
       | DataTableSortingState
-      | ((prev: DataTableSortingState | null) => DataTableSortingState)
+      | null
+      | ((prev: DataTableSortingState | null) => DataTableSortingState | null)
   ) => {
     if (!options.sorting?.onSortingChange) {
       return;
@@ -579,7 +598,7 @@ export function createDataTable<TData extends DataTableRowData>(
     addFilter(filter);
   };
 
-  const getSearch = () => localSearch();
+  const getSearch = () => localSearch() ?? searchState();
 
   const onSearchChange = (value: string) => {
     localSearch.set(value);
@@ -597,12 +616,14 @@ export function createDataTable<TData extends DataTableRowData>(
     if (debounce <= 0) {
       resetPageIndex();
       options.search.onSearchChange(value);
+      localSearch.set(null);
       return;
     }
 
     searchTimeout = setTimeout(() => {
       resetPageIndex();
       options.search?.onSearchChange(value);
+      localSearch.set(null);
     }, debounce);
   };
 
@@ -634,22 +655,16 @@ export function createDataTable<TData extends DataTableRowData>(
     setColumnOrder(order);
   };
 
-  const getPageCount = () => {
-    const total = rowCountSignal();
-    const size = paginationState().pageSize || DEFAULT_PAGE_SIZE;
-    if (size <= 0) {
-      return 0;
-    }
-    return Math.ceil(total / size);
+  const getPageCount = () => pageCountSignal();
+
+  const getPageIndex = () => {
+    const current = paginationState().pageIndex ?? DEFAULT_PAGE_INDEX;
+    return Math.min(Math.max(current, 0), getPageCount() - 1);
   };
 
-  const getCanNextPage = () => {
-    return paginationState().pageIndex + 1 < getPageCount();
-  };
+  const getCanNextPage = () => getPageIndex() + 1 < getPageCount();
 
-  const getCanPreviousPage = () => {
-    return paginationState().pageIndex > 0;
-  };
+  const getCanPreviousPage = () => getPageIndex() > 0;
 
   const nextPage = () => {
     if (!options.pagination?.onPaginationChange) {
@@ -661,9 +676,10 @@ export function createDataTable<TData extends DataTableRowData>(
     }
 
     const current = paginationState();
+    const pageIndex = getPageIndex();
     options.pagination.onPaginationChange({
       ...current,
-      pageIndex: current.pageIndex + 1,
+      pageIndex: pageIndex + 1,
     });
   };
 
@@ -677,9 +693,10 @@ export function createDataTable<TData extends DataTableRowData>(
     }
 
     const current = paginationState();
+    const pageIndex = getPageIndex();
     options.pagination.onPaginationChange({
       ...current,
-      pageIndex: Math.max(0, current.pageIndex - 1),
+      pageIndex: Math.max(0, pageIndex - 1),
     });
   };
 
@@ -712,7 +729,7 @@ export function createDataTable<TData extends DataTableRowData>(
       return showSkeletonSignal();
     },
     get pageIndex() {
-      return paginationState().pageIndex ?? DEFAULT_PAGE_INDEX;
+      return getPageIndex();
     },
     get pageSize() {
       return paginationState().pageSize ?? DEFAULT_PAGE_SIZE;

@@ -50,14 +50,14 @@ export class DataTableSortableHeaderCellComponent {
   isDragging = false;
 
   get classes(): string {
-    return ['group/header-cell bg-ui-bg-base', this.className].filter(Boolean).join(' ');
+    return ['group/header-cell', this.className].filter(Boolean).join(' ');
   }
 
   get computedStyle(): Record<string, string | number> {
     return {
       ...(this.style ?? {}),
       opacity: this.isDragging ? 0.8 : 1,
-      zIndex: this.isDragging ? 50 : this.isFirstColumn ? 1 : 0,
+      ...(this.isDragging ? { zIndex: 50 } : {}),
     };
   }
 }

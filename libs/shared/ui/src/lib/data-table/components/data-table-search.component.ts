@@ -15,6 +15,7 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
       <input
         [attr.autofocus]="autoFocus ? true : null"
         type="search"
+        [disabled]="isDisabled"
         [value]="instance.getSearch()"
         (input)="onSearchInput($event)"
         [placeholder]="placeholder"
@@ -35,6 +36,10 @@ export class DataTableSearchComponent {
     return this.context.instance;
   }
 
+  get isDisabled(): boolean {
+    return !this.instance.enableSearch;
+  }
+
   onSearchInput(event: Event): void {
     const target = event.target as HTMLInputElement | null;
     this.instance.onSearchChange(target?.value ?? '');
@@ -44,6 +49,9 @@ export class DataTableSearchComponent {
     const base =
       'h-8 w-full rounded-md border border-ui-border-base bg-ui-bg-field px-3 text-sm text-ui-fg-base shadow-borders-base transition-fg placeholder:text-ui-fg-muted focus:outline-none focus:ring-2 focus:ring-ui-border-interactive';
     const loadingClass = this.instance.isLoading ? 'pr-[calc(15px+2px+8px)]' : '';
-    return [base, loadingClass, this.className].filter(Boolean).join(' ');
+    const disabledClass = this.isDisabled ? 'opacity-60 cursor-not-allowed' : '';
+    return [base, loadingClass, disabledClass, this.className]
+      .filter(Boolean)
+      .join(' ');
   }
 }

@@ -251,6 +251,14 @@ export interface StoryTableOptions {
   filters?: DataTableFilter[];
   commands?: DataTableCommand[];
   pageSize?: number;
+  rowCount?: number;
+  isLoading?: boolean;
+  initialSearch?: string;
+  initialFiltering?: DataTableFilteringState;
+  initialSorting?: DataTableSortingState | null;
+  initialRowSelection?: DataTableRowSelectionState;
+  initialColumnVisibility?: DataTableColumnVisibilityState;
+  initialColumnOrder?: DataTableColumnOrderState;
   enableSelection?: boolean;
   enableSorting?: boolean;
   enableFiltering?: boolean;
@@ -291,22 +299,25 @@ export const createStoryTable = (options: StoryTableOptions = {}): StoryTableIns
   const filters = signal(options.filters ?? storyFilters);
   const commands = signal(options.commands ?? storyCommands);
 
-  const sorting = signal<DataTableSortingState | null>(null);
-  const filtering = signal<DataTableFilteringState>({});
-  const search = signal('');
+  const sorting = signal<DataTableSortingState | null>(options.initialSorting ?? null);
+  const filtering = signal<DataTableFilteringState>(options.initialFiltering ?? {});
+  const search = signal(options.initialSearch ?? '');
   const pagination = signal<DataTablePaginationState>({
     pageIndex: 0,
     pageSize: options.pageSize ?? 5,
   });
-  const rowSelection = signal<DataTableRowSelectionState>({});
-  const columnVisibility = signal<DataTableColumnVisibilityState>({});
-  const columnOrder = signal<DataTableColumnOrderState>([]);
+  const rowSelection = signal<DataTableRowSelectionState>(options.initialRowSelection ?? {});
+  const columnVisibility = signal<DataTableColumnVisibilityState>(
+    options.initialColumnVisibility ?? {}
+  );
+  const columnOrder = signal<DataTableColumnOrderState>(options.initialColumnOrder ?? []);
 
   const instance = createDataTable<StoryRow>({
     data,
     columns,
     filters: enableFiltering ? filters : [],
     commands,
+    isLoading: options.isLoading ?? false,
     sorting: enableSorting
       ? {
           state: sorting,
@@ -332,6 +343,7 @@ export const createStoryTable = (options: StoryTableOptions = {}): StoryTableIns
           onPaginationChange: (next) => pagination.set(next),
         }
       : undefined,
+    rowCount: options.rowCount,
     rowSelection: enableSelection
       ? {
           state: rowSelection,

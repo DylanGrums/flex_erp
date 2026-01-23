@@ -303,21 +303,7 @@ export class DataTableTableComponent<TData extends DataTableRowData> implements 
   }
 
   get headerRowClass(): string {
-    const classes: string[] = [];
-
-    if (this.hasActions) {
-      classes.push(
-        '[&_th:last-of-type]:w-[1%] [&_th:last-of-type]:whitespace-nowrap'
-      );
-    }
-
-    if (this.hasSelect) {
-      classes.push(
-        '[&_th:first-of-type]:w-[1%] [&_th:first-of-type]:whitespace-nowrap'
-      );
-    }
-
-    return classes.join(' ');
+    return '';
   }
 
   get hasSelect(): boolean {
@@ -400,17 +386,16 @@ export class DataTableTableComponent<TData extends DataTableRowData> implements 
     const align = this.getHeaderAlign(header);
 
     return {
-      "w-[calc(20px+24px+24px)] min-w-[calc(20px+24px+24px)] max-w-[calc(20px+24px+24px)]":
-        isSelectHeader,
-      "w-[calc(28px+24px+4px)] min-w-[calc(28px+24px+4px)] max-w-[calc(28px+24px+4px)]":
-        isActionHeader,
+      'w-[18px] min-w-[18px] max-w-[18px]': isSelectHeader,
+      'w-[28px] min-w-[28px] max-w-[28px]': isActionHeader,
       'px-2 text-center': isSelectHeader || isActionHeader,
       "after:absolute after:inset-y-0 after:right-0 after:h-full after:w-px after:bg-transparent after:content-['']":
         isFirstColumn,
       'after:bg-ui-border-base': this.showStickyBorder() && isFirstColumn,
-      'bg-ui-bg-subtle sticky': isFirstColumn || isSelectHeader,
+      'bg-ui-bg-subtle sticky z-20': isFirstColumn || isSelectHeader,
+      relative: isFirstColumn || isSelectHeader,
       'left-0': isSelectHeader || (isFirstColumn && !this.hasSelect),
-      'left-[calc(20px+24px+24px)]': isFirstColumn && this.hasSelect,
+      'left-[34px]': isFirstColumn && this.hasSelect,
       'text-right': align === 'right' && !isActionHeader,
       'text-center': align === 'center',
     };
@@ -446,18 +431,16 @@ export class DataTableTableComponent<TData extends DataTableRowData> implements 
     const align = this.getCellAlign(column);
 
     return {
-      "w-[calc(20px+24px+24px)] min-w-[calc(20px+24px+24px)] max-w-[calc(20px+24px+24px)]":
-        isSelectCell,
-      "w-[calc(28px+24px+4px)] min-w-[calc(28px+24px+4px)] max-w-[calc(28px+24px+4px)]":
-        isActionCell,
+      'w-[18px] min-w-[18px] max-w-[18px]': isSelectCell,
+      'w-[28px] min-w-[28px] max-w-[28px]': isActionCell,
       'px-2 text-center': isSelectCell || isActionCell,
-      'bg-ui-bg-base group-hover/row:bg-ui-bg-base-hover transition-fg sticky h-full':
+      'bg-ui-bg-base group-hover/row:bg-ui-bg-base-hover transition-fg sticky h-full z-10 relative':
         isFirstColumn || isSelectCell,
       "after:absolute after:inset-y-0 after:right-0 after:h-full after:w-px after:bg-transparent after:content-['']":
         isFirstColumn,
       'after:bg-ui-border-base': this.showStickyBorder() && isFirstColumn,
       'left-0': isSelectCell || (isFirstColumn && !this.hasSelect),
-      'left-[calc(20px+24px+24px)]': isFirstColumn && this.hasSelect,
+      'left-[34px]': isFirstColumn && this.hasSelect,
       'text-right': align === 'right' && !isActionCell,
       'text-center': align === 'center',
     };
