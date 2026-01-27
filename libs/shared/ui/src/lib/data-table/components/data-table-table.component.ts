@@ -37,6 +37,8 @@ import {
 import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.component';
 import { DataTableRenderOutletComponent } from './data-table-render-outlet.component';
 
+type DataTableDensity = 'default' | 'compact';
+
 @Component({
   selector: 'flex-data-table-table',
   standalone: true,
@@ -55,9 +57,9 @@ import { DataTableRenderOutletComponent } from './data-table-render-outlet.compo
         <div class="flex w-full flex-1 flex-col overflow-hidden">
           <div class="min-h-0 w-full flex-1 overscroll-none border-y border-ui-border-base">
             <div class="flex flex-col divide-y">
-              <flex-data-table-skeleton className="h-10 w-full rounded-none"></flex-data-table-skeleton>
+              <flex-data-table-skeleton [className]="skeletonRowClass"></flex-data-table-skeleton>
               @for (row of skeletonRows; track row) {
-                <flex-data-table-skeleton className="h-10 w-full rounded-none"></flex-data-table-skeleton>
+                <flex-data-table-skeleton [className]="skeletonRowClass"></flex-data-table-skeleton>
               }
             </div>
           </div>
@@ -74,7 +76,7 @@ import { DataTableRenderOutletComponent } from './data-table-render-outlet.compo
               (scroll)="onScroll($event)"
               class="min-h-0 w-full flex-1 overflow-auto overscroll-none border-y border-ui-border-base"
             >
-              <table class="relative isolate w-full text-sm text-ui-fg-base">
+              <table [class]="tableClass">
                 <thead
                   class="shadow-ui-border-base sticky inset-x-0 top-0 z-[1] w-full border-b-0 border-t-0 bg-ui-bg-subtle text-xs font-semibold text-ui-fg-muted shadow-[0_1px_1px_0]"
                   style="transform: translate3d(0,0,0)"
@@ -88,8 +90,8 @@ import { DataTableRenderOutletComponent } from './data-table-render-outlet.compo
                         @if (isDraggableHeader(header)) {
                           <flex-data-table-sortable-header-cell
                             [id]="header.id"
-                            className="whitespace-nowrap px-3 py-2 align-middle"
-                            [ngClass]="getHeaderCellClasses(header, idx)"
+                            className="whitespace-nowrap align-middle"
+                            [ngClass]="[headerPaddingClass, getHeaderCellClasses(header, idx)]"
                             [ngStyle]="getHeaderCellStyle(header)"
                             [isFirstColumn]="isFirstColumn(idx)"
                           >
@@ -98,8 +100,8 @@ import { DataTableRenderOutletComponent } from './data-table-render-outlet.compo
                         } @else {
                           <flex-data-table-non-sortable-header-cell
                             [id]="header.id"
-                            className="whitespace-nowrap px-3 py-2 align-middle"
-                            [ngClass]="getHeaderCellClasses(header, idx)"
+                            className="whitespace-nowrap align-middle"
+                            [ngClass]="[headerPaddingClass, getHeaderCellClasses(header, idx)]"
                             [ngStyle]="getHeaderCellStyle(header)"
                           >
                             <ng-container *ngTemplateOutlet="headerContent; context: { $implicit: header }"></ng-container>
@@ -120,8 +122,8 @@ import { DataTableRenderOutletComponent } from './data-table-render-outlet.compo
                     >
                       @for (cell of row.getVisibleCells(); track cell.id; let idx = $index) {
                         <td
-                          class="items-stretch truncate whitespace-nowrap px-3 py-2 align-middle text-sm text-ui-fg-base"
-                          [ngClass]="getCellClasses(cell.column, idx)"
+                          class="items-stretch truncate whitespace-nowrap align-middle text-ui-fg-base"
+                          [ngClass]="[cellPaddingClass, cellTextClass, getCellClasses(cell.column, idx)]"
                           [ngStyle]="getCellStyle(cell.column)"
                         >
                           <flex-data-table-render-outlet
@@ -141,7 +143,7 @@ import { DataTableRenderOutletComponent } from './data-table-render-outlet.compo
               (scroll)="onScroll($event)"
               class="min-h-0 w-full flex-1 overflow-auto overscroll-none border-y border-ui-border-base"
             >
-              <table class="relative isolate w-full text-sm text-ui-fg-base">
+              <table [class]="tableClass">
                 <thead
                   class="shadow-ui-border-base sticky inset-x-0 top-0 z-[1] w-full border-b-0 border-t-0 bg-ui-bg-subtle text-xs font-semibold text-ui-fg-muted shadow-[0_1px_1px_0]"
                   style="transform: translate3d(0,0,0)"
@@ -153,8 +155,8 @@ import { DataTableRenderOutletComponent } from './data-table-render-outlet.compo
                     >
                       @for (header of headerGroup.headers; track header.id; let idx = $index) {
                         <th
-                          class="whitespace-nowrap px-3 py-2 align-middle"
-                          [ngClass]="getHeaderCellClasses(header, idx)"
+                          class="whitespace-nowrap align-middle"
+                          [ngClass]="[headerPaddingClass, getHeaderCellClasses(header, idx)]"
                           [ngStyle]="getHeaderCellStyle(header)"
                         >
                           <ng-container *ngTemplateOutlet="headerContent; context: { $implicit: header }"></ng-container>
@@ -174,8 +176,8 @@ import { DataTableRenderOutletComponent } from './data-table-render-outlet.compo
                     >
                       @for (cell of row.getVisibleCells(); track cell.id; let idx = $index) {
                         <td
-                          class="items-stretch truncate whitespace-nowrap px-3 py-2 align-middle text-sm text-ui-fg-base"
-                          [ngClass]="getCellClasses(cell.column, idx)"
+                          class="items-stretch truncate whitespace-nowrap align-middle text-ui-fg-base"
+                          [ngClass]="[cellPaddingClass, cellTextClass, getCellClasses(cell.column, idx)]"
                           [ngStyle]="getCellStyle(cell.column)"
                         >
                           <flex-data-table-render-outlet
@@ -258,6 +260,7 @@ import { DataTableRenderOutletComponent } from './data-table-render-outlet.compo
 })
 export class DataTableTableComponent<TData extends DataTableRowData> implements AfterViewInit {
   @Input() emptyState?: DataTableEmptyStateProps;
+  @Input() density: DataTableDensity = 'default';
 
   @ViewChild('scrollable') private scrollableRef?: ElementRef<HTMLDivElement>;
 
@@ -300,6 +303,32 @@ export class DataTableTableComponent<TData extends DataTableRowData> implements 
 
   get skeletonRows(): number[] {
     return Array.from({ length: this.instance.pageSize }, (_, i) => i);
+  }
+
+  get isCompact(): boolean {
+    return this.density === 'compact';
+  }
+
+  get headerPaddingClass(): string {
+    return this.isCompact ? 'px-2 py-1' : 'px-3 py-2';
+  }
+
+  get cellPaddingClass(): string {
+    return this.isCompact ? 'px-2 py-1.5' : 'px-3 py-2';
+  }
+
+  get cellTextClass(): string {
+    return this.isCompact ? 'text-xs' : 'text-sm';
+  }
+
+  get tableClass(): string {
+    return this.isCompact
+      ? 'relative isolate w-full text-xs text-ui-fg-base'
+      : 'relative isolate w-full text-sm text-ui-fg-base';
+  }
+
+  get skeletonRowClass(): string {
+    return this.isCompact ? 'h-9 w-full rounded-none' : 'h-10 w-full rounded-none';
   }
 
   get headerRowClass(): string {
