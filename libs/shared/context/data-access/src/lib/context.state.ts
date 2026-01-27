@@ -109,10 +109,23 @@ export class ContextState {
     ctx: StateContext<ContextStateModel>,
     action: LoadStoresSuccess,
   ) {
+    const currentCtx = ctx.getState().ctx;
+    const defaultStoreId =
+      currentCtx.storeId ?? action.stores[0]?.id ?? null;
+    const nextCtx =
+      currentCtx.storeId === defaultStoreId
+        ? currentCtx
+        : { ...currentCtx, storeId: defaultStoreId };
+
+    if (nextCtx !== currentCtx) {
+      this.storage.write(nextCtx);
+    }
+
     ctx.patchState({
       stores: action.stores,
       storesLoading: false,
       storesError: null,
+      ctx: nextCtx,
     });
   }
 

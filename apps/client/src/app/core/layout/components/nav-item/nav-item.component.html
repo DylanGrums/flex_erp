@@ -30,11 +30,11 @@
     </div>
 
     <ng-template #parentTooltip>
-      @if (shortcutFor(item().to); as sc) {
-        <div
-          flexTooltip
-          class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
-        >
+      <div
+        flexTooltip
+        class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
+      >
+        @if (shortcutFor(item().to); as sc) {
           <span>{{ sc.label | transloco }}</span>
 
           <div class="flex items-center gap-x-1">
@@ -54,10 +54,10 @@
               </div>
             }
           </div>
+        }
 
-          <div flexTooltipArrow></div>
-        </div>
-      }
+        <div flexTooltipArrow></div>
+      </div>
     </ng-template>
   } @else {
     <div
@@ -132,11 +132,11 @@
                   </div>
 
                   <ng-template #parentNestedTooltip>
-                    @if (shortcutFor(item().to); as sc) {
-                      <div
-                        flexTooltip
-                        class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
-                      >
+                    <div
+                      flexTooltip
+                      class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
+                    >
+                      @if (shortcutFor(item().to); as sc) {
                         <span>{{ sc.label | transloco }}</span>
                         <div class="flex items-center gap-1">
                           @for (key of (sc.keys.Mac ?? []); track key; let i = $index) {
@@ -154,9 +154,9 @@
                             </div>
                           }
                         </div>
-                        <div flexTooltipArrow></div>
-                      </div>
-                    }
+                      }
+                      <div flexTooltipArrow></div>
+                    </div>
                   </ng-template>
                 } @else {
                   <div
@@ -201,11 +201,11 @@
                     </div>
 
                     <ng-template #subTooltip>
-                      @if (shortcutFor(sub.to); as sc) {
-                        <div
-                          flexTooltip
-                          class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
-                        >
+                      <div
+                        flexTooltip
+                        class="txt-compact-xsmall flex h-5 items-center justify-between gap-x-2 whitespace-nowrap"
+                      >
+                        @if (shortcutFor(sub.to); as sc) {
                           <span>{{ sc.label | transloco }}</span>
                           <div class="flex items-center gap-x-1">
                             @for (key of (sc.keys.Mac ?? []); track key; let i = $index) {
@@ -223,9 +223,9 @@
                               </div>
                             }
                           </div>
-                          <div flexTooltipArrow></div>
-                        </div>
-                      }
+                        }
+                        <div flexTooltipArrow></div>
+                      </div>
                     </ng-template>
                   } @else {
                     <div
