@@ -1,8 +1,15 @@
 import { Request } from 'express';
-import { User } from 'generated/prisma/client';
+export type AuthUser = {
+  id?: string;
+  userId?: string;
+  tenantId?: string;
+  email?: string;
+  roles?: string | string[];
+  role?: string;
+  avatar?: string | null;
+  isActive?: boolean;
+};
 
-interface RequestWithUser extends Request {
-  user: User;
+export interface RequestWithUser extends Request {
+  user?: AuthUser;
 }
-
-export default RequestWithUser;

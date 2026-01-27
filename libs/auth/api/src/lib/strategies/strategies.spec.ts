@@ -22,8 +22,21 @@ describe('Passport strategies', () => {
     const strategy = new JwtStrategy();
     await expect(strategy.validate({ type: 'unknown' } as any)).resolves.toBe(false);
 
-    const payload = await strategy.validate({ type: 'access', sub: 'u1', email: 'a@test.com', roles: 'ADMIN', role: 'ADMIN' } as any);
-    expect(payload).toEqual({ userId: 'u1', email: 'a@test.com', roles: 'ADMIN', role: 'ADMIN' });
+    const payload = await strategy.validate({
+      type: 'access',
+      sub: 'u1',
+      email: 'a@test.com',
+      tenantId: 't1',
+      roles: 'ADMIN',
+      role: 'ADMIN',
+    } as any);
+    expect(payload).toEqual({
+      userId: 'u1',
+      email: 'a@test.com',
+      tenantId: 't1',
+      roles: 'ADMIN',
+      role: 'ADMIN',
+    });
   });
 
   it('validates refresh tokens in RefreshStrategy using cookies', async () => {

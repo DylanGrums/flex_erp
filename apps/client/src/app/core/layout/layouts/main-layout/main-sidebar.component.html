@@ -1,6 +1,71 @@
 <aside class="flex flex-1 flex-col justify-between overflow-y-auto">
   <div class="flex flex-1 flex-col">
     <div class="sticky top-0">
+      <div class="w-full p-3 pb-2">
+        <button
+          type="button"
+          class="bg-ui-bg-base transition-fg grid w-full grid-cols-[1fr_16px] items-center gap-x-2 rounded-md border border-ui-border-base p-2 text-start hover:bg-ui-bg-subtle-hover data-[state=open]:bg-ui-bg-subtle-hover"
+          [flexDropdownMenuTrigger]="storeSwitcherMenu"
+          sideOffset="6"
+        >
+          <div class="flex min-w-0 flex-col">
+            <span
+              class="text-[10px] font-semibold uppercase tracking-wide text-ui-fg-subtle"
+              >Store</span
+            >
+            <span class="truncate text-sm font-medium">{{ storeLabel() }}</span>
+          </div>
+          <i class="pi pi-angle-down text-xs text-ui-fg-muted"></i>
+        </button>
+
+        <ng-template #storeSwitcherMenu>
+          <div
+            flexDropdownMenuContent
+            class="w-[220px] max-w-[220px] rounded-md border border-ui-border-base bg-ui-bg-base p-1 shadow-sm"
+          >
+            <div class="px-2 pb-1 pt-2 text-xs font-medium text-ui-fg-subtle">
+              Switch store
+            </div>
+            <button
+              *ngFor="let store of stores()"
+              type="button"
+              flexDropdownMenuItem
+              class="flex w-full items-center gap-x-2 rounded-md px-2 py-2 text-start hover:bg-ui-bg-subtle-hover"
+              (click)="selectStore(store.id)"
+            >
+              <div
+                class="flex h-7 w-7 items-center justify-center rounded-md bg-ui-bg-subtle"
+              >
+                <i class="pi pi-shop text-xs text-ui-fg-subtle"></i>
+              </div>
+              <div class="flex min-w-0 flex-1 flex-col">
+                <span class="truncate text-sm font-medium">{{
+                  store.name
+                }}</span>
+                <span class="truncate text-xs text-ui-fg-subtle">{{
+                  store.id
+                }}</span>
+              </div>
+              <i
+                *ngIf="storeId() === store.id"
+                class="pi pi-check text-xs text-ui-fg-subtle"
+              ></i>
+            </button>
+
+            <div class="my-1 h-px bg-ui-border-base"></div>
+
+            <button
+              type="button"
+              flexDropdownMenuItem
+              class="flex w-full items-center gap-x-2 rounded-md px-2 py-2 text-start hover:bg-ui-bg-subtle-hover"
+              (click)="selectStore(null)"
+            >
+              <i class="pi pi-times-circle text-ui-fg-subtle"></i>
+              <span class="text-sm">Clear selection</span>
+            </button>
+          </div>
+        </ng-template>
+      </div>
       <div class="w-full p-3 cursor-pointer">
         <button
           type="button"
@@ -55,8 +120,12 @@
                 <span class="text-xs font-semibold"> F </span>
               </div>
               <div class="flex flex-col overflow-hidden">
-                <div class="truncate text-sm font-semibold">{{ 'app.title' | transloco }}</div>
-                <div class="text-xs text-ui-fg-subtle">{{ 'nav.store' | transloco }}</div>
+                <div class="truncate text-sm font-semibold">
+                  {{ 'app.title' | transloco }}
+                </div>
+                <div class="text-xs text-ui-fg-subtle">
+                  {{ 'nav.store' | transloco }}
+                </div>
               </div>
             </div>
 
@@ -97,7 +166,9 @@
         <ng-container *ngFor="let section of coreSections(); let last = last">
           <div class="py-3">
             <div class="px-3">
-              <div class="text-ui-fg-muted flex h-7 items-center justify-between px-2">
+              <div
+                class="text-ui-fg-muted flex h-7 items-center justify-between px-2"
+              >
                 <span class="text-sm">{{ section.label | transloco }}</span>
               </div>
             </div>
@@ -105,7 +176,10 @@
             <div class="pt-0.5">
               <nav class="flex flex-col gap-y-0.5">
                 <ng-container *ngFor="let route of section.items">
-                  <app-nav-item [item]="route" [shortcuts]="shortcuts.shortcuts"></app-nav-item>
+                  <app-nav-item
+                    [item]="route"
+                    [shortcuts]="shortcuts.shortcuts"
+                  ></app-nav-item>
                 </ng-container>
               </nav>
             </div>
@@ -123,7 +197,7 @@
             icon: 'pi pi-cog',
             label: 'nav.settings',
             to: '/settings',
-            type: 'core'
+            type: 'core',
           }"
           [shortcuts]="shortcuts.shortcuts"
         ></app-nav-item>

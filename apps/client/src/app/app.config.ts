@@ -19,6 +19,11 @@ import {
   authInterceptor,
 } from '@flex-erp/auth/data-access';
 import { ProductsState } from '@flex-erp/store/data-access';
+import {
+  ContextState,
+  contextInterceptor,
+  provideAppContext,
+} from '@flex-erp/shared/context/data-access';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { environment } from '../environments/environment';
@@ -35,7 +40,7 @@ import { CMS_NAV } from '@flex-erp/cms/manifest';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, contextInterceptor])),
     provideTransloco({
       config: translocoConfig({
         availableLangs: ['fr', 'en'],
@@ -50,7 +55,7 @@ export const appConfig: ApplicationConfig = {
 
     // NGXS via functional providers
     importProvidersFrom(
-      NgxsModule.forRoot([AuthState, ProductsState], {
+      NgxsModule.forRoot([AuthState, ProductsState, ContextState], {
         developmentMode: !environment.production,
       }),
       NgxsLoggerPluginModule.forRoot({ disabled: environment.production }),
@@ -102,5 +107,6 @@ export const appConfig: ApplicationConfig = {
     DialogService,
     provideNavManifest(STORE_NAV.nav.manifest),
     provideNavManifest(CMS_NAV.nav.manifest),
+    ...provideAppContext(),
   ],
 };

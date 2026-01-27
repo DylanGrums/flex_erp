@@ -1,18 +1,21 @@
 export type AuthUserService = {
   validatePassword(email: string, password: string): Promise<any>;
-  updateUser(args: { where: { id: string }; data: { lastLoginAt: Date } }): Promise<any>;
+  updateUser(args: {
+    where: { id: string };
+    data: { lastLoginAt: Date };
+  }): Promise<any>;
   findById(id: string): Promise<any>;
 };
 
 export type AuthPrismaClient = {
   user: {
-    findUnique(args: { where: { id: string } }): Promise<any>;
+    findUnique(args: { where: { id: string }; include?: any }): Promise<any>;
   };
-  refreshToken: {
+  authSession: {
     create(args: any): Promise<any>;
     findUnique(args: any): Promise<any>;
-    update(args: any): Promise<any>;
-    updateMany(args: any): Promise<any>;
+    delete(args: any): Promise<any>;
+    deleteMany(args: any): Promise<any>;
   };
   $transaction<T>(cb: (tx: AuthPrismaClient) => Promise<T>): Promise<T>;
 };

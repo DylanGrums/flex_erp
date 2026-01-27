@@ -17,10 +17,10 @@ import type * as Prisma from "./prismaNamespace.ts"
 
 const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
-  "clientVersion": "7.1.0",
-  "engineVersion": "ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba",
+  "clientVersion": "7.2.0",
+  "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nenum Role {\n  ADMIN\n  USER\n}\n\nmodel User {\n  id            String         @id @default(uuid())\n  email         String         @unique\n  passwordHash  String\n  firstName     String\n  lastName      String\n  avatar        String?\n  role          Role           @default(USER)\n  isActive      Boolean        @default(true)\n  lastLoginAt   DateTime?\n  refreshTokens RefreshToken[]\n  createdAt     DateTime       @default(now())\n  updatedAt     DateTime       @updatedAt\n}\n\nmodel RefreshToken {\n  id              String    @id @default(uuid())\n  jti             String    @unique\n  hashedToken     String\n  userId          String\n  createdAt       DateTime  @default(now())\n  expiresAt       DateTime\n  revokedAt       DateTime?\n  reasonRevoked   String?\n  replacedByToken String?\n  createdByIp     String?\n  revokedByIp     String?\n  userAgent       String?\n  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([userId])\n  @@index([jti])\n  @@index([expiresAt])\n}\n",
+  "inlineSchema": "// -----------------------------\n// AUTH (schema: auth)\n// -----------------------------\n\nenum UserStatus {\n  ACTIVE\n  DISABLED\n\n  @@schema(\"auth\")\n}\n\nenum PermissionEffect {\n  ALLOW\n  DENY\n\n  @@schema(\"auth\")\n}\n\nmodel User {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n\n  email        String\n  passwordHash String\n  status       UserStatus @default(ACTIVE)\n\n  lastLoginAt DateTime?\n  createdAt   DateTime  @default(now())\n  updatedAt   DateTime  @updatedAt\n\n  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)\n\n  roles     UserRole[]\n  sessions  AuthSession[]\n  overrides UserPermission[]\n\n  // back relations from other schemas\n  cmsPageVersionsCreated CmsPageVersion[]\n  cmsAssetsCreated       CmsAsset[]\n  timeOffReviewed        TimeOffRequest[]\n  employee               Employee?        @relation(\"EmployeeToUser\")\n\n  @@unique([tenantId, email])\n  @@unique([tenantId, id])\n  @@index([tenantId, status])\n  @@schema(\"auth\")\n}\n\nmodel AuthSession {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  userId   String @db.Uuid\n\n  refreshTokenHash String\n  expiresAt        DateTime\n\n  createdAt DateTime @default(now())\n\n  user User @relation(fields: [tenantId, userId], references: [tenantId, id], onDelete: Cascade)\n\n  @@index([tenantId, userId])\n  @@schema(\"auth\")\n}\n\nmodel Role {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n\n  key         String\n  name        String\n  description String?\n\n  createdAt DateTime @default(now())\n\n  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)\n\n  users       UserRole[]\n  permissions RolePermission[]\n\n  @@unique([tenantId, key])\n  @@unique([tenantId, id])\n  @@schema(\"auth\")\n}\n\nmodel UserRole {\n  tenantId String @db.Uuid\n  userId   String @db.Uuid\n  roleId   String @db.Uuid\n\n  assignedAt DateTime @default(now())\n\n  user User @relation(fields: [tenantId, userId], references: [tenantId, id], onDelete: Cascade)\n  role Role @relation(fields: [tenantId, roleId], references: [tenantId, id], onDelete: Cascade)\n\n  @@id([tenantId, userId, roleId])\n  @@schema(\"auth\")\n}\n\nmodel Permission {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n\n  key         String\n  description String?\n  createdAt   DateTime @default(now())\n\n  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)\n\n  roleGrants    RolePermission[]\n  userOverrides UserPermission[]\n\n  @@unique([tenantId, key])\n  @@unique([tenantId, id])\n  @@schema(\"auth\")\n}\n\nmodel RolePermission {\n  tenantId     String @db.Uuid\n  roleId       String @db.Uuid\n  permissionId String @db.Uuid\n\n  grantedAt DateTime @default(now())\n\n  role       Role       @relation(fields: [tenantId, roleId], references: [tenantId, id], onDelete: Cascade)\n  permission Permission @relation(fields: [tenantId, permissionId], references: [tenantId, id], onDelete: Cascade)\n\n  @@id([tenantId, roleId, permissionId])\n  @@schema(\"auth\")\n}\n\nmodel UserPermission {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n\n  userId       String @db.Uuid\n  permissionId String @db.Uuid\n\n  effect PermissionEffect\n\n  conditionSchemaVersion Int   @default(1)\n  condition              Json?\n\n  createdAt DateTime @default(now())\n\n  user       User       @relation(fields: [tenantId, userId], references: [tenantId, id], onDelete: Cascade)\n  permission Permission @relation(fields: [tenantId, permissionId], references: [tenantId, id], onDelete: Cascade)\n\n  @@index([tenantId, userId])\n  @@index([tenantId, permissionId])\n  @@schema(\"auth\")\n}\n\n// -----------------------------\n// CMS (schema: cms)\n// -----------------------------\n\nenum CmsPageStatus {\n  DRAFT\n  PUBLISHED\n  ARCHIVED\n\n  @@schema(\"cms\")\n}\n\nenum CmsAssetKind {\n  IMAGE\n  VIDEO\n  FILE\n\n  @@schema(\"cms\")\n}\n\nenum CmsMenuItemType {\n  URL\n  INTERNAL_PAGE\n\n  @@schema(\"cms\")\n}\n\nmodel CmsSite {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n\n  name   String\n  domain String?\n\n  locale String @default(\"fr-FR\")\n\n  settingsSchemaVersion Int   @default(1)\n  settings              Json?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  store Store @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)\n\n  pages  CmsPage[]\n  assets CmsAsset[]\n  menus  CmsMenu[]\n\n  @@unique([tenantId, storeId, id])\n  @@unique([tenantId, storeId, domain])\n  @@index([tenantId, storeId])\n  @@schema(\"cms\")\n}\n\nmodel CmsPage {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n  siteId   String @db.Uuid\n\n  slug   String\n  title  String\n  status CmsPageStatus @default(DRAFT)\n\n  publishedVersionId String?   @unique @db.Uuid\n  publishedAt        DateTime?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  site CmsSite @relation(fields: [tenantId, storeId, siteId], references: [tenantId, storeId, id], onDelete: Cascade)\n\n  versions         CmsPageVersion[]\n  publishedVersion CmsPageVersion?  @relation(\"CmsPagePublishedVersion\", fields: [publishedVersionId], references: [id], onDelete: SetNull)\n\n  // Opposite relation for menu items pointing to page\n  menuItems CmsMenuItem[]\n\n  @@unique([tenantId, storeId, id])\n  @@unique([tenantId, storeId, siteId, slug])\n  @@index([tenantId, storeId, status])\n  @@schema(\"cms\")\n}\n\nmodel CmsPageVersion {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n\n  pageId  String @db.Uuid\n  version Int\n\n  contentSchemaVersion Int  @default(1)\n  content              Json\n\n  createdByUserId String?  @db.Uuid\n  createdAt       DateTime @default(now())\n\n  page CmsPage @relation(fields: [tenantId, storeId, pageId], references: [tenantId, storeId, id], onDelete: Cascade)\n\n  createdByUser User? @relation(fields: [tenantId, createdByUserId], references: [tenantId, id], onDelete: Restrict)\n\n  publishedByPage CmsPage? @relation(\"CmsPagePublishedVersion\")\n\n  @@unique([tenantId, storeId, pageId, version])\n  @@index([tenantId, storeId, pageId])\n  @@schema(\"cms\")\n}\n\nmodel CmsAsset {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n  siteId   String @db.Uuid\n\n  kind      CmsAssetKind\n  filename  String\n  mimeType  String\n  sizeBytes Int\n\n  url      String\n  checksum String?\n\n  width  Int?\n  height Int?\n\n  createdByUserId String?  @db.Uuid\n  createdAt       DateTime @default(now())\n\n  site  CmsSite @relation(fields: [tenantId, storeId, siteId], references: [tenantId, storeId, id], onDelete: Cascade)\n  store Store   @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)\n\n  createdByUser User? @relation(fields: [tenantId, createdByUserId], references: [tenantId, id], onDelete: Restrict)\n\n  @@index([tenantId, storeId, siteId])\n  @@schema(\"cms\")\n}\n\nmodel CmsMenu {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n  siteId   String @db.Uuid\n\n  key   String\n  title String\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  site  CmsSite       @relation(fields: [tenantId, storeId, siteId], references: [tenantId, storeId, id], onDelete: Cascade)\n  items CmsMenuItem[]\n\n  @@unique([tenantId, storeId, id])\n  @@unique([tenantId, storeId, siteId, key])\n  @@schema(\"cms\")\n}\n\nmodel CmsMenuItem {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n\n  menuId   String  @db.Uuid\n  parentId String? @db.Uuid\n\n  label String\n  type  CmsMenuItemType @default(URL)\n\n  href   String?\n  pageId String? @db.Uuid\n\n  position Int @default(0)\n\n  menu     CmsMenu       @relation(fields: [tenantId, storeId, menuId], references: [tenantId, storeId, id], onDelete: Cascade)\n  parent   CmsMenuItem?  @relation(\"CmsMenuItemParent\", fields: [parentId], references: [id], onDelete: Cascade)\n  children CmsMenuItem[] @relation(\"CmsMenuItemParent\")\n\n  page CmsPage? @relation(fields: [tenantId, storeId, pageId], references: [tenantId, storeId, id], onDelete: Restrict)\n\n  @@index([tenantId, storeId, menuId])\n  @@schema(\"cms\")\n}\n\n// -----------------------------\n// CORE (schema: core)\n// -----------------------------\n\nenum CurrencyCode {\n  EUR\n  USD\n  GBP\n\n  @@schema(\"core\")\n}\n\nenum OrgUnitKind {\n  REGION\n  GROUP\n  FRANCHISEE\n  BRAND\n\n  @@schema(\"core\")\n}\n\nenum ModuleKey {\n  STORE\n  CMS\n  EMPLOYEE\n\n  @@schema(\"core\")\n}\n\nenum DomainEventSource {\n  SYSTEM\n  USER\n  INTEGRATION\n\n  @@schema(\"core\")\n}\n\nmodel Tenant {\n  id        String   @id @default(uuid()) @db.Uuid\n  slug      String   @unique\n  name      String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Core\n  stores               Store[]\n  businessUnits        BusinessUnit[]\n  orgUnits             OrgUnit[]\n  modules              TenantModule[]\n  addresses            Address[]\n  events               DomainEvent[]\n  storeTags            StoreTag[]\n  storeClassifications StoreClassification[]\n\n  // Auth (auth schema)\n  users       User[]\n  roles       Role[]\n  permissions Permission[]\n  employees   Employee[]\n\n  @@schema(\"core\")\n}\n\nmodel TenantModule {\n  id       String    @id @default(uuid()) @db.Uuid\n  tenantId String    @db.Uuid\n  key      ModuleKey\n  enabled  Boolean   @default(true)\n\n  configSchemaVersion Int   @default(1)\n  config              Json?\n\n  installedAt DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n\n  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)\n\n  @@unique([tenantId, key])\n  @@index([tenantId, enabled])\n  @@schema(\"core\")\n}\n\nmodel Address {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n\n  label   String?\n  line1   String\n  line2   String?\n  zip     String\n  city    String\n  region  String?\n  country String  @db.VarChar(2)\n  phone   String?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)\n\n  // Opposite relations (fixes your errors)\n  businessUnits          BusinessUnit[]    @relation(\"BusinessUnitAddress\")\n  customerAddresses      CustomerAddress[]\n  orderShippingAddresses Order[]           @relation(\"OrderShippingAddress\")\n  orderBillingAddresses  Order[]           @relation(\"OrderBillingAddress\")\n\n  // Needed for composite refs from other schemas\n  @@unique([tenantId, id])\n  @@index([tenantId, city])\n  @@schema(\"core\")\n}\n\nmodel BusinessUnit {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n\n  name      String\n  legalName String?\n  taxId     String?\n  vatNumber String?\n\n  addressId String?  @db.Uuid\n  address   Address? @relation(\"BusinessUnitAddress\", fields: [tenantId, addressId], references: [tenantId, id], onDelete: Restrict)\n\n  orgUnitId String?  @db.Uuid\n  orgUnit   OrgUnit? @relation(\"OrgUnitBusinessUnits\", fields: [tenantId, orgUnitId], references: [tenantId, id], onDelete: Restrict)\n\n  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)\n\n  stores Store[]\n\n  @@unique([tenantId, id])\n  @@unique([tenantId, name])\n  @@index([tenantId, orgUnitId])\n  @@schema(\"core\")\n}\n\nmodel Store {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n\n  code String\n  name String\n\n  timezone String       @default(\"Europe/Paris\")\n  currency CurrencyCode @default(EUR)\n\n  businessUnitId String?       @db.Uuid\n  businessUnit   BusinessUnit? @relation(fields: [businessUnitId], references: [id], onDelete: SetNull)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)\n\n  // groupings\n  orgUnitLinks StoreOrgUnit[]\n  tagLinks     StoreTagAssignment[]\n  classLinks   StoreClassificationAssignment[]\n\n  // Opposite relations for module schemas (fixes “missing opposite relation field on Store”)\n  customers   Customer[]\n  products    Product[]\n  collections Collection[]\n  discounts   Discount[]\n  carts       Cart[]\n  orders      Order[]\n  cmsAssets   CmsAsset[]\n\n  cmsSites CmsSite[]\n\n  employees       EmployeeStore[]\n  shifts          Shift[]\n  timeOffRequests TimeOffRequest[]\n\n  @@unique([tenantId, code])\n  // This is CRITICAL: cross-schema relations use (tenantId, id) uniqueness\n  @@unique([tenantId, id])\n  @@index([tenantId, name])\n  @@schema(\"core\")\n}\n\nmodel OrgUnit {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n\n  kind OrgUnitKind\n  name String\n  slug String\n\n  parentId String?   @db.Uuid\n  parent   OrgUnit?  @relation(\"OrgUnitParent\", fields: [tenantId, parentId], references: [tenantId, id], onDelete: Restrict)\n  children OrgUnit[] @relation(\"OrgUnitParent\")\n\n  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)\n\n  storeLinks StoreOrgUnit[]\n\n  businessUnits BusinessUnit[] @relation(\"OrgUnitBusinessUnits\")\n\n  ancestorClosures   OrgUnitClosure[] @relation(\"OrgUnitAncestor\")\n  descendantClosures OrgUnitClosure[] @relation(\"OrgUnitDescendant\")\n\n  employeeLinks EmployeeOrgUnit[]\n\n  @@unique([tenantId, id])\n  @@unique([tenantId, kind, slug])\n  @@index([tenantId, kind])\n  @@schema(\"core\")\n}\n\nmodel OrgUnitClosure {\n  tenantId     String @db.Uuid\n  ancestorId   String @db.Uuid\n  descendantId String @db.Uuid\n  depth        Int\n\n  ancestor   OrgUnit @relation(\"OrgUnitAncestor\", fields: [tenantId, ancestorId], references: [tenantId, id], onDelete: Cascade)\n  descendant OrgUnit @relation(\"OrgUnitDescendant\", fields: [tenantId, descendantId], references: [tenantId, id], onDelete: Cascade)\n\n  @@id([tenantId, ancestorId, descendantId])\n  @@index([tenantId, descendantId])\n  @@schema(\"core\")\n}\n\nmodel StoreOrgUnit {\n  tenantId  String @db.Uuid\n  storeId   String @db.Uuid\n  orgUnitId String @db.Uuid\n\n  // only one REGION per store (your rule #2)\n  isPrimaryRegion Boolean @default(false)\n\n  assignedAt DateTime @default(now())\n\n  store   Store   @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)\n  orgUnit OrgUnit @relation(fields: [tenantId, orgUnitId], references: [tenantId, id], onDelete: Cascade)\n\n  @@id([tenantId, storeId, orgUnitId])\n  @@index([tenantId, orgUnitId])\n  @@index([tenantId, storeId, isPrimaryRegion])\n  @@schema(\"core\")\n}\n\n// -----------------------------\n// Store Tags (descriptifs)\n// -----------------------------\n\nmodel StoreTag {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n\n  name String\n  slug String\n\n  createdAt DateTime @default(now())\n\n  tenant Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)\n  stores StoreTagAssignment[]\n\n  @@unique([tenantId, id])\n  @@unique([tenantId, slug])\n  @@schema(\"core\")\n}\n\nmodel StoreTagAssignment {\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n  tagId    String @db.Uuid\n\n  store Store    @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)\n  tag   StoreTag @relation(fields: [tenantId, tagId], references: [tenantId, id], onDelete: Cascade)\n\n  @@id([tenantId, storeId, tagId])\n  @@schema(\"core\")\n}\n\n// -----------------------------\n// Store Classification (structuré)\n// -----------------------------\n\nmodel StoreClassification {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n\n  category String\n  value    String\n  label    String?\n\n  createdAt DateTime @default(now())\n\n  tenant Tenant                          @relation(fields: [tenantId], references: [id], onDelete: Cascade)\n  stores StoreClassificationAssignment[]\n\n  @@unique([tenantId, id])\n  @@unique([tenantId, category, value])\n  @@index([tenantId, category])\n  @@schema(\"core\")\n}\n\nmodel StoreClassificationAssignment {\n  tenantId         String @db.Uuid\n  storeId          String @db.Uuid\n  classificationId String @db.Uuid\n\n  store          Store               @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)\n  classification StoreClassification @relation(fields: [tenantId, classificationId], references: [tenantId, id], onDelete: Cascade)\n\n  @@id([tenantId, storeId, classificationId])\n  @@schema(\"core\")\n}\n\n// -----------------------------\n// Domain Events (workflows future)\n// -----------------------------\n\nmodel DomainEvent {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n\n  source     DomainEventSource @default(SYSTEM)\n  type       String\n  entityType String?\n  entityId   String?\n\n  payload Json\n\n  occurredAt  DateTime  @default(now())\n  processedAt DateTime?\n\n  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)\n\n  @@index([tenantId, occurredAt])\n  @@index([tenantId, type, occurredAt])\n  @@schema(\"core\")\n}\n\n// -----------------------------\n// Cross-module pivot: Employee <-> OrgUnit\n// -----------------------------\n\nmodel EmployeeOrgUnit {\n  tenantId   String @db.Uuid\n  employeeId String @db.Uuid\n  orgUnitId  String @db.Uuid\n\n  assignmentRole String?\n  startAt        DateTime?\n  endAt          DateTime?\n\n  assignedAt DateTime @default(now())\n\n  employee Employee @relation(fields: [tenantId, employeeId], references: [tenantId, id], onDelete: Cascade)\n  orgUnit  OrgUnit  @relation(fields: [tenantId, orgUnitId], references: [tenantId, id], onDelete: Cascade)\n\n  @@id([tenantId, employeeId, orgUnitId])\n  @@index([tenantId, orgUnitId])\n  @@schema(\"core\")\n}\n\n// -----------------------------\n// EMPLOYEE (schema: employee)\n// -----------------------------\n\nenum EmployeeStatus {\n  ACTIVE\n  INACTIVE\n\n  @@schema(\"employee\")\n}\n\nenum ShiftStatus {\n  PLANNED\n  CONFIRMED\n  CANCELLED\n\n  @@schema(\"employee\")\n}\n\nenum TimeOffStatus {\n  PENDING\n  APPROVED\n  REJECTED\n  CANCELLED\n\n  @@schema(\"employee\")\n}\n\nenum TimeOffType {\n  VACATION\n  SICK\n  OTHER\n\n  @@schema(\"employee\")\n}\n\nmodel Employee {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n\n  userId String?        @db.Uuid\n  status EmployeeStatus @default(ACTIVE)\n\n  firstName String\n  lastName  String\n  email     String?\n  phone     String?\n\n  hiredAt   DateTime?\n  createdAt DateTime  @default(now())\n  updatedAt DateTime  @updatedAt\n\n  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)\n\n  user User? @relation(\"EmployeeToUser\", fields: [tenantId, userId], references: [tenantId, id], onDelete: Restrict)\n\n  stores          EmployeeStore[]\n  shifts          Shift[]\n  timeOffRequests TimeOffRequest[]\n\n  orgUnitAssignments EmployeeOrgUnit[]\n\n  @@unique([tenantId, id])\n  @@unique([tenantId, userId])\n  @@index([tenantId, status])\n  @@schema(\"employee\")\n}\n\nmodel EmployeeStore {\n  tenantId   String @db.Uuid\n  storeId    String @db.Uuid\n  employeeId String @db.Uuid\n\n  isPrimary Boolean @default(false)\n  roleTitle String?\n\n  startAt DateTime?\n  endAt   DateTime?\n\n  employee Employee @relation(fields: [tenantId, employeeId], references: [tenantId, id], onDelete: Cascade)\n  store    Store    @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)\n\n  @@id([tenantId, storeId, employeeId])\n  @@index([tenantId, employeeId])\n  @@schema(\"employee\")\n}\n\nmodel Shift {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n\n  employeeId String @db.Uuid\n\n  startAt DateTime\n  endAt   DateTime\n\n  status ShiftStatus @default(PLANNED)\n  notes  String?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  store    Store    @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)\n  employee Employee @relation(fields: [tenantId, employeeId], references: [tenantId, id], onDelete: Cascade)\n\n  @@index([tenantId, storeId, startAt])\n  @@index([tenantId, employeeId, startAt])\n  @@schema(\"employee\")\n}\n\nmodel TimeOffRequest {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n\n  employeeId String  @db.Uuid\n  storeId    String? @db.Uuid\n\n  startAt DateTime\n  endAt   DateTime\n\n  type   TimeOffType\n  status TimeOffStatus @default(PENDING)\n\n  reason String?\n\n  reviewedByUserId String?   @db.Uuid\n  reviewedAt       DateTime?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  employee Employee @relation(fields: [tenantId, employeeId], references: [tenantId, id], onDelete: Cascade)\n  store    Store?   @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Restrict)\n\n  reviewedByUser User? @relation(fields: [tenantId, reviewedByUserId], references: [tenantId, id], onDelete: Restrict)\n\n  @@index([tenantId, employeeId, startAt])\n  @@index([tenantId, storeId, startAt])\n  @@schema(\"employee\")\n}\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  schemas  = [\"core\", \"auth\", \"store\", \"cms\", \"employee\"]\n}\n\n// -----------------------------\n// STORE (schema: store)\n// -----------------------------\n\nenum ProductStatus {\n  DRAFT\n  ACTIVE\n  ARCHIVED\n\n  @@schema(\"store\")\n}\n\nenum CartStatus {\n  ACTIVE\n  ORDERED\n  ABANDONED\n\n  @@schema(\"store\")\n}\n\nenum OrderStatus {\n  PENDING\n  PAID\n  CANCELLED\n  REFUNDED\n\n  @@schema(\"store\")\n}\n\nenum DiscountKind {\n  PERCENT\n  FIXED\n\n  @@schema(\"store\")\n}\n\nenum CustomerAddressKind {\n  SHIPPING\n  BILLING\n\n  @@schema(\"store\")\n}\n\nmodel Customer {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n\n  email     String?\n  phone     String?\n  firstName String?\n  lastName  String?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  store Store @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)\n\n  addresses CustomerAddress[]\n  carts     Cart[]\n  orders    Order[]\n\n  @@unique([tenantId, storeId, id])\n  @@index([tenantId, storeId])\n  @@index([tenantId, storeId, email])\n  @@schema(\"store\")\n}\n\nmodel CustomerAddress {\n  tenantId   String              @db.Uuid\n  storeId    String              @db.Uuid\n  customerId String              @db.Uuid\n  addressId  String              @db.Uuid\n  kind       CustomerAddressKind\n\n  customer Customer @relation(fields: [tenantId, storeId, customerId], references: [tenantId, storeId, id], onDelete: Cascade)\n  address  Address  @relation(fields: [tenantId, addressId], references: [tenantId, id], onDelete: Cascade)\n\n  @@id([tenantId, storeId, customerId, addressId, kind])\n  @@schema(\"store\")\n}\n\nmodel Product {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n\n  title       String\n  handle      String\n  description String?\n  status      ProductStatus @default(DRAFT)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  store Store @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)\n\n  images      ProductImage[]\n  options     ProductOption[]\n  variants    ProductVariant[]\n  collections CollectionProduct[]\n\n  @@unique([tenantId, storeId, id])\n  @@unique([tenantId, storeId, handle])\n  @@index([tenantId, storeId, status])\n  @@schema(\"store\")\n}\n\nmodel ProductImage {\n  id        String @id @default(uuid()) @db.Uuid\n  tenantId  String @db.Uuid\n  storeId   String @db.Uuid\n  productId String @db.Uuid\n\n  url      String\n  alt      String?\n  position Int     @default(0)\n\n  product Product @relation(fields: [tenantId, storeId, productId], references: [tenantId, storeId, id], onDelete: Cascade)\n\n  @@index([tenantId, storeId, productId])\n  @@schema(\"store\")\n}\n\nmodel ProductOption {\n  id        String @id @default(uuid()) @db.Uuid\n  tenantId  String @db.Uuid\n  storeId   String @db.Uuid\n  productId String @db.Uuid\n\n  name     String\n  position Int    @default(0)\n\n  product Product              @relation(fields: [tenantId, storeId, productId], references: [tenantId, storeId, id], onDelete: Cascade)\n  values  ProductOptionValue[]\n\n  // REQUIRED for relations referencing (tenantId, storeId, id)\n  @@unique([tenantId, storeId, id])\n  @@index([tenantId, storeId, productId])\n  @@schema(\"store\")\n}\n\nmodel ProductOptionValue {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n  optionId String @db.Uuid\n\n  value    String\n  position Int    @default(0)\n\n  option   ProductOption        @relation(fields: [tenantId, storeId, optionId], references: [tenantId, storeId, id], onDelete: Cascade)\n  variants VariantOptionValue[]\n\n  @@unique([tenantId, storeId, id])\n  @@unique([tenantId, storeId, optionId, value])\n  @@schema(\"store\")\n}\n\nmodel ProductVariant {\n  id        String @id @default(uuid()) @db.Uuid\n  tenantId  String @db.Uuid\n  storeId   String @db.Uuid\n  productId String @db.Uuid\n\n  title String\n  sku   String?\n\n  priceAmount Int\n  currency    CurrencyCode @default(EUR)\n\n  compareAtAmount Int?\n\n  inventoryQuantity Int     @default(0)\n  allowBackorder    Boolean @default(false)\n\n  position  Int      @default(0)\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  product Product @relation(fields: [tenantId, storeId, productId], references: [tenantId, storeId, id], onDelete: Cascade)\n\n  optionValues VariantOptionValue[]\n\n  cartItems  CartItem[]\n  orderItems OrderItem[]\n\n  @@unique([tenantId, storeId, id])\n  @@unique([tenantId, storeId, sku])\n  @@index([tenantId, storeId, productId])\n  @@schema(\"store\")\n}\n\nmodel VariantOptionValue {\n  tenantId      String @db.Uuid\n  storeId       String @db.Uuid\n  variantId     String @db.Uuid\n  optionValueId String @db.Uuid\n\n  variant     ProductVariant     @relation(fields: [tenantId, storeId, variantId], references: [tenantId, storeId, id], onDelete: Cascade)\n  optionValue ProductOptionValue @relation(fields: [tenantId, storeId, optionValueId], references: [tenantId, storeId, id], onDelete: Cascade)\n\n  @@id([tenantId, storeId, variantId, optionValueId])\n  @@schema(\"store\")\n}\n\nmodel Collection {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n\n  title       String\n  handle      String\n  description String?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  store Store @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)\n\n  products CollectionProduct[]\n\n  @@unique([tenantId, storeId, id])\n  @@unique([tenantId, storeId, handle])\n  @@schema(\"store\")\n}\n\nmodel CollectionProduct {\n  tenantId     String @db.Uuid\n  storeId      String @db.Uuid\n  collectionId String @db.Uuid\n  productId    String @db.Uuid\n\n  collection Collection @relation(fields: [tenantId, storeId, collectionId], references: [tenantId, storeId, id], onDelete: Cascade)\n  product    Product    @relation(fields: [tenantId, storeId, productId], references: [tenantId, storeId, id], onDelete: Cascade)\n\n  @@id([tenantId, storeId, collectionId, productId])\n  @@schema(\"store\")\n}\n\nmodel Discount {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n\n  code  String\n  kind  DiscountKind\n  value Int\n\n  startsAt DateTime?\n  endsAt   DateTime?\n  isActive Boolean   @default(true)\n\n  metadataSchemaVersion Int   @default(1)\n  metadata              Json?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  store Store @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)\n\n  cartAdjustments  CartAdjustment[]\n  orderAdjustments OrderAdjustment[]\n\n  @@unique([tenantId, storeId, id])\n  @@unique([tenantId, storeId, code])\n  @@schema(\"store\")\n}\n\nmodel Cart {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n\n  customerId String? @db.Uuid\n\n  status   CartStatus   @default(ACTIVE)\n  currency CurrencyCode @default(EUR)\n\n  subtotalAmount Int @default(0)\n  discountAmount Int @default(0)\n  totalAmount    Int @default(0)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  store    Store     @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)\n  customer Customer? @relation(fields: [tenantId, storeId, customerId], references: [tenantId, storeId, id], onDelete: Restrict)\n\n  items       CartItem[]\n  adjustments CartAdjustment[]\n\n  @@unique([tenantId, storeId, id])\n  @@index([tenantId, storeId, status])\n  @@schema(\"store\")\n}\n\nmodel CartItem {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n\n  cartId    String @db.Uuid\n  variantId String @db.Uuid\n\n  quantity        Int\n  unitPriceAmount Int\n  totalAmount     Int\n\n  cart    Cart           @relation(fields: [tenantId, storeId, cartId], references: [tenantId, storeId, id], onDelete: Cascade)\n  variant ProductVariant @relation(fields: [tenantId, storeId, variantId], references: [tenantId, storeId, id], onDelete: Restrict)\n\n  @@index([tenantId, storeId, cartId])\n  @@schema(\"store\")\n}\n\nmodel CartAdjustment {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n\n  cartId     String @db.Uuid\n  discountId String @db.Uuid\n\n  amount      Int\n  description String?\n\n  cart     Cart     @relation(fields: [tenantId, storeId, cartId], references: [tenantId, storeId, id], onDelete: Cascade)\n  discount Discount @relation(fields: [tenantId, storeId, discountId], references: [tenantId, storeId, id], onDelete: Restrict)\n\n  @@index([tenantId, storeId, cartId])\n  @@schema(\"store\")\n}\n\nmodel Order {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n\n  number   Int\n  status   OrderStatus  @default(PENDING)\n  currency CurrencyCode @default(EUR)\n\n  customerId String? @db.Uuid\n  email      String?\n\n  shippingAddressId String? @db.Uuid\n  billingAddressId  String? @db.Uuid\n\n  subtotalAmount Int @default(0)\n  discountAmount Int @default(0)\n  totalAmount    Int @default(0)\n\n  placedAt  DateTime?\n  createdAt DateTime  @default(now())\n  updatedAt DateTime  @updatedAt\n\n  store    Store     @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)\n  customer Customer? @relation(fields: [tenantId, storeId, customerId], references: [tenantId, storeId, id], onDelete: Restrict)\n\n  shippingAddress Address? @relation(\"OrderShippingAddress\", fields: [tenantId, shippingAddressId], references: [tenantId, id], onDelete: Restrict)\n  billingAddress  Address? @relation(\"OrderBillingAddress\", fields: [tenantId, billingAddressId], references: [tenantId, id], onDelete: Restrict)\n\n  items       OrderItem[]\n  adjustments OrderAdjustment[]\n\n  @@unique([tenantId, storeId, id])\n  @@unique([tenantId, storeId, number])\n  @@index([tenantId, storeId, status])\n  @@schema(\"store\")\n}\n\nmodel OrderItem {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n\n  orderId   String @db.Uuid\n  variantId String @db.Uuid\n\n  titleSnapshot String\n  skuSnapshot   String?\n\n  quantity        Int\n  unitPriceAmount Int\n  totalAmount     Int\n\n  order   Order          @relation(fields: [tenantId, storeId, orderId], references: [tenantId, storeId, id], onDelete: Cascade)\n  variant ProductVariant @relation(fields: [tenantId, storeId, variantId], references: [tenantId, storeId, id], onDelete: Restrict)\n\n  @@index([tenantId, storeId, orderId])\n  @@schema(\"store\")\n}\n\nmodel OrderAdjustment {\n  id       String @id @default(uuid()) @db.Uuid\n  tenantId String @db.Uuid\n  storeId  String @db.Uuid\n\n  orderId    String @db.Uuid\n  discountId String @db.Uuid\n\n  amount      Int\n  description String?\n\n  order    Order    @relation(fields: [tenantId, storeId, orderId], references: [tenantId, storeId, id], onDelete: Cascade)\n  discount Discount @relation(fields: [tenantId, storeId, discountId], references: [tenantId, storeId, id], onDelete: Restrict)\n\n  @@index([tenantId, storeId, orderId])\n  @@schema(\"store\")\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"firstName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"avatar\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"lastLoginAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"refreshTokens\",\"kind\":\"object\",\"type\":\"RefreshToken\",\"relationName\":\"RefreshTokenToUser\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"RefreshToken\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"jti\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"hashedToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"revokedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"reasonRevoked\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"replacedByToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdByIp\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"revokedByIp\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userAgent\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"RefreshTokenToUser\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"passwordHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"UserStatus\"},{\"name\":\"lastLoginAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"tenant\",\"kind\":\"object\",\"type\":\"Tenant\",\"relationName\":\"TenantToUser\"},{\"name\":\"roles\",\"kind\":\"object\",\"type\":\"UserRole\",\"relationName\":\"UserToUserRole\"},{\"name\":\"sessions\",\"kind\":\"object\",\"type\":\"AuthSession\",\"relationName\":\"AuthSessionToUser\"},{\"name\":\"overrides\",\"kind\":\"object\",\"type\":\"UserPermission\",\"relationName\":\"UserToUserPermission\"},{\"name\":\"cmsPageVersionsCreated\",\"kind\":\"object\",\"type\":\"CmsPageVersion\",\"relationName\":\"CmsPageVersionToUser\"},{\"name\":\"cmsAssetsCreated\",\"kind\":\"object\",\"type\":\"CmsAsset\",\"relationName\":\"CmsAssetToUser\"},{\"name\":\"timeOffReviewed\",\"kind\":\"object\",\"type\":\"TimeOffRequest\",\"relationName\":\"TimeOffRequestToUser\"},{\"name\":\"employee\",\"kind\":\"object\",\"type\":\"Employee\",\"relationName\":\"EmployeeToUser\"}],\"dbName\":null},\"AuthSession\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"refreshTokenHash\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AuthSessionToUser\"}],\"dbName\":null},\"Role\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"key\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"tenant\",\"kind\":\"object\",\"type\":\"Tenant\",\"relationName\":\"RoleToTenant\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"UserRole\",\"relationName\":\"RoleToUserRole\"},{\"name\":\"permissions\",\"kind\":\"object\",\"type\":\"RolePermission\",\"relationName\":\"RoleToRolePermission\"}],\"dbName\":null},\"UserRole\":{\"fields\":[{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"roleId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"assignedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToUserRole\"},{\"name\":\"role\",\"kind\":\"object\",\"type\":\"Role\",\"relationName\":\"RoleToUserRole\"}],\"dbName\":null},\"Permission\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"key\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"tenant\",\"kind\":\"object\",\"type\":\"Tenant\",\"relationName\":\"PermissionToTenant\"},{\"name\":\"roleGrants\",\"kind\":\"object\",\"type\":\"RolePermission\",\"relationName\":\"PermissionToRolePermission\"},{\"name\":\"userOverrides\",\"kind\":\"object\",\"type\":\"UserPermission\",\"relationName\":\"PermissionToUserPermission\"}],\"dbName\":null},\"RolePermission\":{\"fields\":[{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"roleId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"permissionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"grantedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"role\",\"kind\":\"object\",\"type\":\"Role\",\"relationName\":\"RoleToRolePermission\"},{\"name\":\"permission\",\"kind\":\"object\",\"type\":\"Permission\",\"relationName\":\"PermissionToRolePermission\"}],\"dbName\":null},\"UserPermission\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"permissionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"effect\",\"kind\":\"enum\",\"type\":\"PermissionEffect\"},{\"name\":\"conditionSchemaVersion\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"condition\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToUserPermission\"},{\"name\":\"permission\",\"kind\":\"object\",\"type\":\"Permission\",\"relationName\":\"PermissionToUserPermission\"}],\"dbName\":null},\"CmsSite\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"domain\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"locale\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"settingsSchemaVersion\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"settings\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"store\",\"kind\":\"object\",\"type\":\"Store\",\"relationName\":\"CmsSiteToStore\"},{\"name\":\"pages\",\"kind\":\"object\",\"type\":\"CmsPage\",\"relationName\":\"CmsPageToCmsSite\"},{\"name\":\"assets\",\"kind\":\"object\",\"type\":\"CmsAsset\",\"relationName\":\"CmsAssetToCmsSite\"},{\"name\":\"menus\",\"kind\":\"object\",\"type\":\"CmsMenu\",\"relationName\":\"CmsMenuToCmsSite\"}],\"dbName\":null},\"CmsPage\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"siteId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"CmsPageStatus\"},{\"name\":\"publishedVersionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"publishedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"site\",\"kind\":\"object\",\"type\":\"CmsSite\",\"relationName\":\"CmsPageToCmsSite\"},{\"name\":\"versions\",\"kind\":\"object\",\"type\":\"CmsPageVersion\",\"relationName\":\"CmsPageToCmsPageVersion\"},{\"name\":\"publishedVersion\",\"kind\":\"object\",\"type\":\"CmsPageVersion\",\"relationName\":\"CmsPagePublishedVersion\"},{\"name\":\"menuItems\",\"kind\":\"object\",\"type\":\"CmsMenuItem\",\"relationName\":\"CmsMenuItemToCmsPage\"}],\"dbName\":null},\"CmsPageVersion\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"pageId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"version\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"contentSchemaVersion\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"content\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"createdByUserId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"page\",\"kind\":\"object\",\"type\":\"CmsPage\",\"relationName\":\"CmsPageToCmsPageVersion\"},{\"name\":\"createdByUser\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"CmsPageVersionToUser\"},{\"name\":\"publishedByPage\",\"kind\":\"object\",\"type\":\"CmsPage\",\"relationName\":\"CmsPagePublishedVersion\"}],\"dbName\":null},\"CmsAsset\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"siteId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"kind\",\"kind\":\"enum\",\"type\":\"CmsAssetKind\"},{\"name\":\"filename\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"mimeType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sizeBytes\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"checksum\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"width\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"height\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdByUserId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"site\",\"kind\":\"object\",\"type\":\"CmsSite\",\"relationName\":\"CmsAssetToCmsSite\"},{\"name\":\"store\",\"kind\":\"object\",\"type\":\"Store\",\"relationName\":\"CmsAssetToStore\"},{\"name\":\"createdByUser\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"CmsAssetToUser\"}],\"dbName\":null},\"CmsMenu\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"siteId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"key\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"site\",\"kind\":\"object\",\"type\":\"CmsSite\",\"relationName\":\"CmsMenuToCmsSite\"},{\"name\":\"items\",\"kind\":\"object\",\"type\":\"CmsMenuItem\",\"relationName\":\"CmsMenuToCmsMenuItem\"}],\"dbName\":null},\"CmsMenuItem\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"menuId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"parentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"label\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"type\",\"kind\":\"enum\",\"type\":\"CmsMenuItemType\"},{\"name\":\"href\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"pageId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"menu\",\"kind\":\"object\",\"type\":\"CmsMenu\",\"relationName\":\"CmsMenuToCmsMenuItem\"},{\"name\":\"parent\",\"kind\":\"object\",\"type\":\"CmsMenuItem\",\"relationName\":\"CmsMenuItemParent\"},{\"name\":\"children\",\"kind\":\"object\",\"type\":\"CmsMenuItem\",\"relationName\":\"CmsMenuItemParent\"},{\"name\":\"page\",\"kind\":\"object\",\"type\":\"CmsPage\",\"relationName\":\"CmsMenuItemToCmsPage\"}],\"dbName\":null},\"Tenant\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"stores\",\"kind\":\"object\",\"type\":\"Store\",\"relationName\":\"StoreToTenant\"},{\"name\":\"businessUnits\",\"kind\":\"object\",\"type\":\"BusinessUnit\",\"relationName\":\"BusinessUnitToTenant\"},{\"name\":\"orgUnits\",\"kind\":\"object\",\"type\":\"OrgUnit\",\"relationName\":\"OrgUnitToTenant\"},{\"name\":\"modules\",\"kind\":\"object\",\"type\":\"TenantModule\",\"relationName\":\"TenantToTenantModule\"},{\"name\":\"addresses\",\"kind\":\"object\",\"type\":\"Address\",\"relationName\":\"AddressToTenant\"},{\"name\":\"events\",\"kind\":\"object\",\"type\":\"DomainEvent\",\"relationName\":\"DomainEventToTenant\"},{\"name\":\"storeTags\",\"kind\":\"object\",\"type\":\"StoreTag\",\"relationName\":\"StoreTagToTenant\"},{\"name\":\"storeClassifications\",\"kind\":\"object\",\"type\":\"StoreClassification\",\"relationName\":\"StoreClassificationToTenant\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"TenantToUser\"},{\"name\":\"roles\",\"kind\":\"object\",\"type\":\"Role\",\"relationName\":\"RoleToTenant\"},{\"name\":\"permissions\",\"kind\":\"object\",\"type\":\"Permission\",\"relationName\":\"PermissionToTenant\"},{\"name\":\"employees\",\"kind\":\"object\",\"type\":\"Employee\",\"relationName\":\"EmployeeToTenant\"}],\"dbName\":null},\"TenantModule\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"key\",\"kind\":\"enum\",\"type\":\"ModuleKey\"},{\"name\":\"enabled\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"configSchemaVersion\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"config\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"installedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"tenant\",\"kind\":\"object\",\"type\":\"Tenant\",\"relationName\":\"TenantToTenantModule\"}],\"dbName\":null},\"Address\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"label\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"line1\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"line2\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"zip\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"region\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"country\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"tenant\",\"kind\":\"object\",\"type\":\"Tenant\",\"relationName\":\"AddressToTenant\"},{\"name\":\"businessUnits\",\"kind\":\"object\",\"type\":\"BusinessUnit\",\"relationName\":\"BusinessUnitAddress\"},{\"name\":\"customerAddresses\",\"kind\":\"object\",\"type\":\"CustomerAddress\",\"relationName\":\"AddressToCustomerAddress\"},{\"name\":\"orderShippingAddresses\",\"kind\":\"object\",\"type\":\"Order\",\"relationName\":\"OrderShippingAddress\"},{\"name\":\"orderBillingAddresses\",\"kind\":\"object\",\"type\":\"Order\",\"relationName\":\"OrderBillingAddress\"}],\"dbName\":null},\"BusinessUnit\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"legalName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"taxId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"vatNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"addressId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"address\",\"kind\":\"object\",\"type\":\"Address\",\"relationName\":\"BusinessUnitAddress\"},{\"name\":\"orgUnitId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"orgUnit\",\"kind\":\"object\",\"type\":\"OrgUnit\",\"relationName\":\"OrgUnitBusinessUnits\"},{\"name\":\"tenant\",\"kind\":\"object\",\"type\":\"Tenant\",\"relationName\":\"BusinessUnitToTenant\"},{\"name\":\"stores\",\"kind\":\"object\",\"type\":\"Store\",\"relationName\":\"BusinessUnitToStore\"}],\"dbName\":null},\"Store\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"code\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"timezone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"currency\",\"kind\":\"enum\",\"type\":\"CurrencyCode\"},{\"name\":\"businessUnitId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"businessUnit\",\"kind\":\"object\",\"type\":\"BusinessUnit\",\"relationName\":\"BusinessUnitToStore\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"tenant\",\"kind\":\"object\",\"type\":\"Tenant\",\"relationName\":\"StoreToTenant\"},{\"name\":\"orgUnitLinks\",\"kind\":\"object\",\"type\":\"StoreOrgUnit\",\"relationName\":\"StoreToStoreOrgUnit\"},{\"name\":\"tagLinks\",\"kind\":\"object\",\"type\":\"StoreTagAssignment\",\"relationName\":\"StoreToStoreTagAssignment\"},{\"name\":\"classLinks\",\"kind\":\"object\",\"type\":\"StoreClassificationAssignment\",\"relationName\":\"StoreToStoreClassificationAssignment\"},{\"name\":\"customers\",\"kind\":\"object\",\"type\":\"Customer\",\"relationName\":\"CustomerToStore\"},{\"name\":\"products\",\"kind\":\"object\",\"type\":\"Product\",\"relationName\":\"ProductToStore\"},{\"name\":\"collections\",\"kind\":\"object\",\"type\":\"Collection\",\"relationName\":\"CollectionToStore\"},{\"name\":\"discounts\",\"kind\":\"object\",\"type\":\"Discount\",\"relationName\":\"DiscountToStore\"},{\"name\":\"carts\",\"kind\":\"object\",\"type\":\"Cart\",\"relationName\":\"CartToStore\"},{\"name\":\"orders\",\"kind\":\"object\",\"type\":\"Order\",\"relationName\":\"OrderToStore\"},{\"name\":\"cmsAssets\",\"kind\":\"object\",\"type\":\"CmsAsset\",\"relationName\":\"CmsAssetToStore\"},{\"name\":\"cmsSites\",\"kind\":\"object\",\"type\":\"CmsSite\",\"relationName\":\"CmsSiteToStore\"},{\"name\":\"employees\",\"kind\":\"object\",\"type\":\"EmployeeStore\",\"relationName\":\"EmployeeStoreToStore\"},{\"name\":\"shifts\",\"kind\":\"object\",\"type\":\"Shift\",\"relationName\":\"ShiftToStore\"},{\"name\":\"timeOffRequests\",\"kind\":\"object\",\"type\":\"TimeOffRequest\",\"relationName\":\"StoreToTimeOffRequest\"}],\"dbName\":null},\"OrgUnit\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"kind\",\"kind\":\"enum\",\"type\":\"OrgUnitKind\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"parentId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"parent\",\"kind\":\"object\",\"type\":\"OrgUnit\",\"relationName\":\"OrgUnitParent\"},{\"name\":\"children\",\"kind\":\"object\",\"type\":\"OrgUnit\",\"relationName\":\"OrgUnitParent\"},{\"name\":\"tenant\",\"kind\":\"object\",\"type\":\"Tenant\",\"relationName\":\"OrgUnitToTenant\"},{\"name\":\"storeLinks\",\"kind\":\"object\",\"type\":\"StoreOrgUnit\",\"relationName\":\"OrgUnitToStoreOrgUnit\"},{\"name\":\"businessUnits\",\"kind\":\"object\",\"type\":\"BusinessUnit\",\"relationName\":\"OrgUnitBusinessUnits\"},{\"name\":\"ancestorClosures\",\"kind\":\"object\",\"type\":\"OrgUnitClosure\",\"relationName\":\"OrgUnitAncestor\"},{\"name\":\"descendantClosures\",\"kind\":\"object\",\"type\":\"OrgUnitClosure\",\"relationName\":\"OrgUnitDescendant\"},{\"name\":\"employeeLinks\",\"kind\":\"object\",\"type\":\"EmployeeOrgUnit\",\"relationName\":\"EmployeeOrgUnitToOrgUnit\"}],\"dbName\":null},\"OrgUnitClosure\":{\"fields\":[{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ancestorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"descendantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"depth\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"ancestor\",\"kind\":\"object\",\"type\":\"OrgUnit\",\"relationName\":\"OrgUnitAncestor\"},{\"name\":\"descendant\",\"kind\":\"object\",\"type\":\"OrgUnit\",\"relationName\":\"OrgUnitDescendant\"}],\"dbName\":null},\"StoreOrgUnit\":{\"fields\":[{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"orgUnitId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isPrimaryRegion\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"assignedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"store\",\"kind\":\"object\",\"type\":\"Store\",\"relationName\":\"StoreToStoreOrgUnit\"},{\"name\":\"orgUnit\",\"kind\":\"object\",\"type\":\"OrgUnit\",\"relationName\":\"OrgUnitToStoreOrgUnit\"}],\"dbName\":null},\"StoreTag\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"slug\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"tenant\",\"kind\":\"object\",\"type\":\"Tenant\",\"relationName\":\"StoreTagToTenant\"},{\"name\":\"stores\",\"kind\":\"object\",\"type\":\"StoreTagAssignment\",\"relationName\":\"StoreTagToStoreTagAssignment\"}],\"dbName\":null},\"StoreTagAssignment\":{\"fields\":[{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tagId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"store\",\"kind\":\"object\",\"type\":\"Store\",\"relationName\":\"StoreToStoreTagAssignment\"},{\"name\":\"tag\",\"kind\":\"object\",\"type\":\"StoreTag\",\"relationName\":\"StoreTagToStoreTagAssignment\"}],\"dbName\":null},\"StoreClassification\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"category\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"label\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"tenant\",\"kind\":\"object\",\"type\":\"Tenant\",\"relationName\":\"StoreClassificationToTenant\"},{\"name\":\"stores\",\"kind\":\"object\",\"type\":\"StoreClassificationAssignment\",\"relationName\":\"StoreClassificationToStoreClassificationAssignment\"}],\"dbName\":null},\"StoreClassificationAssignment\":{\"fields\":[{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"classificationId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"store\",\"kind\":\"object\",\"type\":\"Store\",\"relationName\":\"StoreToStoreClassificationAssignment\"},{\"name\":\"classification\",\"kind\":\"object\",\"type\":\"StoreClassification\",\"relationName\":\"StoreClassificationToStoreClassificationAssignment\"}],\"dbName\":null},\"DomainEvent\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"source\",\"kind\":\"enum\",\"type\":\"DomainEventSource\"},{\"name\":\"type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"entityType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"entityId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"payload\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"occurredAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"processedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"tenant\",\"kind\":\"object\",\"type\":\"Tenant\",\"relationName\":\"DomainEventToTenant\"}],\"dbName\":null},\"EmployeeOrgUnit\":{\"fields\":[{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"employeeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"orgUnitId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"assignmentRole\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"assignedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"employee\",\"kind\":\"object\",\"type\":\"Employee\",\"relationName\":\"EmployeeToEmployeeOrgUnit\"},{\"name\":\"orgUnit\",\"kind\":\"object\",\"type\":\"OrgUnit\",\"relationName\":\"EmployeeOrgUnitToOrgUnit\"}],\"dbName\":null},\"Employee\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"EmployeeStatus\"},{\"name\":\"firstName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"hiredAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"tenant\",\"kind\":\"object\",\"type\":\"Tenant\",\"relationName\":\"EmployeeToTenant\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"EmployeeToUser\"},{\"name\":\"stores\",\"kind\":\"object\",\"type\":\"EmployeeStore\",\"relationName\":\"EmployeeToEmployeeStore\"},{\"name\":\"shifts\",\"kind\":\"object\",\"type\":\"Shift\",\"relationName\":\"EmployeeToShift\"},{\"name\":\"timeOffRequests\",\"kind\":\"object\",\"type\":\"TimeOffRequest\",\"relationName\":\"EmployeeToTimeOffRequest\"},{\"name\":\"orgUnitAssignments\",\"kind\":\"object\",\"type\":\"EmployeeOrgUnit\",\"relationName\":\"EmployeeToEmployeeOrgUnit\"}],\"dbName\":null},\"EmployeeStore\":{\"fields\":[{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"employeeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isPrimary\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"roleTitle\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"employee\",\"kind\":\"object\",\"type\":\"Employee\",\"relationName\":\"EmployeeToEmployeeStore\"},{\"name\":\"store\",\"kind\":\"object\",\"type\":\"Store\",\"relationName\":\"EmployeeStoreToStore\"}],\"dbName\":null},\"Shift\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"employeeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"ShiftStatus\"},{\"name\":\"notes\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"store\",\"kind\":\"object\",\"type\":\"Store\",\"relationName\":\"ShiftToStore\"},{\"name\":\"employee\",\"kind\":\"object\",\"type\":\"Employee\",\"relationName\":\"EmployeeToShift\"}],\"dbName\":null},\"TimeOffRequest\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"employeeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"type\",\"kind\":\"enum\",\"type\":\"TimeOffType\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"TimeOffStatus\"},{\"name\":\"reason\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"reviewedByUserId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"reviewedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"employee\",\"kind\":\"object\",\"type\":\"Employee\",\"relationName\":\"EmployeeToTimeOffRequest\"},{\"name\":\"store\",\"kind\":\"object\",\"type\":\"Store\",\"relationName\":\"StoreToTimeOffRequest\"},{\"name\":\"reviewedByUser\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"TimeOffRequestToUser\"}],\"dbName\":null},\"Customer\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"firstName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"store\",\"kind\":\"object\",\"type\":\"Store\",\"relationName\":\"CustomerToStore\"},{\"name\":\"addresses\",\"kind\":\"object\",\"type\":\"CustomerAddress\",\"relationName\":\"CustomerToCustomerAddress\"},{\"name\":\"carts\",\"kind\":\"object\",\"type\":\"Cart\",\"relationName\":\"CartToCustomer\"},{\"name\":\"orders\",\"kind\":\"object\",\"type\":\"Order\",\"relationName\":\"CustomerToOrder\"}],\"dbName\":null},\"CustomerAddress\":{\"fields\":[{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"customerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"addressId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"kind\",\"kind\":\"enum\",\"type\":\"CustomerAddressKind\"},{\"name\":\"customer\",\"kind\":\"object\",\"type\":\"Customer\",\"relationName\":\"CustomerToCustomerAddress\"},{\"name\":\"address\",\"kind\":\"object\",\"type\":\"Address\",\"relationName\":\"AddressToCustomerAddress\"}],\"dbName\":null},\"Product\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"handle\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"ProductStatus\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"store\",\"kind\":\"object\",\"type\":\"Store\",\"relationName\":\"ProductToStore\"},{\"name\":\"images\",\"kind\":\"object\",\"type\":\"ProductImage\",\"relationName\":\"ProductToProductImage\"},{\"name\":\"options\",\"kind\":\"object\",\"type\":\"ProductOption\",\"relationName\":\"ProductToProductOption\"},{\"name\":\"variants\",\"kind\":\"object\",\"type\":\"ProductVariant\",\"relationName\":\"ProductToProductVariant\"},{\"name\":\"collections\",\"kind\":\"object\",\"type\":\"CollectionProduct\",\"relationName\":\"CollectionProductToProduct\"}],\"dbName\":null},\"ProductImage\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"productId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"alt\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"product\",\"kind\":\"object\",\"type\":\"Product\",\"relationName\":\"ProductToProductImage\"}],\"dbName\":null},\"ProductOption\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"productId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"product\",\"kind\":\"object\",\"type\":\"Product\",\"relationName\":\"ProductToProductOption\"},{\"name\":\"values\",\"kind\":\"object\",\"type\":\"ProductOptionValue\",\"relationName\":\"ProductOptionToProductOptionValue\"}],\"dbName\":null},\"ProductOptionValue\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"optionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"option\",\"kind\":\"object\",\"type\":\"ProductOption\",\"relationName\":\"ProductOptionToProductOptionValue\"},{\"name\":\"variants\",\"kind\":\"object\",\"type\":\"VariantOptionValue\",\"relationName\":\"ProductOptionValueToVariantOptionValue\"}],\"dbName\":null},\"ProductVariant\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"productId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sku\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"priceAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"currency\",\"kind\":\"enum\",\"type\":\"CurrencyCode\"},{\"name\":\"compareAtAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"inventoryQuantity\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"allowBackorder\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"position\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"product\",\"kind\":\"object\",\"type\":\"Product\",\"relationName\":\"ProductToProductVariant\"},{\"name\":\"optionValues\",\"kind\":\"object\",\"type\":\"VariantOptionValue\",\"relationName\":\"ProductVariantToVariantOptionValue\"},{\"name\":\"cartItems\",\"kind\":\"object\",\"type\":\"CartItem\",\"relationName\":\"CartItemToProductVariant\"},{\"name\":\"orderItems\",\"kind\":\"object\",\"type\":\"OrderItem\",\"relationName\":\"OrderItemToProductVariant\"}],\"dbName\":null},\"VariantOptionValue\":{\"fields\":[{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"variantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"optionValueId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"variant\",\"kind\":\"object\",\"type\":\"ProductVariant\",\"relationName\":\"ProductVariantToVariantOptionValue\"},{\"name\":\"optionValue\",\"kind\":\"object\",\"type\":\"ProductOptionValue\",\"relationName\":\"ProductOptionValueToVariantOptionValue\"}],\"dbName\":null},\"Collection\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"handle\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"store\",\"kind\":\"object\",\"type\":\"Store\",\"relationName\":\"CollectionToStore\"},{\"name\":\"products\",\"kind\":\"object\",\"type\":\"CollectionProduct\",\"relationName\":\"CollectionToCollectionProduct\"}],\"dbName\":null},\"CollectionProduct\":{\"fields\":[{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"collectionId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"productId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"collection\",\"kind\":\"object\",\"type\":\"Collection\",\"relationName\":\"CollectionToCollectionProduct\"},{\"name\":\"product\",\"kind\":\"object\",\"type\":\"Product\",\"relationName\":\"CollectionProductToProduct\"}],\"dbName\":null},\"Discount\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"code\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"kind\",\"kind\":\"enum\",\"type\":\"DiscountKind\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"startsAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endsAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"metadataSchemaVersion\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"metadata\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"store\",\"kind\":\"object\",\"type\":\"Store\",\"relationName\":\"DiscountToStore\"},{\"name\":\"cartAdjustments\",\"kind\":\"object\",\"type\":\"CartAdjustment\",\"relationName\":\"CartAdjustmentToDiscount\"},{\"name\":\"orderAdjustments\",\"kind\":\"object\",\"type\":\"OrderAdjustment\",\"relationName\":\"DiscountToOrderAdjustment\"}],\"dbName\":null},\"Cart\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"customerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"CartStatus\"},{\"name\":\"currency\",\"kind\":\"enum\",\"type\":\"CurrencyCode\"},{\"name\":\"subtotalAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"discountAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"totalAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"store\",\"kind\":\"object\",\"type\":\"Store\",\"relationName\":\"CartToStore\"},{\"name\":\"customer\",\"kind\":\"object\",\"type\":\"Customer\",\"relationName\":\"CartToCustomer\"},{\"name\":\"items\",\"kind\":\"object\",\"type\":\"CartItem\",\"relationName\":\"CartToCartItem\"},{\"name\":\"adjustments\",\"kind\":\"object\",\"type\":\"CartAdjustment\",\"relationName\":\"CartToCartAdjustment\"}],\"dbName\":null},\"CartItem\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cartId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"variantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"quantity\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"unitPriceAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"totalAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"cart\",\"kind\":\"object\",\"type\":\"Cart\",\"relationName\":\"CartToCartItem\"},{\"name\":\"variant\",\"kind\":\"object\",\"type\":\"ProductVariant\",\"relationName\":\"CartItemToProductVariant\"}],\"dbName\":null},\"CartAdjustment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cartId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"discountId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"amount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cart\",\"kind\":\"object\",\"type\":\"Cart\",\"relationName\":\"CartToCartAdjustment\"},{\"name\":\"discount\",\"kind\":\"object\",\"type\":\"Discount\",\"relationName\":\"CartAdjustmentToDiscount\"}],\"dbName\":null},\"Order\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"number\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"OrderStatus\"},{\"name\":\"currency\",\"kind\":\"enum\",\"type\":\"CurrencyCode\"},{\"name\":\"customerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"shippingAddressId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"billingAddressId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"subtotalAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"discountAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"totalAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"placedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"store\",\"kind\":\"object\",\"type\":\"Store\",\"relationName\":\"OrderToStore\"},{\"name\":\"customer\",\"kind\":\"object\",\"type\":\"Customer\",\"relationName\":\"CustomerToOrder\"},{\"name\":\"shippingAddress\",\"kind\":\"object\",\"type\":\"Address\",\"relationName\":\"OrderShippingAddress\"},{\"name\":\"billingAddress\",\"kind\":\"object\",\"type\":\"Address\",\"relationName\":\"OrderBillingAddress\"},{\"name\":\"items\",\"kind\":\"object\",\"type\":\"OrderItem\",\"relationName\":\"OrderToOrderItem\"},{\"name\":\"adjustments\",\"kind\":\"object\",\"type\":\"OrderAdjustment\",\"relationName\":\"OrderToOrderAdjustment\"}],\"dbName\":null},\"OrderItem\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"orderId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"variantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"titleSnapshot\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"skuSnapshot\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"quantity\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"unitPriceAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"totalAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"order\",\"kind\":\"object\",\"type\":\"Order\",\"relationName\":\"OrderToOrderItem\"},{\"name\":\"variant\",\"kind\":\"object\",\"type\":\"ProductVariant\",\"relationName\":\"OrderItemToProductVariant\"}],\"dbName\":null},\"OrderAdjustment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tenantId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"storeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"orderId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"discountId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"amount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"order\",\"kind\":\"object\",\"type\":\"Order\",\"relationName\":\"OrderToOrderAdjustment\"},{\"name\":\"discount\",\"kind\":\"object\",\"type\":\"Discount\",\"relationName\":\"DiscountToOrderAdjustment\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -185,14 +185,474 @@ export interface PrismaClient<
   get user(): Prisma.UserDelegate<ExtArgs, { omit: OmitOpts }>;
 
   /**
-   * `prisma.refreshToken`: Exposes CRUD operations for the **RefreshToken** model.
+   * `prisma.authSession`: Exposes CRUD operations for the **AuthSession** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more RefreshTokens
-    * const refreshTokens = await prisma.refreshToken.findMany()
+    * // Fetch zero or more AuthSessions
+    * const authSessions = await prisma.authSession.findMany()
     * ```
     */
-  get refreshToken(): Prisma.RefreshTokenDelegate<ExtArgs, { omit: OmitOpts }>;
+  get authSession(): Prisma.AuthSessionDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.role`: Exposes CRUD operations for the **Role** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Roles
+    * const roles = await prisma.role.findMany()
+    * ```
+    */
+  get role(): Prisma.RoleDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.userRole`: Exposes CRUD operations for the **UserRole** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserRoles
+    * const userRoles = await prisma.userRole.findMany()
+    * ```
+    */
+  get userRole(): Prisma.UserRoleDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.permission`: Exposes CRUD operations for the **Permission** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Permissions
+    * const permissions = await prisma.permission.findMany()
+    * ```
+    */
+  get permission(): Prisma.PermissionDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.rolePermission`: Exposes CRUD operations for the **RolePermission** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RolePermissions
+    * const rolePermissions = await prisma.rolePermission.findMany()
+    * ```
+    */
+  get rolePermission(): Prisma.RolePermissionDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.userPermission`: Exposes CRUD operations for the **UserPermission** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserPermissions
+    * const userPermissions = await prisma.userPermission.findMany()
+    * ```
+    */
+  get userPermission(): Prisma.UserPermissionDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.cmsSite`: Exposes CRUD operations for the **CmsSite** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CmsSites
+    * const cmsSites = await prisma.cmsSite.findMany()
+    * ```
+    */
+  get cmsSite(): Prisma.CmsSiteDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.cmsPage`: Exposes CRUD operations for the **CmsPage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CmsPages
+    * const cmsPages = await prisma.cmsPage.findMany()
+    * ```
+    */
+  get cmsPage(): Prisma.CmsPageDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.cmsPageVersion`: Exposes CRUD operations for the **CmsPageVersion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CmsPageVersions
+    * const cmsPageVersions = await prisma.cmsPageVersion.findMany()
+    * ```
+    */
+  get cmsPageVersion(): Prisma.CmsPageVersionDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.cmsAsset`: Exposes CRUD operations for the **CmsAsset** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CmsAssets
+    * const cmsAssets = await prisma.cmsAsset.findMany()
+    * ```
+    */
+  get cmsAsset(): Prisma.CmsAssetDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.cmsMenu`: Exposes CRUD operations for the **CmsMenu** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CmsMenus
+    * const cmsMenus = await prisma.cmsMenu.findMany()
+    * ```
+    */
+  get cmsMenu(): Prisma.CmsMenuDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.cmsMenuItem`: Exposes CRUD operations for the **CmsMenuItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CmsMenuItems
+    * const cmsMenuItems = await prisma.cmsMenuItem.findMany()
+    * ```
+    */
+  get cmsMenuItem(): Prisma.CmsMenuItemDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.tenant`: Exposes CRUD operations for the **Tenant** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Tenants
+    * const tenants = await prisma.tenant.findMany()
+    * ```
+    */
+  get tenant(): Prisma.TenantDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.tenantModule`: Exposes CRUD operations for the **TenantModule** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TenantModules
+    * const tenantModules = await prisma.tenantModule.findMany()
+    * ```
+    */
+  get tenantModule(): Prisma.TenantModuleDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.address`: Exposes CRUD operations for the **Address** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Addresses
+    * const addresses = await prisma.address.findMany()
+    * ```
+    */
+  get address(): Prisma.AddressDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.businessUnit`: Exposes CRUD operations for the **BusinessUnit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BusinessUnits
+    * const businessUnits = await prisma.businessUnit.findMany()
+    * ```
+    */
+  get businessUnit(): Prisma.BusinessUnitDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.store`: Exposes CRUD operations for the **Store** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Stores
+    * const stores = await prisma.store.findMany()
+    * ```
+    */
+  get store(): Prisma.StoreDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.orgUnit`: Exposes CRUD operations for the **OrgUnit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OrgUnits
+    * const orgUnits = await prisma.orgUnit.findMany()
+    * ```
+    */
+  get orgUnit(): Prisma.OrgUnitDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.orgUnitClosure`: Exposes CRUD operations for the **OrgUnitClosure** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OrgUnitClosures
+    * const orgUnitClosures = await prisma.orgUnitClosure.findMany()
+    * ```
+    */
+  get orgUnitClosure(): Prisma.OrgUnitClosureDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.storeOrgUnit`: Exposes CRUD operations for the **StoreOrgUnit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StoreOrgUnits
+    * const storeOrgUnits = await prisma.storeOrgUnit.findMany()
+    * ```
+    */
+  get storeOrgUnit(): Prisma.StoreOrgUnitDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.storeTag`: Exposes CRUD operations for the **StoreTag** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StoreTags
+    * const storeTags = await prisma.storeTag.findMany()
+    * ```
+    */
+  get storeTag(): Prisma.StoreTagDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.storeTagAssignment`: Exposes CRUD operations for the **StoreTagAssignment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StoreTagAssignments
+    * const storeTagAssignments = await prisma.storeTagAssignment.findMany()
+    * ```
+    */
+  get storeTagAssignment(): Prisma.StoreTagAssignmentDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.storeClassification`: Exposes CRUD operations for the **StoreClassification** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StoreClassifications
+    * const storeClassifications = await prisma.storeClassification.findMany()
+    * ```
+    */
+  get storeClassification(): Prisma.StoreClassificationDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.storeClassificationAssignment`: Exposes CRUD operations for the **StoreClassificationAssignment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StoreClassificationAssignments
+    * const storeClassificationAssignments = await prisma.storeClassificationAssignment.findMany()
+    * ```
+    */
+  get storeClassificationAssignment(): Prisma.StoreClassificationAssignmentDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.domainEvent`: Exposes CRUD operations for the **DomainEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DomainEvents
+    * const domainEvents = await prisma.domainEvent.findMany()
+    * ```
+    */
+  get domainEvent(): Prisma.DomainEventDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.employeeOrgUnit`: Exposes CRUD operations for the **EmployeeOrgUnit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EmployeeOrgUnits
+    * const employeeOrgUnits = await prisma.employeeOrgUnit.findMany()
+    * ```
+    */
+  get employeeOrgUnit(): Prisma.EmployeeOrgUnitDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.employee`: Exposes CRUD operations for the **Employee** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Employees
+    * const employees = await prisma.employee.findMany()
+    * ```
+    */
+  get employee(): Prisma.EmployeeDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.employeeStore`: Exposes CRUD operations for the **EmployeeStore** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EmployeeStores
+    * const employeeStores = await prisma.employeeStore.findMany()
+    * ```
+    */
+  get employeeStore(): Prisma.EmployeeStoreDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.shift`: Exposes CRUD operations for the **Shift** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Shifts
+    * const shifts = await prisma.shift.findMany()
+    * ```
+    */
+  get shift(): Prisma.ShiftDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.timeOffRequest`: Exposes CRUD operations for the **TimeOffRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TimeOffRequests
+    * const timeOffRequests = await prisma.timeOffRequest.findMany()
+    * ```
+    */
+  get timeOffRequest(): Prisma.TimeOffRequestDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.customer`: Exposes CRUD operations for the **Customer** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Customers
+    * const customers = await prisma.customer.findMany()
+    * ```
+    */
+  get customer(): Prisma.CustomerDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.customerAddress`: Exposes CRUD operations for the **CustomerAddress** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CustomerAddresses
+    * const customerAddresses = await prisma.customerAddress.findMany()
+    * ```
+    */
+  get customerAddress(): Prisma.CustomerAddressDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.product`: Exposes CRUD operations for the **Product** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Products
+    * const products = await prisma.product.findMany()
+    * ```
+    */
+  get product(): Prisma.ProductDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.productImage`: Exposes CRUD operations for the **ProductImage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductImages
+    * const productImages = await prisma.productImage.findMany()
+    * ```
+    */
+  get productImage(): Prisma.ProductImageDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.productOption`: Exposes CRUD operations for the **ProductOption** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductOptions
+    * const productOptions = await prisma.productOption.findMany()
+    * ```
+    */
+  get productOption(): Prisma.ProductOptionDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.productOptionValue`: Exposes CRUD operations for the **ProductOptionValue** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductOptionValues
+    * const productOptionValues = await prisma.productOptionValue.findMany()
+    * ```
+    */
+  get productOptionValue(): Prisma.ProductOptionValueDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.productVariant`: Exposes CRUD operations for the **ProductVariant** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductVariants
+    * const productVariants = await prisma.productVariant.findMany()
+    * ```
+    */
+  get productVariant(): Prisma.ProductVariantDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.variantOptionValue`: Exposes CRUD operations for the **VariantOptionValue** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more VariantOptionValues
+    * const variantOptionValues = await prisma.variantOptionValue.findMany()
+    * ```
+    */
+  get variantOptionValue(): Prisma.VariantOptionValueDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.collection`: Exposes CRUD operations for the **Collection** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Collections
+    * const collections = await prisma.collection.findMany()
+    * ```
+    */
+  get collection(): Prisma.CollectionDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.collectionProduct`: Exposes CRUD operations for the **CollectionProduct** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CollectionProducts
+    * const collectionProducts = await prisma.collectionProduct.findMany()
+    * ```
+    */
+  get collectionProduct(): Prisma.CollectionProductDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.discount`: Exposes CRUD operations for the **Discount** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Discounts
+    * const discounts = await prisma.discount.findMany()
+    * ```
+    */
+  get discount(): Prisma.DiscountDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.cart`: Exposes CRUD operations for the **Cart** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Carts
+    * const carts = await prisma.cart.findMany()
+    * ```
+    */
+  get cart(): Prisma.CartDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.cartItem`: Exposes CRUD operations for the **CartItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CartItems
+    * const cartItems = await prisma.cartItem.findMany()
+    * ```
+    */
+  get cartItem(): Prisma.CartItemDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.cartAdjustment`: Exposes CRUD operations for the **CartAdjustment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CartAdjustments
+    * const cartAdjustments = await prisma.cartAdjustment.findMany()
+    * ```
+    */
+  get cartAdjustment(): Prisma.CartAdjustmentDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.order`: Exposes CRUD operations for the **Order** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Orders
+    * const orders = await prisma.order.findMany()
+    * ```
+    */
+  get order(): Prisma.OrderDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.orderItem`: Exposes CRUD operations for the **OrderItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OrderItems
+    * const orderItems = await prisma.orderItem.findMany()
+    * ```
+    */
+  get orderItem(): Prisma.OrderItemDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.orderAdjustment`: Exposes CRUD operations for the **OrderAdjustment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more OrderAdjustments
+    * const orderAdjustments = await prisma.orderAdjustment.findMany()
+    * ```
+    */
+  get orderAdjustment(): Prisma.OrderAdjustmentDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

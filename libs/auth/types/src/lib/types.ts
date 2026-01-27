@@ -14,6 +14,7 @@ export type AuthRegisterRequest = {
 export type AuthUser = {
   id: string;
   email: string;
+  tenantId: string;
   role?: string;
   avatar?: string | null;
   firstName?: string;
@@ -23,6 +24,7 @@ export type AuthUser = {
 export type AuthTokenPayload = {
   sub: string;
   email: string;
+  tenantId: string;
   role: string;
   type: 'access';
 };

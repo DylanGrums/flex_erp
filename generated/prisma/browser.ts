@@ -23,7 +23,237 @@ export * from './enums.ts';
  */
 export type User = Prisma.UserModel
 /**
- * Model RefreshToken
+ * Model AuthSession
  * 
  */
-export type RefreshToken = Prisma.RefreshTokenModel
+export type AuthSession = Prisma.AuthSessionModel
+/**
+ * Model Role
+ * 
+ */
+export type Role = Prisma.RoleModel
+/**
+ * Model UserRole
+ * 
+ */
+export type UserRole = Prisma.UserRoleModel
+/**
+ * Model Permission
+ * 
+ */
+export type Permission = Prisma.PermissionModel
+/**
+ * Model RolePermission
+ * 
+ */
+export type RolePermission = Prisma.RolePermissionModel
+/**
+ * Model UserPermission
+ * 
+ */
+export type UserPermission = Prisma.UserPermissionModel
+/**
+ * Model CmsSite
+ * 
+ */
+export type CmsSite = Prisma.CmsSiteModel
+/**
+ * Model CmsPage
+ * 
+ */
+export type CmsPage = Prisma.CmsPageModel
+/**
+ * Model CmsPageVersion
+ * 
+ */
+export type CmsPageVersion = Prisma.CmsPageVersionModel
+/**
+ * Model CmsAsset
+ * 
+ */
+export type CmsAsset = Prisma.CmsAssetModel
+/**
+ * Model CmsMenu
+ * 
+ */
+export type CmsMenu = Prisma.CmsMenuModel
+/**
+ * Model CmsMenuItem
+ * 
+ */
+export type CmsMenuItem = Prisma.CmsMenuItemModel
+/**
+ * Model Tenant
+ * 
+ */
+export type Tenant = Prisma.TenantModel
+/**
+ * Model TenantModule
+ * 
+ */
+export type TenantModule = Prisma.TenantModuleModel
+/**
+ * Model Address
+ * 
+ */
+export type Address = Prisma.AddressModel
+/**
+ * Model BusinessUnit
+ * 
+ */
+export type BusinessUnit = Prisma.BusinessUnitModel
+/**
+ * Model Store
+ * 
+ */
+export type Store = Prisma.StoreModel
+/**
+ * Model OrgUnit
+ * 
+ */
+export type OrgUnit = Prisma.OrgUnitModel
+/**
+ * Model OrgUnitClosure
+ * 
+ */
+export type OrgUnitClosure = Prisma.OrgUnitClosureModel
+/**
+ * Model StoreOrgUnit
+ * 
+ */
+export type StoreOrgUnit = Prisma.StoreOrgUnitModel
+/**
+ * Model StoreTag
+ * 
+ */
+export type StoreTag = Prisma.StoreTagModel
+/**
+ * Model StoreTagAssignment
+ * 
+ */
+export type StoreTagAssignment = Prisma.StoreTagAssignmentModel
+/**
+ * Model StoreClassification
+ * 
+ */
+export type StoreClassification = Prisma.StoreClassificationModel
+/**
+ * Model StoreClassificationAssignment
+ * 
+ */
+export type StoreClassificationAssignment = Prisma.StoreClassificationAssignmentModel
+/**
+ * Model DomainEvent
+ * 
+ */
+export type DomainEvent = Prisma.DomainEventModel
+/**
+ * Model EmployeeOrgUnit
+ * 
+ */
+export type EmployeeOrgUnit = Prisma.EmployeeOrgUnitModel
+/**
+ * Model Employee
+ * 
+ */
+export type Employee = Prisma.EmployeeModel
+/**
+ * Model EmployeeStore
+ * 
+ */
+export type EmployeeStore = Prisma.EmployeeStoreModel
+/**
+ * Model Shift
+ * 
+ */
+export type Shift = Prisma.ShiftModel
+/**
+ * Model TimeOffRequest
+ * 
+ */
+export type TimeOffRequest = Prisma.TimeOffRequestModel
+/**
+ * Model Customer
+ * 
+ */
+export type Customer = Prisma.CustomerModel
+/**
+ * Model CustomerAddress
+ * 
+ */
+export type CustomerAddress = Prisma.CustomerAddressModel
+/**
+ * Model Product
+ * 
+ */
+export type Product = Prisma.ProductModel
+/**
+ * Model ProductImage
+ * 
+ */
+export type ProductImage = Prisma.ProductImageModel
+/**
+ * Model ProductOption
+ * 
+ */
+export type ProductOption = Prisma.ProductOptionModel
+/**
+ * Model ProductOptionValue
+ * 
+ */
+export type ProductOptionValue = Prisma.ProductOptionValueModel
+/**
+ * Model ProductVariant
+ * 
+ */
+export type ProductVariant = Prisma.ProductVariantModel
+/**
+ * Model VariantOptionValue
+ * 
+ */
+export type VariantOptionValue = Prisma.VariantOptionValueModel
+/**
+ * Model Collection
+ * 
+ */
+export type Collection = Prisma.CollectionModel
+/**
+ * Model CollectionProduct
+ * 
+ */
+export type CollectionProduct = Prisma.CollectionProductModel
+/**
+ * Model Discount
+ * 
+ */
+export type Discount = Prisma.DiscountModel
+/**
+ * Model Cart
+ * 
+ */
+export type Cart = Prisma.CartModel
+/**
+ * Model CartItem
+ * 
+ */
+export type CartItem = Prisma.CartItemModel
+/**
+ * Model CartAdjustment
+ * 
+ */
+export type CartAdjustment = Prisma.CartAdjustmentModel
+/**
+ * Model Order
+ * 
+ */
+export type Order = Prisma.OrderModel
+/**
+ * Model OrderItem
+ * 
+ */
+export type OrderItem = Prisma.OrderItemModel
+/**
+ * Model OrderAdjustment
+ * 
+ */
+export type OrderAdjustment = Prisma.OrderAdjustmentModel

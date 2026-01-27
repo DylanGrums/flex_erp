@@ -17,10 +17,10 @@ describe('Auth Actions', () => {
     const success = new LoginSuccess({
       accessToken: 't',
       accessTokenExpiresAt: '2024-01-01T00:00:00Z',
-      user: { id: '1' } as any,
+      user: { id: '1', tenantId: 't1' } as any,
     });
     expect(LoginSuccess.type).toBe('[Auth] Login Success');
-    expect(success.payload.user).toEqual({ id: '1' });
+    expect(success.payload.user).toEqual({ id: '1', tenantId: 't1' });
 
     const failed = new LoginFailed('oops');
     expect(LoginFailed.type).toBe('[Auth] Login Failed');

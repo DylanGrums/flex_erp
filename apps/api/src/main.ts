@@ -15,7 +15,7 @@ async function bootstrap() {
     origin: clientOrigin,
     credentials: true,
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Tenant-Id', 'X-Store-Id'],
   });
 
   const port = process.env.PORT || 3000;

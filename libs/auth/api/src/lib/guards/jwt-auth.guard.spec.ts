@@ -9,33 +9,58 @@ describe('JwtAuthGuard', () => {
       switchToHttp: () => ({
         getRequest: () => req,
       }),
-    } as unknown as ExecutionContext);
+    }) as unknown as ExecutionContext;
 
   it('throws when no user is present on request', async () => {
     const prisma = { user: { findUnique: jest.fn() } };
     const guard = new JwtAuthGuard(prisma as any);
-    await expect(guard.canActivate(makeContext({}))).rejects.toBeInstanceOf(UnauthorizedException);
+    await expect(guard.canActivate(makeContext({}))).rejects.toBeInstanceOf(
+      UnauthorizedException,
+    );
   });
 
   it('throws when user is not active or missing', async () => {
-    const prisma = { user: { findUnique: jest.fn().mockResolvedValue({ isActive: false }) } };
+    const prisma = {
+      user: { findUnique: jest.fn().mockResolvedValue({ status: 'DISABLED' }) },
+    };
     const guard = new JwtAuthGuard(prisma as any);
     const req = { user: { userId: 'u1' } };
 
-    await expect(guard.canActivate(makeContext(req))).rejects.toBeInstanceOf(UnauthorizedException);
-    expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { id: 'u1' } });
+    await expect(guard.canActivate(makeContext(req))).rejects.toBeInstanceOf(
+      UnauthorizedException,
+    );
+    expect(prisma.user.findUnique).toHaveBeenCalledWith({
+      where: { id: 'u1' },
+      include: { roles: { include: { role: true } } },
+    });
   });
 
   it('attaches sanitized user data on success', async () => {
-    const dbUser = { id: 'u1', email: 'a@test.com', role: 'ADMIN', avatar: 'av', isActive: true };
-    const prisma = { user: { findUnique: jest.fn().mockResolvedValue(dbUser) } };
+    const dbUser = {
+      id: 'u1',
+      tenantId: 't1',
+      email: 'a@test.com',
+      status: 'ACTIVE',
+      roles: [{ role: { key: 'ADMIN' } }],
+    };
+    const prisma = {
+      user: { findUnique: jest.fn().mockResolvedValue(dbUser) },
+    };
     const guard = new JwtAuthGuard(prisma as any);
     const req: any = { user: { userId: 'u1' } };
 
     const result = await guard.canActivate(makeContext(req));
 
     expect(result).toBe(true);
-    expect(req.user).toEqual({ id: 'u1', email: 'a@test.com', roles: 'ADMIN', avatar: 'av', isActive: true });
+    expect(req.user).toEqual({
+      id: 'u1',
+      tenantId: 't1',
+      email: 'a@test.com',
+      roles: 'ADMIN',
+      role: 'ADMIN',
+      avatar: null,
+      isActive: true,
+    });
     expect(req.fullUser).toEqual(dbUser);
   });
 

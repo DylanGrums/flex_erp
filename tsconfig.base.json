@@ -24,6 +24,9 @@
       "@flex-erp/store/manifest": ["libs/store/manifest/src/index.ts"],
       "@flex-erp/shared/ui": ["libs/shared/ui/src/index.ts"],
       "@flex-erp/shared/nav": ["libs/shared/nav/src/index.ts"],
+      "@flex-erp/shared/context/data-access": [
+        "libs/shared/context/data-access/src/index.ts"
+      ],
       "@flex-erp/auth/types": ["libs/auth/types/src/index.ts"],
       "@flex-erp/auth/util": ["libs/auth/util/src/index.ts"],
       "@flex-erp/auth/ui": ["libs/auth/ui/src/index.ts"],

@@ -5,7 +5,10 @@
     "declaration": true,
     "types": ["node"]
   },
-  "include": ["src/**/*.ts"],
+  "include": [
+    "src/**/*.ts",
+    "../api/src/lib/models/requestWithUser.interface.ts"
+  ],
   "exclude": [
     "jest.config.ts",
     "jest.config.cts",

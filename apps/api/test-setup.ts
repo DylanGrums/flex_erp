@@ -20,12 +20,12 @@ jest.mock(
   () => {
     class PrismaClient {
       user: any;
-      refreshToken: any;
+      authSession: any;
       $transaction: any;
       $connect: any;
       constructor() {
         this.user = {};
-        this.refreshToken = {};
+        this.authSession = {};
         this.$transaction = jest.fn();
         this.$connect = jest.fn();
       }
@@ -35,4 +35,4 @@ jest.mock(
   { virtual: true },
 );
 
-export { };
+export {};

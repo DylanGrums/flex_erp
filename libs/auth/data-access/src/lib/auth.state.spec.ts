@@ -13,6 +13,7 @@ import {
   Refresh,
 } from './auth.actions';
 import { AuthStateModel } from './auth.models';
+import { ClearContext, SetTenantId } from '@flex-erp/shared/context/data-access';
 
 type TestContext = StateContext<AuthStateModel> & { dispatch: jest.Mock };
 
@@ -115,7 +116,7 @@ describe('AuthState', () => {
       of({
         accessToken: 'abc',
         accessTokenExpiresAt: expiration,
-        user: { id: 'user-1' } as any,
+        user: { id: 'user-1', tenantId: 'tenant-1' } as any,
       }),
     );
 
@@ -129,6 +130,7 @@ describe('AuthState', () => {
       error: null,
     });
 
+    expect(ctx.dispatch).toHaveBeenCalledWith(new SetTenantId('tenant-1'));
     jest.runOnlyPendingTimers();
     expect(ctx.dispatch).toHaveBeenCalledWith(new Refresh());
   });
@@ -186,7 +188,7 @@ describe('AuthState', () => {
       of({
         accessToken: 'newToken',
         accessTokenExpiresAt: expiration,
-        user: { id: 'new' } as any,
+        user: { id: 'new', tenantId: 'tenant-2' } as any,
       }),
     );
 
@@ -197,6 +199,7 @@ describe('AuthState', () => {
       accessTokenExpiresAt: expiration,
       error: null,
     });
+    expect(ctx.dispatch).toHaveBeenCalledWith(new SetTenantId('tenant-2'));
     jest.runOnlyPendingTimers();
     expect(ctx.dispatch).toHaveBeenCalledWith(new Refresh());
   });
@@ -212,6 +215,7 @@ describe('AuthState', () => {
 
     state.refresh(ctx).subscribe();
     expect(latest()).toEqual(initialAuthState);
+    expect(ctx.dispatch).toHaveBeenCalledWith(new ClearContext());
     expect((state as any).refreshTimerId).toBeNull();
   });
 
@@ -225,6 +229,7 @@ describe('AuthState', () => {
 
     state.refresh(ctx).subscribe();
     expect(latest()).toEqual(initialAuthState);
+    expect(ctx.dispatch).toHaveBeenCalledWith(new ClearContext());
   });
 
   it('refresh catch handles missing clearTimeout', () => {
@@ -239,6 +244,7 @@ describe('AuthState', () => {
 
     state.refresh(ctx).subscribe();
     expect(latest()).toEqual(initialAuthState);
+    expect(ctx.dispatch).toHaveBeenCalledWith(new ClearContext());
     (globalThis as any).clearTimeout = originalClear;
   });
 
@@ -280,12 +286,14 @@ describe('AuthState', () => {
 
     state.logout(ctx).subscribe();
     expect(latest()).toEqual(initialAuthState);
+    expect(ctx.dispatch).toHaveBeenCalledWith(new ClearContext());
     expect((state as any).refreshTimerId).toBeNull();
 
     (state as any).refreshTimerId = setTimeout(() => {}, 5_000);
     api.logout.mockReturnValueOnce(throwError(() => new Error('fail')));
     state.logout(ctx).subscribe();
     expect(latest()).toEqual(initialAuthState);
+    expect(ctx.dispatch).toHaveBeenCalledWith(new ClearContext());
     expect(timersCleared).toHaveBeenCalled();
   });
 
@@ -299,7 +307,7 @@ describe('AuthState', () => {
       new LoginSuccess({
         accessToken: 'abc',
         accessTokenExpiresAt: expiration,
-        user: { id: '1' } as any,
+        user: { id: '1', tenantId: 'tenant-1' } as any,
       }),
     );
     expect(latest()).toMatchObject({
@@ -309,6 +317,7 @@ describe('AuthState', () => {
       loading: false,
       error: null,
     });
+    expect(ctx.dispatch).toHaveBeenCalledWith(new SetTenantId('tenant-1'));
     expect((state as any).refreshTimerId).not.toBeNull();
 
     state.loginFailed(ctx, new LoginFailed('nope'));

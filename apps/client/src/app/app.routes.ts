@@ -6,29 +6,39 @@ import { SettingsStorePage } from './pages/settings-store.page';
 import { SettingsProfilePage } from './pages/settings-profile.page';
 import { DataTableDemoPage } from './pages/data-table-demo.page';
 import { authGuard } from '@flex-erp/auth/data-access';
+import { requireStoreGuard } from '@flex-erp/shared/context/data-access';
 
 export const routes: Routes = [
   {
     path: '',
     component: MainLayoutComponent,
     canActivate: [authGuard],
+    canActivateChild: [requireStoreGuard],
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'orders' },
       { path: 'data-table', component: DataTableDemoPage },
       {
         path: '',
-        loadChildren: () => import('@flex-erp/store/feature').then((m) => m.storeFeatureRoutes),
+        loadChildren: () =>
+          import('@flex-erp/store/feature').then((m) => m.storeFeatureRoutes),
+      },
+      {
+        path: 'store',
+        loadChildren: () =>
+          import('@flex-erp/store/feature').then((m) => m.storeFeatureRoutes),
       },
       {
         path: 'cms',
-        loadChildren: () => import('@flex-erp/cms/feature').then((m) => m.cmsFeatureRoutes),
+        loadChildren: () =>
+          import('@flex-erp/cms/feature').then((m) => m.cmsFeatureRoutes),
       },
     ],
   },
   {
     path: 'login',
     component: PublicLayoutComponent,
-    loadChildren: () => import('@flex-erp/auth/feature').then((m) => m.AUTH_ROUTES),
+    loadChildren: () =>
+      import('@flex-erp/auth/feature').then((m) => m.AUTH_ROUTES),
   },
   {
     path: 'settings',

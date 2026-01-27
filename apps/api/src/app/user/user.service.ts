@@ -3,14 +3,13 @@ import { PrismaService } from '../../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { Prisma, User } from 'generated/prisma/client';
-import { Role } from 'generated/prisma/enums';
 
 @Injectable()
 export class UserService {
   constructor(
     private prisma: PrismaService,
-    private configService: ConfigService
-  ) { }  
+    private configService: ConfigService,
+  ) {}
 
   async getUser(where: Prisma.UserWhereUniqueInput): Promise<User | null> {
     return this.prisma.user.findUnique({
@@ -22,17 +21,14 @@ export class UserService {
     return this.prisma.user.findMany();
   }
 
-  async create(data: { email: string; password: string; firstName?: string; lastName?: string }) {
+  async create(data: { tenantId: string; email: string; password: string }) {
     const rounds = Number(process.env.BCRYPT_ROUNDS ?? 12);
     const passwordHash = await bcrypt.hash(data.password, rounds);
     return this.prisma.user.create({
       data: {
+        tenantId: data.tenantId,
         email: data.email,
         passwordHash,
-        role: Role.USER,
-        isActive: true,
-        firstName: data.firstName ?? '',
-        lastName: data.lastName ?? '',
       },
     });
   }
@@ -55,21 +51,41 @@ export class UserService {
   }
 
   findByEmail(email: string) {
-    return this.prisma.user.findUnique({ where: { email } });
+    return this.prisma.user.findFirst({
+      where: { email },
+      include: { roles: { include: { role: true } } },
+    });
   }
 
-  findById(id: string) {
-    return this.prisma.user.findUnique({ where: { id } });
+  async findById(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: { roles: { include: { role: true } } },
+    });
+    return user ? this.toAuthUser(user) : null;
   }
 
   async validatePassword(email: string, password: string) {
-    // Throw error if no email/password 
+    // Throw error if no email/password
     if (!email || !password) {
       throw new Error('Email and password are required');
     }
     const user = await this.findByEmail(email);
-    if (!user || !user.isActive) return null;
+    if (!user || user.status !== 'ACTIVE') return null;
     const ok = await bcrypt.compare(password, user.passwordHash);
-    return ok ? user : null;
+    return ok ? this.toAuthUser(user) : null;
+  }
+
+  private toAuthUser(user: any) {
+    const defaultRole =
+      this.configService.get<string>('DEFAULT_ROLE_KEY') ?? 'USER';
+    const role = user.roles?.[0]?.role?.key ?? defaultRole;
+    return {
+      ...user,
+      role,
+      roles: role,
+      avatar: null,
+      isActive: user.status === 'ACTIVE',
+    };
   }
 }

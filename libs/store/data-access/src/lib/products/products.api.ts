@@ -3,26 +3,55 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { API_BASE_URL } from '@flex-erp/auth/util';
 import { Product } from '@flex-erp/store/util';
+import { ProductUpsertPayload } from './products.actions';
 
 @Injectable({ providedIn: 'root' })
 export class ProductsApi {
   private http = inject(HttpClient);
   private apiBaseUrl = inject(API_BASE_URL);
 
-  list(storeId: string) {
+  list() {
     return this.unwrap(
-      this.http.get<Product[]>(this.buildUrl(`/stores/${storeId}/products`), {
+      this.http.get<Product[]>(this.buildUrl('/products'), {
         observe: 'response',
+        withCredentials: true,
       }),
     );
   }
 
-  getById(storeId: string, id: string) {
+  getById(id: string) {
     return this.unwrap(
       this.http.get<Product | null>(
-        this.buildUrl(`/stores/${storeId}/products/${id}`),
+        this.buildUrl(`/products/${id}`),
         {
           observe: 'response',
+          withCredentials: true,
+        },
+      ),
+    );
+  }
+
+  create(payload: ProductUpsertPayload) {
+    return this.unwrap(
+      this.http.post<Product>(
+        this.buildUrl('/products'),
+        payload,
+        {
+          observe: 'response',
+          withCredentials: true,
+        },
+      ),
+    );
+  }
+
+  update(id: string, payload: ProductUpsertPayload) {
+    return this.unwrap(
+      this.http.patch<Product>(
+        this.buildUrl(`/products/${id}`),
+        payload,
+        {
+          observe: 'response',
+          withCredentials: true,
         },
       ),
     );

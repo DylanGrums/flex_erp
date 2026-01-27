@@ -4,6 +4,7 @@ import { catchError, tap, of } from 'rxjs';
 import { AuthStateModel } from './auth.models';
 import { Refresh, Login, LoadMe, Logout, LoginSuccess, LoginFailed, ClearError } from './auth.actions';
 import { AuthApiService } from './auth-api.service';
+import { ClearContext, SetTenantId } from '@flex-erp/shared/context/data-access';
 
 const DEFAULT_STATE: AuthStateModel = {
   user: null,
@@ -59,6 +60,7 @@ export class AuthState implements OnDestroy {
           loading: false,
           error: null,
         });
+        ctx.dispatch(new SetTenantId(res.user.tenantId ?? null));
         this.scheduleSilentRefresh(ctx, res.accessTokenExpiresAt);
       }),
       catchError(err => {
@@ -82,10 +84,12 @@ export class AuthState implements OnDestroy {
           accessTokenExpiresAt: res.accessTokenExpiresAt,
           error: null,
         });
+        ctx.dispatch(new SetTenantId(res.user.tenantId ?? null));
         this.scheduleSilentRefresh(ctx, res.accessTokenExpiresAt);
       }),
       catchError(() => {
         ctx.setState({ ...DEFAULT_STATE });
+        ctx.dispatch(new ClearContext());
         if (this.refreshTimerId) { globalThis.clearTimeout?.(this.refreshTimerId); this.refreshTimerId = null; }
         return of(null);
       })
@@ -108,10 +112,12 @@ export class AuthState implements OnDestroy {
       tap(() => {
         if (this.refreshTimerId) { clearTimeout(this.refreshTimerId); this.refreshTimerId = null; }
         ctx.setState({ ...DEFAULT_STATE });
+        ctx.dispatch(new ClearContext());
       }),
       catchError(() => {
         if (this.refreshTimerId) { clearTimeout(this.refreshTimerId); this.refreshTimerId = null; }
         ctx.setState({ ...DEFAULT_STATE });
+        ctx.dispatch(new ClearContext());
         return of(null);
       })
     );
@@ -126,6 +132,7 @@ export class AuthState implements OnDestroy {
       loading: false,
       error: null,
     });
+    ctx.dispatch(new SetTenantId(payload.user.tenantId ?? null));
     this.scheduleSilentRefresh(ctx, payload.accessTokenExpiresAt);
   }
 

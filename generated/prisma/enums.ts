@@ -9,9 +9,160 @@
 * 🟢 You can import this file directly.
 */
 
-export const Role = {
-  ADMIN: 'ADMIN',
-  USER: 'USER'
+export const UserStatus = {
+  ACTIVE: 'ACTIVE',
+  DISABLED: 'DISABLED'
 } as const
 
-export type Role = (typeof Role)[keyof typeof Role]
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
+
+
+export const PermissionEffect = {
+  ALLOW: 'ALLOW',
+  DENY: 'DENY'
+} as const
+
+export type PermissionEffect = (typeof PermissionEffect)[keyof typeof PermissionEffect]
+
+
+export const CmsPageStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type CmsPageStatus = (typeof CmsPageStatus)[keyof typeof CmsPageStatus]
+
+
+export const CmsAssetKind = {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  FILE: 'FILE'
+} as const
+
+export type CmsAssetKind = (typeof CmsAssetKind)[keyof typeof CmsAssetKind]
+
+
+export const CmsMenuItemType = {
+  URL: 'URL',
+  INTERNAL_PAGE: 'INTERNAL_PAGE'
+} as const
+
+export type CmsMenuItemType = (typeof CmsMenuItemType)[keyof typeof CmsMenuItemType]
+
+
+export const CurrencyCode = {
+  EUR: 'EUR',
+  USD: 'USD',
+  GBP: 'GBP'
+} as const
+
+export type CurrencyCode = (typeof CurrencyCode)[keyof typeof CurrencyCode]
+
+
+export const OrgUnitKind = {
+  REGION: 'REGION',
+  GROUP: 'GROUP',
+  FRANCHISEE: 'FRANCHISEE',
+  BRAND: 'BRAND'
+} as const
+
+export type OrgUnitKind = (typeof OrgUnitKind)[keyof typeof OrgUnitKind]
+
+
+export const ModuleKey = {
+  STORE: 'STORE',
+  CMS: 'CMS',
+  EMPLOYEE: 'EMPLOYEE'
+} as const
+
+export type ModuleKey = (typeof ModuleKey)[keyof typeof ModuleKey]
+
+
+export const DomainEventSource = {
+  SYSTEM: 'SYSTEM',
+  USER: 'USER',
+  INTEGRATION: 'INTEGRATION'
+} as const
+
+export type DomainEventSource = (typeof DomainEventSource)[keyof typeof DomainEventSource]
+
+
+export const EmployeeStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+} as const
+
+export type EmployeeStatus = (typeof EmployeeStatus)[keyof typeof EmployeeStatus]
+
+
+export const ShiftStatus = {
+  PLANNED: 'PLANNED',
+  CONFIRMED: 'CONFIRMED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type ShiftStatus = (typeof ShiftStatus)[keyof typeof ShiftStatus]
+
+
+export const TimeOffStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type TimeOffStatus = (typeof TimeOffStatus)[keyof typeof TimeOffStatus]
+
+
+export const TimeOffType = {
+  VACATION: 'VACATION',
+  SICK: 'SICK',
+  OTHER: 'OTHER'
+} as const
+
+export type TimeOffType = (typeof TimeOffType)[keyof typeof TimeOffType]
+
+
+export const ProductStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type ProductStatus = (typeof ProductStatus)[keyof typeof ProductStatus]
+
+
+export const CartStatus = {
+  ACTIVE: 'ACTIVE',
+  ORDERED: 'ORDERED',
+  ABANDONED: 'ABANDONED'
+} as const
+
+export type CartStatus = (typeof CartStatus)[keyof typeof CartStatus]
+
+
+export const OrderStatus = {
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
+
+
+export const DiscountKind = {
+  PERCENT: 'PERCENT',
+  FIXED: 'FIXED'
+} as const
+
+export type DiscountKind = (typeof DiscountKind)[keyof typeof DiscountKind]
+
+
+export const CustomerAddressKind = {
+  SHIPPING: 'SHIPPING',
+  BILLING: 'BILLING'
+} as const
+
+export type CustomerAddressKind = (typeof CustomerAddressKind)[keyof typeof CustomerAddressKind]

@@ -2,16 +2,26 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { randomUUID } from 'node:crypto';
 import { parseDuration } from './utils/duration';
-import { Role } from 'generated/prisma/enums';
-export type AccessPayload = { sub: string; email: string; role: Role; type: 'access' };
+export type AccessPayload = {
+  sub: string;
+  email: string;
+  tenantId: string;
+  role: string;
+  type: 'access';
+};
 export type RefreshPayload = { sub: string; jti: string; type: 'refresh' };
 
 @Injectable()
 export class TokensService {
-  constructor(private jwt: JwtService) { }
+  constructor(private jwt: JwtService) {}
 
-  signAccess(payload: { sub: string; email: string; role: Role }) {
-    const primaryRole = payload.role ?? Role.USER;
+  signAccess(payload: {
+    sub: string;
+    email: string;
+    tenantId: string;
+    role: string;
+  }) {
+    const primaryRole = payload.role ?? 'USER';
     const p: AccessPayload = { ...payload, role: primaryRole, type: 'access' };
 
     const accessTtl = process.env.JWT_ACCESS_TTL ?? '15m';

@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+} from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Router, RouterModule } from '@angular/router';
 
 import { DividerModule } from 'primeng/divider';
 import { PopoverModule } from 'primeng/popover';
@@ -24,6 +30,7 @@ import {
 
 import { NAV_MANIFESTS } from '@flex-erp/shared/nav';
 import { CMS_NAV } from '@flex-erp/cms/manifest';
+import { ContextFacade } from '@flex-erp/shared/context/data-access';
 
 @Component({
   selector: 'app-main-sidebar',
@@ -54,6 +61,8 @@ import { CMS_NAV } from '@flex-erp/cms/manifest';
 export class MainSidebarComponent {
   readonly search = inject(SearchService);
   readonly shortcuts = inject(ShortcutsService);
+  readonly context = inject(ContextFacade);
+  private readonly router = inject(Router);
 
   private readonly manifests = (() => {
     const injected = inject(NAV_MANIFESTS, { optional: true }) ?? [];
@@ -72,12 +81,12 @@ export class MainSidebarComponent {
     { label: string; items: NavItem[]; dividerAfter?: boolean }[]
   >(() => {
     const sortedManifests = [...this.manifests].sort(
-      (a, b) => (a.order ?? 0) - (b.order ?? 0)
+      (a, b) => (a.order ?? 0) - (b.order ?? 0),
     );
 
     return sortedManifests.flatMap((manifest) => {
       const sections = [...manifest.sections].sort(
-        (a, b) => (a.order ?? 0) - (b.order ?? 0)
+        (a, b) => (a.order ?? 0) - (b.order ?? 0),
       );
 
       return sections.map((section) => ({
@@ -88,7 +97,22 @@ export class MainSidebarComponent {
     });
   });
 
+  readonly stores = toSignal(this.context.stores$, { initialValue: [] });
+  readonly storeId = toSignal(this.context.storeId$, { initialValue: null });
+  readonly storeLabel = computed(() => {
+    const id = this.storeId();
+    if (!id) {
+      return 'Select a store';
+    }
+    return this.stores().find((store) => store.id === id)?.name ?? id;
+  });
+
   toggleSearch(): void {
     this.search.toggle();
+  }
+
+  selectStore(storeId: string | null): void {
+    this.context.setStoreId(storeId);
+    void this.router.navigateByUrl('/orders');
   }
 }

@@ -1,6 +1,5 @@
 import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'node:crypto';
-import { Role } from 'generated/prisma/enums';
 import { TokensService } from './tokens.service';
 
 describe('TokensService', () => {
@@ -28,10 +27,21 @@ describe('TokensService', () => {
     process.env.JWT_ISSUER = 'issuer';
     jwt.sign.mockReturnValue('access-token');
 
-    const result = service.signAccess({ sub: '1', email: 'a@test.com', role: undefined as any });
+    const result = service.signAccess({
+      sub: '1',
+      email: 'a@test.com',
+      tenantId: 'tenant-1',
+      role: undefined as any,
+    });
 
     expect(jwt.sign).toHaveBeenCalledWith(
-      { sub: '1', email: 'a@test.com', role: Role.USER, type: 'access' },
+      {
+        sub: '1',
+        email: 'a@test.com',
+        tenantId: 'tenant-1',
+        role: 'USER',
+        type: 'access',
+      },
       expect.objectContaining({
         secret: 'access-secret',
         expiresIn: 10,
@@ -41,7 +51,9 @@ describe('TokensService', () => {
       }),
     );
     expect(result.token).toBe('access-token');
-    expect(result.expiresAt.toISOString()).toBe(new Date(now + 10_000).toISOString());
+    expect(result.expiresAt.toISOString()).toBe(
+      new Date(now + 10_000).toISOString(),
+    );
   });
 
   it('signs refresh tokens with generated jti', () => {
@@ -54,7 +66,11 @@ describe('TokensService', () => {
     const result = service.signRefresh('user-1');
 
     const [payload, options] = jwt.sign.mock.calls[0];
-    expect(payload).toEqual({ sub: 'user-1', jti: result.jti, type: 'refresh' });
+    expect(payload).toEqual({
+      sub: 'user-1',
+      jti: result.jti,
+      type: 'refresh',
+    });
     expect(options).toEqual(
       expect.objectContaining({
         secret: 'refresh-secret',
@@ -66,6 +82,8 @@ describe('TokensService', () => {
     );
     expect(result.jti).toMatch(/^[a-f0-9-]{36}$/i);
     expect(result.token).toBe('refresh-token');
-    expect(result.expiresAt.toISOString()).toBe(new Date(now + 7_200_000).toISOString());
+    expect(result.expiresAt.toISOString()).toBe(
+      new Date(now + 7_200_000).toISOString(),
+    );
   });
 });
