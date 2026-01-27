@@ -3,7 +3,6 @@ import { applyRouteMeta } from '@flex-erp/shared/nav';
 import { STORE_NAV } from '@flex-erp/store/manifest';
 
 import { StoreOrdersPageComponent } from './pages/orders/orders.page';
-import { ProductListComponent } from './product-list/product-list.component';
 import { ProductCreateComponent } from './product-editor/product-create.component';
 import { ProductEditComponent } from './product-editor/product-edit.component';
 import { StoreCollectionsPageComponent } from './pages/collections/collections.page';
@@ -12,14 +11,15 @@ import { StoreInventoryPageComponent } from './pages/inventory/inventory.page';
 import { StoreCustomersPageComponent } from './pages/customers/customers.page';
 import { StorePromotionsPageComponent } from './pages/promotions/promotions.page';
 import { StorePriceListsPageComponent } from './pages/price-lists/price-lists.page';
+import { StoreProductsPageComponent } from './pages/products/products.page';
 
 const rawRoutes: Routes = [
   {
     path: '',
     children: [
-      { path: '', component: ProductListComponent },
+      { path: '', component: StoreProductsPageComponent },
       { path: 'orders', component: StoreOrdersPageComponent },
-      { path: 'products', component: ProductListComponent },
+      { path: 'products', component: StoreProductsPageComponent },
       { path: 'products/new', component: ProductCreateComponent },
       { path: 'products/:id', component: ProductEditComponent },
       { path: 'collections', component: StoreCollectionsPageComponent },

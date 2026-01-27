@@ -5,8 +5,10 @@ import {
   TemplateRef,
   ViewChild,
   computed,
+  inject,
   signal,
 } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoModule } from '@jsverse/transloco';
 import { Box, Pencil, Trash2 } from 'lucide-angular';
 
@@ -280,6 +282,9 @@ const applyFilters = (
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoreProductsPageComponent {
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+
   @ViewChild('categoryFilter', { static: true })
   private categoryFilterTemplate!: TemplateRef<DataTableCustomFilterContext>;
 
@@ -427,7 +432,7 @@ export class StoreProductsPageComponent {
     rowCount: this.rowCount,
     getRowId: (row) => row.id,
     onRowClick: (_event, row) => {
-      alert(`Open ${row.name}`);
+      this.router.navigate([row.id], { relativeTo: this.route });
     },
     search: {
       state: this.search,
