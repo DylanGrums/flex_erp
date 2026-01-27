@@ -42,6 +42,7 @@ const createContext = (
     patchState: (val: Partial<AuthStateModel>) => {
       current = { ...current, ...val };
     },
+    abortSignal: new AbortController().signal,
     dispatch: jest.fn(),
   };
 
@@ -336,7 +337,7 @@ describe('AuthState', () => {
     );
     expect((state as any).refreshTimerId).toBeNull();
 
-    state.clearError(ctx, new ClearError());
+    (state as any).clearError(ctx, new ClearError());
     expect(latest().error).toBeNull();
   });
 

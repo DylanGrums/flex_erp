@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Store } from '@ngxs/store';
+import { TranslocoTestingModule } from '@jsverse/transloco';
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
@@ -19,7 +20,10 @@ describe('LoginComponent', () => {
       dialogRefMock = { close: jest.fn() };
 
       TestBed.configureTestingModule({
-        imports: [LoginComponent],
+        imports: [
+          LoginComponent,
+          TranslocoTestingModule.forRoot({ langs: {}, preloadLangs: true }),
+        ],
         providers: [
           { provide: DynamicDialogRef, useValue: dialogRefMock },
           { provide: Store, useValue: storeMock },

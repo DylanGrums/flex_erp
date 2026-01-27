@@ -2,7 +2,9 @@
   "name": "@flex-erp/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "test:all": "nx run-many -t test --all"
+  },
   "private": true,
   "dependencies": {
     "@angular/cdk": "21.1.0",

@@ -15,6 +15,15 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@angular/common/http": ["node_modules/@angular/common/types/http.d.ts"],
+      "@angular/common/http/testing": [
+        "node_modules/@angular/common/types/http-testing.d.ts"
+      ],
+      "@angular/core/testing": ["node_modules/@angular/core/types/testing.d.ts"],
+      "primeng/*": ["node_modules/primeng/types/primeng-*.d.ts"],
+      "primeng/dynamicdialog": [
+        "node_modules/primeng/types/primeng-dynamicdialog.d.ts"
+      ],
       "@flex-erp/ui-preset": ["packages/ui-preset/src/index.ts"],
       "@flex-erp/store/feature": ["libs/store/feature/src/index.ts"],
       "@flex-erp/store/data-access": ["libs/store/data-access/src/index.ts"],

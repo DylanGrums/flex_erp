@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TranslocoTestingModule } from '@jsverse/transloco';
 import { Types } from './types';
 
 describe('Types', () => {
@@ -7,7 +8,7 @@ describe('Types', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Types],
+      imports: [Types, TranslocoTestingModule.forRoot({ langs: {}, preloadLangs: true })],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Types);

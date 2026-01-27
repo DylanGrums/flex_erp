@@ -1,4 +1,4 @@
-import { HttpRequest } from '@angular/common/http';
+import { HttpRequest, HttpResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom, of } from 'rxjs';
 import { Store } from '@ngxs/store';
@@ -31,12 +31,12 @@ describe('contextInterceptor', () => {
       return null;
     });
 
-    const next = jest.fn((req) => of(req));
+    const next = jest.fn((req) => of(new HttpResponse({ headers: req.headers })));
     const req = new HttpRequest('GET', '/api/orders');
 
-    const handled = await TestBed.runInInjectionContext(() =>
+    const handled = (await TestBed.runInInjectionContext(() =>
       firstValueFrom(contextInterceptor(req, next)),
-    );
+    )) as HttpResponse<unknown>;
 
     expect(handled.headers.get('X-Store-Id')).toBe('store-1');
     expect(handled.headers.get('X-Tenant-Id')).toBe('tenant-1');
@@ -44,12 +44,12 @@ describe('contextInterceptor', () => {
 
   it('skips headers when context empty', async () => {
     storeMock.selectSnapshot.mockReturnValue(null);
-    const next = jest.fn((req) => of(req));
+    const next = jest.fn((req) => of(new HttpResponse({ headers: req.headers })));
     const req = new HttpRequest('GET', '/api/orders');
 
-    const handled = await TestBed.runInInjectionContext(() =>
+    const handled = (await TestBed.runInInjectionContext(() =>
       firstValueFrom(contextInterceptor(req, next)),
-    );
+    )) as HttpResponse<unknown>;
 
     expect(handled.headers.has('X-Store-Id')).toBe(false);
     expect(handled.headers.has('X-Tenant-Id')).toBe(false);
@@ -69,12 +69,12 @@ describe('contextInterceptor', () => {
       return null;
     });
 
-    const next = jest.fn((req) => of(req));
+    const next = jest.fn((req) => of(new HttpResponse({ headers: req.headers })));
     const req = new HttpRequest('GET', '/api/orders');
 
-    const handled = await TestBed.runInInjectionContext(() =>
+    const handled = (await TestBed.runInInjectionContext(() =>
       firstValueFrom(contextInterceptor(req, next)),
-    );
+    )) as HttpResponse<unknown>;
 
     expect(handled.headers.get('X-Store-Id')).toBe('store-1');
     expect(handled.headers.get('X-Tenant-Id')).toBe('tenant-2');

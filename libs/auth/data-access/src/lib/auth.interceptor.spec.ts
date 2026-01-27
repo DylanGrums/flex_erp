@@ -23,9 +23,9 @@ describe('authInterceptor', () => {
     const next = jest.fn((req) => of(req));
     const req = new HttpRequest('GET', 'http://api.example.com/users');
 
-    const handled = await TestBed.runInInjectionContext(() =>
+    const handled = (await TestBed.runInInjectionContext(() =>
       firstValueFrom(authInterceptor(req, next)),
-    );
+    )) as unknown as HttpRequest<unknown>;
 
     expect(next).toHaveBeenCalled();
     expect(handled.headers.get('Authorization')).toBe('Bearer jwt-token');
@@ -37,9 +37,9 @@ describe('authInterceptor', () => {
     const next = jest.fn((req) => of(req));
     const req = new HttpRequest('GET', 'http://other.example.com/users');
 
-    const handled = await TestBed.runInInjectionContext(() =>
+    const handled = (await TestBed.runInInjectionContext(() =>
       firstValueFrom(authInterceptor(req, next)),
-    );
+    )) as unknown as HttpRequest<unknown>;
 
     expect(handled.headers.get('Authorization')).toBeNull();
     expect(handled.withCredentials).toBeFalsy();
@@ -50,9 +50,9 @@ describe('authInterceptor', () => {
     const next = jest.fn((req) => of(req));
     const req = new HttpRequest('GET', 'http://api.example.com/data');
 
-    const handled = await TestBed.runInInjectionContext(() =>
+    const handled = (await TestBed.runInInjectionContext(() =>
       firstValueFrom(authInterceptor(req, next)),
-    );
+    )) as unknown as HttpRequest<unknown>;
 
     expect(handled.headers.has('Authorization')).toBe(false);
     expect(handled.withCredentials).toBe(true);

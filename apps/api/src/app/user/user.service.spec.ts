@@ -104,7 +104,7 @@ describe('UserService', () => {
       passwordHash: 'hashed-other',
       status: 'ACTIVE',
     });
-    jest.mocked(bcrypt.compare).mockResolvedValueOnce(false);
+    (bcrypt.compare as jest.Mock).mockResolvedValueOnce(false);
     expect(await service.validatePassword('u2@test.com', 'pass')).toBeNull();
 
     prisma.user.findFirst.mockResolvedValueOnce({
@@ -112,7 +112,7 @@ describe('UserService', () => {
       passwordHash: 'hashed-pass',
       status: 'ACTIVE',
     });
-    jest.mocked(bcrypt.compare).mockResolvedValueOnce(true);
+    (bcrypt.compare as jest.Mock).mockResolvedValueOnce(true);
     const valid = await service.validatePassword('u3@test.com', 'pass');
     expect(valid).toMatchObject({
       id: 'u3',
