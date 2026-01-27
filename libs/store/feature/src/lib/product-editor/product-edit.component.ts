@@ -6,7 +6,14 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { TranslocoModule } from '@jsverse/transloco';
 import { ProductsFacade } from '@flex-erp/store/data-access';
@@ -67,7 +74,7 @@ export class ProductEditComponent {
     status: this.fb.control('DRAFT', { nonNullable: true }),
     options: this.fb.control('', { nonNullable: true }),
     images: this.fb.control('', { nonNullable: true }),
-    variants: this.fb.array([
+    variants: this.fb.array<VariantFormGroup>([
       this.fb.group({
         sku: this.fb.control<string | null>(null),
         price: this.fb.control(0, { nonNullable: true }),
@@ -95,11 +102,11 @@ export class ProductEditComponent {
         images: (product.images ?? []).join('\n'),
       });
       const variants = product.variants ?? [];
-      const variantControls =
+      const variantControls: VariantSeed[] =
         variants.length > 0
           ? variants
           : [{ sku: null, price: 0, optionValues: [] }];
-      const variantsArray = this.fb.array(
+      const variantsArray = this.fb.array<VariantFormGroup>(
         variantControls.map((variant) =>
           this.fb.group({
             sku: this.fb.control<string | null>(variant.sku ?? null),
@@ -142,3 +149,15 @@ export class ProductEditComponent {
     });
   }
 }
+
+type VariantSeed = {
+  sku?: string | null;
+  price?: number | null;
+  optionValues?: string[];
+};
+
+type VariantFormGroup = FormGroup<{
+  sku: FormControl<string | null>;
+  price: FormControl<number>;
+  optionValues: FormControl<string>;
+}>;

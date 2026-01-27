@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ArrowDown, ArrowUp, ArrowUpDown, Check, LucideAngularModule } from 'lucide-angular';
 import {
   FlexDropdownMenuContentDirective,
   FlexDropdownMenuItemIndicatorDirective,
@@ -25,6 +26,7 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
     CommonModule,
     DataTableIconButtonComponent,
     DataTableSkeletonComponent,
+    LucideAngularModule,
     FlexDropdownMenuTriggerDirective,
     FlexDropdownMenuContentDirective,
     FlexDropdownMenuItemRadioGroupDirective,
@@ -44,8 +46,9 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
           size="small"
           [flexDropdownMenuTrigger]="menu"
           [flexTooltipTrigger]="tooltipTemplate"
+          [attr.aria-label]="tooltip || 'Sort'"
         >
-          <i class="pi pi-sort-alt text-sm"></i>
+          <i-lucide [img]="ArrowUpDown" class="h-4 w-4"></i-lucide>
         </button>
         <ng-template #tooltipTemplate>
           <div
@@ -56,8 +59,13 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
           </div>
         </ng-template>
       } @else {
-        <button flexDataTableIconButton size="small" [flexDropdownMenuTrigger]="menu">
-          <i class="pi pi-sort-alt text-sm"></i>
+        <button
+          flexDataTableIconButton
+          size="small"
+          [flexDropdownMenuTrigger]="menu"
+          [attr.aria-label]="tooltip || 'Sort'"
+        >
+          <i-lucide [img]="ArrowUpDown" class="h-4 w-4"></i-lucide>
         </button>
       }
 
@@ -72,7 +80,7 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
             >
               No sorting
               <span flexDropdownMenuItemIndicator class="ms-auto text-ui-fg-interactive">
-                <i class="pi pi-check text-xs"></i>
+                <i-lucide [img]="Check" class="h-3 w-3"></i-lucide>
               </span>
             </button>
             @for (column of sortableColumns; track column.id) {
@@ -84,7 +92,7 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
               >
                 {{ getSortLabel(column) }}
                 <span flexDropdownMenuItemIndicator class="ms-auto text-ui-fg-interactive">
-                  <i class="pi pi-check text-xs"></i>
+                  <i-lucide [img]="Check" class="h-3 w-3"></i-lucide>
                 </span>
               </button>
             }
@@ -103,7 +111,7 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
                 value="false"
                 class="flex w-full items-center gap-2 rounded px-2 py-1.5 text-sm text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover"
               >
-                <i class="pi pi-arrow-up text-xs text-ui-fg-subtle"></i>
+                <i-lucide [img]="ArrowUp" class="h-3 w-3 text-ui-fg-subtle"></i-lucide>
                 {{ getSortDescriptor('asc', selectedColumn) }}
               </button>
               <button
@@ -112,7 +120,7 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
                 value="true"
                 class="flex w-full items-center gap-2 rounded px-2 py-1.5 text-sm text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover"
               >
-                <i class="pi pi-arrow-down text-xs text-ui-fg-subtle"></i>
+                <i-lucide [img]="ArrowDown" class="h-3 w-3 text-ui-fg-subtle"></i-lucide>
                 {{ getSortDescriptor('desc', selectedColumn) }}
               </button>
             </div>
@@ -124,6 +132,11 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableSortingMenuComponent {
+  readonly ArrowUpDown = ArrowUpDown;
+  readonly Check = Check;
+  readonly ArrowUp = ArrowUp;
+  readonly ArrowDown = ArrowDown;
+
   @Input() tooltip?: string;
 
   readonly context = injectDataTableContext();

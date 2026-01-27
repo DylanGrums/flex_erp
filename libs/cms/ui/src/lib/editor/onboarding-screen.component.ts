@@ -2,15 +2,20 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { Template } from '@flex-erp/cms/types';
 import { CmsButtonComponent } from '../primitives/button/cms-button.component';
 import { TranslocoModule } from '@jsverse/transloco';
+import { Bolt, Check, LucideAngularModule, Star } from 'lucide-angular';
 
 @Component({
   selector: 'cms-onboarding-screen',
   standalone: true,
-  imports: [CmsButtonComponent, TranslocoModule],
+  imports: [CmsButtonComponent, TranslocoModule, LucideAngularModule],
   templateUrl: './onboarding-screen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CmsOnboardingScreenComponent {
+  readonly Star = Star;
+  readonly Check = Check;
+  readonly Bolt = Bolt;
+
   @Input() templates: Template[] = [];
   @Output() selectTemplate = new EventEmitter<Template>();
 

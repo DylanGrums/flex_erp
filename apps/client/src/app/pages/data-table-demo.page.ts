@@ -14,11 +14,13 @@ import {
   DataTableColumnOrderState,
   DataTableColumnVisibilityState,
   DataTableCustomFilterContext,
+  DataTableCellContext,
   DataTableEmptyStateProps,
   DataTableFilteringState,
   DataTableFilter,
   DataTableNumberComparisonOperator,
   DataTablePaginationState,
+  DataTableRow,
   DataTableRowSelectionState,
   DataTableSortingState,
   createDataTable,
@@ -35,6 +37,7 @@ import {
   DataTableTableComponent,
   DataTableToolbarComponent,
 } from '@flex-erp/shared/ui';
+import { Box, Pencil, Trash2 } from 'lucide-angular';
 
 type Employee = {
   id: string;
@@ -324,7 +327,7 @@ export class DataTableDemoPage {
 
   readonly rowCount = computed(() => this.processedRows().length);
 
-  readonly columns: DataTableColumnDef<Employee>[] = [
+  readonly columns: DataTableColumnDef<Employee, any>[] = [
     columnHelper.select(),
     columnHelper.accessor('name', {
       header: 'Name',
@@ -364,14 +367,15 @@ export class DataTableDemoPage {
       sortAscLabel: 'Low to High',
       sortDescLabel: 'High to Low',
       headerAlign: 'right',
-      cell: ({ row }) => row.original.age,
+      cell: ({ row }: DataTableCellContext<Employee, number>) =>
+        row.original.age,
     }),
     columnHelper.accessor('joinedAt', {
       header: 'Joined',
       enableSorting: true,
       sortAscLabel: 'Oldest',
       sortDescLabel: 'Newest',
-      cell: ({ row }) =>
+      cell: ({ row }: DataTableCellContext<Employee, Date>) =>
         row.original.joinedAt.toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'short',
@@ -380,26 +384,27 @@ export class DataTableDemoPage {
     }),
     columnHelper.accessor('tags', {
       header: 'Tags',
-      cell: ({ row }) => row.original.tags.join(', '),
+      cell: ({ row }: DataTableCellContext<Employee, string[]>) =>
+        row.original.tags.join(', '),
     }),
     columnHelper.action({
-      actions: (ctx) => [
+      actions: (ctx: DataTableCellContext<Employee, unknown>) => [
         [
           {
             label: 'Edit',
-            icon: 'pi pi-pencil',
+            icon: Pencil,
             onClick: () => alert(`Edit ${ctx.row.original.name}`),
           },
         ],
         [
           {
             label: 'Archive',
-            icon: 'pi pi-box',
+            icon: Box,
             onClick: () => alert(`Archive ${ctx.row.original.name}`),
           },
           {
             label: 'Delete',
-            icon: 'pi pi-trash',
+            icon: Trash2,
             onClick: () => alert(`Delete ${ctx.row.original.name}`),
           },
         ],
@@ -426,39 +431,45 @@ export class DataTableDemoPage {
     filters: this.filters,
     commands: this.commands,
     rowCount: this.rowCount,
-    getRowId: (row) => row.id,
-    onRowClick: (_event, row) => {
+    getRowId: (row: Employee) => row.id,
+    onRowClick: (_event: MouseEvent, row: Employee) => {
       alert(`Navigate to ${row.name}`);
     },
     search: {
       state: this.search,
-      onSearchChange: (value) => this.search.set(value),
+      onSearchChange: (value: string) => this.search.set(value),
       debounce: 300,
     },
     filtering: {
       state: this.filtering,
-      onFilteringChange: (state) => this.filtering.set(state),
+      onFilteringChange: (state: DataTableFilteringState) => this.filtering.set(state),
     },
     sorting: {
       state: this.sorting,
-      onSortingChange: (state) => this.sorting.set(state),
+      onSortingChange: (state: DataTableSortingState | null) =>
+        this.sorting.set(state),
     },
     pagination: {
       state: this.pagination,
-      onPaginationChange: (state) => this.pagination.set(state),
+      onPaginationChange: (state: DataTablePaginationState) =>
+        this.pagination.set(state),
     },
     rowSelection: {
       state: this.rowSelection,
-      onRowSelectionChange: (state) => this.rowSelection.set(state),
-      enableRowSelection: (row) => Number(row.original.id) % 4 !== 0,
+      onRowSelectionChange: (state: DataTableRowSelectionState) =>
+        this.rowSelection.set(state),
+      enableRowSelection: (row: DataTableRow<Employee>) =>
+        Number(row.original.id) % 4 !== 0,
     },
     columnVisibility: {
       state: this.columnVisibility,
-      onColumnVisibilityChange: (state) => this.columnVisibility.set(state),
+      onColumnVisibilityChange: (state: DataTableColumnVisibilityState) =>
+        this.columnVisibility.set(state),
     },
     columnOrder: {
       state: this.columnOrder,
-      onColumnOrderChange: (state) => this.columnOrder.set(state),
+      onColumnOrderChange: (state: DataTableColumnOrderState) =>
+        this.columnOrder.set(state),
     },
   });
 
@@ -530,14 +541,14 @@ export class DataTableDemoPage {
       commandHelper.command({
         label: 'Archive',
         shortcut: 'A',
-        action: (selection) => {
+        action: (selection: DataTableRowSelectionState) => {
           alert(`Archive ${Object.keys(selection).length} rows`);
         },
       }),
       commandHelper.command({
         label: 'Delete',
         shortcut: 'D',
-        action: (selection) => {
+        action: (selection: DataTableRowSelectionState) => {
           alert(`Delete ${Object.keys(selection).length} rows`);
         },
       }),

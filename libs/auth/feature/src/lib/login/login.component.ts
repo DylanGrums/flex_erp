@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { AuthCredentials } from '@flex-erp/auth/types';
 import { Login } from '@flex-erp/auth/data-access';
 import { LoginFormComponent } from '@flex-erp/auth/ui';
@@ -16,15 +15,11 @@ export class LoginComponent {
   error = false;
 
   private store = inject(Store);
-  private dialogRef = inject(DynamicDialogRef, { optional: true });
 
   onSubmit(credentials: AuthCredentials): void {
     this.error = false;
     try {
-      this.store.dispatch(new Login(credentials)).subscribe((user) => {
-        const authed = this.store.selectSnapshot((isAuthenticated) => isAuthenticated);
-        if (authed && this.dialogRef) this.dialogRef.close(user);
-      });
+      this.store.dispatch(new Login(credentials)).subscribe();
     } catch (err) {
       this.error = true;
       console.error(err);

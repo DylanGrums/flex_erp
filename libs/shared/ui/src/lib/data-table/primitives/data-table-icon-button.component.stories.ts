@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { moduleMetadata } from '@storybook/angular';
 import { Component, Input, signal } from '@angular/core';
+import { Ellipsis, LucideAngularModule } from 'lucide-angular';
 import { DataTableIconButtonComponent } from './data-table-icon-button.component';
 import { expect } from '@storybook/jest';
 import { userEvent, within } from '@storybook/testing-library';
@@ -8,7 +9,7 @@ import { userEvent, within } from '@storybook/testing-library';
 @Component({
   selector: 'flex-story-icon-button',
   standalone: true,
-  imports: [DataTableIconButtonComponent],
+  imports: [DataTableIconButtonComponent, LucideAngularModule],
   template: `
     <div class="flex items-center gap-3">
       <button
@@ -18,13 +19,15 @@ import { userEvent, within } from '@storybook/testing-library';
         [disabled]="disabled"
         (click)="count.set(count() + 1)"
       >
-        <i class="pi pi-ellipsis-h text-sm"></i>
+        <i-lucide [img]="Ellipsis" class="h-4 w-4"></i-lucide>
       </button>
       <span data-testid="count">{{ count() }}</span>
     </div>
   `,
 })
 class StoryIconButtonComponent {
+  readonly Ellipsis = Ellipsis;
+
   @Input() size: 'small' | 'base' = 'small';
   @Input() variant: 'default' | 'transparent' = 'default';
   @Input() disabled = false;

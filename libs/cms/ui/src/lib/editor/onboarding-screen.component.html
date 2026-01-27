@@ -2,7 +2,7 @@
   <div class="max-w-4xl w-full">
     <div class="text-center mb-12">
       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ui-bg-subtle text-ui-fg-base text-sm font-medium mb-6">
-        <i class="pi pi-star text-xs"></i>
+        <i-lucide [img]="Star" class="h-3 w-3"></i-lucide>
         {{ 'cms.editor.onboarding.startBuilding' | transloco }}
       </div>
       <h1 class="text-4xl font-bold tracking-tight mb-4">{{ 'cms.editor.onboarding.chooseTemplate' | transloco }}</h1>
@@ -31,7 +31,7 @@
             [class.bg-ui-bg-subtle]="!isSelected(template)"
           >
             @if (isSelected(template)) {
-              <i class="pi pi-check text-xs"></i>
+              <i-lucide [img]="Check" class="h-3 w-3"></i-lucide>
             }
           </div>
 
@@ -91,13 +91,11 @@
               [class.bg-indigo-100]="isClassic(template)"
               [class.bg-emerald-100]="!isClassic(template)"
             >
-              <i
-                class="pi"
-                [class.pi-star]="isClassic(template)"
-                [class.pi-bolt]="!isClassic(template)"
-                [class.text-indigo-600]="isClassic(template)"
-                [class.text-emerald-600]="!isClassic(template)"
-              ></i>
+              @if (isClassic(template)) {
+                <i-lucide [img]="Star" class="h-4 w-4 text-indigo-600"></i-lucide>
+              } @else {
+                <i-lucide [img]="Bolt" class="h-4 w-4 text-emerald-600"></i-lucide>
+              }
             </div>
             <div>
               <h3 class="font-semibold text-lg mb-1">{{ template.name }}</h3>
@@ -123,7 +121,7 @@
         className="px-8 gap-2"
       >
         {{ 'cms.editor.onboarding.startWithTemplate' | transloco }}
-        <i class="pi pi-bolt text-sm"></i>
+        <i-lucide [img]="Bolt" class="h-4 w-4"></i-lucide>
       </cms-button>
     </div>
   </div>

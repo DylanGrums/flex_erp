@@ -7,7 +7,7 @@ export type NestedNavItem = {
 };
 
 export type NavItem = {
-  icon?: string;
+  icon?: import('lucide-angular').LucideIconData;
   label: string;
   to: string;
   items?: NestedNavItem[];

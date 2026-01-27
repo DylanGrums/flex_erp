@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ListFilter, LucideAngularModule } from 'lucide-angular';
 import {
   FlexDropdownMenuContentDirective,
   FlexDropdownMenuItemDirective,
@@ -22,6 +23,7 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
     CommonModule,
     DataTableIconButtonComponent,
     DataTableSkeletonComponent,
+    LucideAngularModule,
     FlexDropdownMenuTriggerDirective,
     FlexDropdownMenuContentDirective,
     FlexDropdownMenuItemDirective,
@@ -39,8 +41,9 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
           [disabled]="filterOptions.length === 0"
           [flexDropdownMenuTrigger]="menu"
           [flexTooltipTrigger]="tooltipTemplate"
+          [attr.aria-label]="tooltip || 'Add filter'"
         >
-          <i class="pi pi-filter text-sm"></i>
+          <i-lucide [img]="ListFilter" class="h-4 w-4"></i-lucide>
         </button>
         <ng-template #tooltipTemplate>
           <div
@@ -56,8 +59,9 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
           size="small"
           [disabled]="filterOptions.length === 0"
           [flexDropdownMenuTrigger]="menu"
+          [attr.aria-label]="tooltip || 'Add filter'"
         >
-          <i class="pi pi-filter text-sm"></i>
+          <i-lucide [img]="ListFilter" class="h-4 w-4"></i-lucide>
         </button>
       }
 
@@ -83,6 +87,8 @@ import { DataTableSkeletonComponent } from '../primitives/data-table-skeleton.co
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableFilterMenuComponent {
+  readonly ListFilter = ListFilter;
+
   @Input() tooltip?: string;
   @Input() onAddFilter?: (id: string, value: unknown) => void;
   @Input() activeFilterIds: string[] = [];

@@ -13,6 +13,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs/operators';
 
 import { TranslocoModule } from '@jsverse/transloco';
+import { LucideAngularModule, type LucideIconData } from 'lucide-angular';
 import {
   FlexCollapsibleContentDirective,
   FlexCollapsibleContentPresenceDirective,
@@ -32,7 +33,7 @@ export type NestedItem = {
 };
 
 export type NavItem = {
-  icon?: string;
+  icon?: LucideIconData;
   label: string;
   to: string;
   items?: NestedItem[];
@@ -67,6 +68,7 @@ const SETTING_NAV_LINK_CLASSES = 'pl-2 py-1';
     FlexTooltipTriggerDirective,
     FlexTooltipDirective,
     FlexTooltipArrowDirective,
+    LucideAngularModule,
     TranslocoModule,
   ],
   templateUrl: './nav-item.component.html',

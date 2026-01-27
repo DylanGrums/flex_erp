@@ -5,7 +5,7 @@ const { join } = require('path');
 module.exports = {
   darkMode: 'class',
   presets: [require('../../packages/ui-preset')],
-  plugins: [require('tailwindcss-primeui')],
+  plugins: [],
 
 
   content: [

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Check, ChevronDown, LucideAngularModule } from 'lucide-angular';
 import {
   FlexSelectDirective,
   FlexSelectDropdownDirective,
@@ -19,6 +20,7 @@ export interface CmsSelectOption {
     FlexSelectPortalDirective,
     FlexSelectDropdownDirective,
     FlexSelectOptionDirective,
+    LucideAngularModule,
   ],
   template: `
     <div
@@ -30,7 +32,7 @@ export interface CmsSelectOption {
     >
       <span>{{ selectedLabel || placeholder }}</span>
       <span class="ms-auto text-ui-fg-muted">
-        <i class="pi pi-chevron-down"></i>
+        <i-lucide [img]="ChevronDown" class="h-4 w-4"></i-lucide>
       </span>
       <div *flexSelectPortal flexSelectDropdown [class]="contentClass">
         @for (option of options; track option.value) {
@@ -42,7 +44,7 @@ export interface CmsSelectOption {
             <span>{{ option.label }}</span>
             @if (option.value === value) {
               <span class="ms-auto text-ui-fg-interactive">
-                <i class="pi pi-check"></i>
+                <i-lucide [img]="Check" class="h-4 w-4"></i-lucide>
               </span>
             }
           </div>
@@ -53,6 +55,9 @@ export interface CmsSelectOption {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CmsSelectComponent {
+  readonly ChevronDown = ChevronDown;
+  readonly Check = Check;
+
   @Input() value: string | null = null;
   @Input() placeholder = 'Select';
   @Input() options: CmsSelectOption[] = [];

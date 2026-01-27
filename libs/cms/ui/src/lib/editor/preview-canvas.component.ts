@@ -1,6 +1,21 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { DeviceType, NodeId, Section } from '@flex-erp/cms/types';
 import { TranslocoModule } from '@jsverse/transloco';
+import {
+  ChevronRight,
+  Facebook,
+  Instagram,
+  LucideAngularModule,
+  Mail,
+  Menu,
+  RefreshCw,
+  Search,
+  Shield,
+  ShoppingCart,
+  Star,
+  Truck,
+  Twitter,
+} from 'lucide-angular';
 
 const DEVICE_WIDTHS: Record<DeviceType, string> = {
   desktop: '100%',
@@ -11,7 +26,7 @@ const DEVICE_WIDTHS: Record<DeviceType, string> = {
 @Component({
   selector: 'cms-preview-canvas',
   standalone: true,
-  imports: [TranslocoModule],
+  imports: [TranslocoModule, LucideAngularModule],
   templateUrl: './preview-canvas.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [
@@ -23,6 +38,19 @@ const DEVICE_WIDTHS: Record<DeviceType, string> = {
   ],
 })
 export class CmsPreviewCanvasComponent {
+  readonly Search = Search;
+  readonly ShoppingCart = ShoppingCart;
+  readonly Menu = Menu;
+  readonly ChevronRight = ChevronRight;
+  readonly Truck = Truck;
+  readonly RefreshCw = RefreshCw;
+  readonly Shield = Shield;
+  readonly Star = Star;
+  readonly Mail = Mail;
+  readonly Facebook = Facebook;
+  readonly Twitter = Twitter;
+  readonly Instagram = Instagram;
+
   @Input() sections: Section[] = [];
   @Input() viewportMode: DeviceType = 'desktop';
   @Input() selectedSectionId: NodeId | null = null;

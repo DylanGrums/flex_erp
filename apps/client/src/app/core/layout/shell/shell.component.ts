@@ -3,15 +3,14 @@ import { ChangeDetectionStrategy, Component, ContentChild, HostListener, Templat
 import { NavigationStart, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
 
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { ProgressBarModule } from 'primeng/progressbar';
 import { TranslocoModule } from '@jsverse/transloco';
+import { LucideAngularModule, Menu, X } from 'lucide-angular';
 
 import { SidebarService } from '../services/sidebar.service';
 import { BreadcrumbsService } from '../services/breadcrumbs.service';
 import { NotificationsComponent } from '../components/notifications/notifications.component';
 import { LanguageSwitcherComponent } from '../../../shared/i18n/language-switcher.component';
+import { FlexDialogComponent, FlexProgressBarComponent } from '@flex-erp/shared/ui';
 
 @Component({
   selector: 'app-shell',
@@ -19,9 +18,9 @@ import { LanguageSwitcherComponent } from '../../../shared/i18n/language-switche
   imports: [
     CommonModule,
     RouterModule,
-    ButtonModule,
-    DialogModule,
-    ProgressBarModule,
+    FlexDialogComponent,
+    FlexProgressBarComponent,
+    LucideAngularModule,
     TranslocoModule,
     NotificationsComponent,
     LanguageSwitcherComponent,
@@ -30,6 +29,9 @@ import { LanguageSwitcherComponent } from '../../../shared/i18n/language-switche
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShellComponent {
+  readonly Menu = Menu;
+  readonly X = X;
+
   private readonly router = inject(Router);
   readonly sidebar = inject(SidebarService);
   readonly breadcrumbs = inject(BreadcrumbsService);

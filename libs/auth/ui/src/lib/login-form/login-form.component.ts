@@ -1,13 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
-import { DividerModule } from 'primeng/divider';
-import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthCredentials } from '@flex-erp/auth/types';
 import { TranslocoModule } from '@jsverse/transloco';
+import { Eye, EyeOff, LogIn, LucideAngularModule, Mail } from 'lucide-angular';
+import { FlexCheckboxComponent } from '@flex-erp/shared/ui';
 
 @Component({
   selector: 'auth-login-form',
@@ -16,17 +13,18 @@ import { TranslocoModule } from '@jsverse/transloco';
   styleUrls: ['./login-form.component.scss'],
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
-    ButtonModule,
-    InputTextModule,
-    PasswordModule,
-    CheckboxModule,
-    DividerModule,
+    FlexCheckboxComponent,
+    LucideAngularModule,
     TranslocoModule,
   ],
 })
 export class LoginFormComponent implements OnInit {
+  readonly Mail = Mail;
+  readonly Eye = Eye;
+  readonly EyeOff = EyeOff;
+  readonly LogIn = LogIn;
+
   @Input() error = false;
   @Input() loading = false;
   @Output() submitLogin = new EventEmitter<AuthCredentials>();
@@ -35,6 +33,7 @@ export class LoginFormComponent implements OnInit {
   loginForm!: FormGroup;
   submitted = false;
   rememberMe = false;
+  showPassword = false;
 
   private fb = inject(FormBuilder);
 
@@ -64,5 +63,9 @@ export class LoginFormComponent implements OnInit {
     this.submitted = false;
     this.loginForm.reset();
     this.resetForm.emit();
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 }

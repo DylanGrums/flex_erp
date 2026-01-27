@@ -1,0 +1,505 @@
+[NX CLOUD] Verifying current cloud bundle
+[NX CLOUD] A local bundle currently exists:  {
+  version: '2601.26.5.hotfix1',
+  fullPath: 'C:\\Projects\\flex_erp\\.nx\\cache\\cloud\\2601.26.5.hotfix1'
+}
+[NX CLOUD] Last verification was within the past 30 minutes, will not verify this time
+[NX CLOUD] Done:  C:\Projects\flex_erp\.nx\cache\cloud\2601.26.5.hotfix1
+Was not able to require.resolve module nx/src/utils/app-root from the following paths: C:\Projects\flex_erp\node_modules\nx\node_modules,C:\Projects\flex_erp\node_modules. This may be expected.
+Was not able to require.resolve module nx/src/utils/app-root from the following paths: C:\Projects\flex_erp\node_modules\nx\node_modules,C:\Projects\flex_erp\node_modules. This may be expected.
+[Nx Cloud Debug] Skipping foreground heartbeat since CI environment is not detected.
+[NX CLOUD] Verifying current cloud bundle
+[NX CLOUD] A local bundle currently exists:  {
+  version: '2601.26.5.hotfix1',
+  fullPath: 'C:\\Projects\\flex_erp\\.nx\\cache\\cloud\\2601.26.5.hotfix1'
+}
+[NX CLOUD] Last verification was within the past 30 minutes, will not verify this time
+[NX CLOUD] Done:  C:\Projects\flex_erp\.nx\cache\cloud\2601.26.5.hotfix1
+
+> nx run client:serve:development
+
+[Nx Cloud Debug] Attempting to acquire filesystem lock with path:  C:\Users\MAADWA~1\AppData\Local\Temp\client-instance-id.lock
+[Nx Cloud Debug] Failed to create folder lock at path: C:\Users\MAADWA~1\AppData\Local\Temp\client-instance-id.lock
+[Nx Cloud] Unable to detect a VCS context from the environment.
+
+ NX   RunStart
+
+
+{
+  "branch": null,
+  "runGroup": "ba98e137e7188c315308d7fe885b67955bc8b58d",
+  "ciExecutionId": null,
+  "ciExecutionEnv": "",
+  "hashes": [
+    "197402652094598689"
+  ],
+  "machineInfo": {
+    "machineId": "78bKIKjdlt4vfJhDDBFDuA==",
+    "platform": "win32",
+    "version": "Windows 11 Pro",
+    "cpuCores": 24
+  },
+  "vcsContext": null,
+  "clientInstanceSource": "CLOUD_RUNNER",
+  "clientInstanceId": "671496bb-85ba-45dd-a616-2f6a1bfdb5b0"
+}
+
+RunStart duration: 140
+[33m>[39m Building...
+▲ [WARNING] NG8113: CmsButtonComponent is not used within the template of CmsSectionLibraryModalComponent [plugin angular-compiler]
+    libs/cms/ui/src/lib/editor/section-library-modal.component.ts:40:4:
+      40 │     CmsButtonComponent,
+         ╵     ~~~~~~~~~~~~~~~~~~
+▲ [WARNING] NG8102: The left side of this nullish coalescing operation does not include 'null' or 'undefined' in its type, therefore the '??' operator can be safely removed.
+ [plugin angular-compiler]
+    libs/cms/ui/src/lib/primitives/switch/cms-switch.component.ts:12:42:
+      12 │       (checkedChange)="checkedChange.emit($event ?? false)"
+         ╵                                           ~~~~~~~~~~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    apps/client/src/app/app.ts:17:90:
+      17 │ ...app.ts%40App"; function App_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    apps/client/src/app/core/layout/layouts/main-layout/main-layout.component.ts:35:180:
+      35 │ ...unction MainLayoutComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] 
+This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    apps/client/src/app/core/layout/layouts/public-layout/public-layout.component.ts:22:188:
+      22 │ ...ction PublicLayoutComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG
+] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    apps/client/src/app/pages/settings-profile.page.ts:38:148:
+      38 │ ...unction SettingsProfilePage_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG
+] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    apps/client/src/app/core/layout/layouts/settings-layout/settings-layout.component.ts:35:196:
+      35 │ ...ion SettingsLayoutComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    apps/client/src/app/pages/settings-store.page.ts:38:142:
+      38 │ ... function SettingsStorePage_HmrLoad(t) { 
+import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] 
+This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    apps/client/src/app/pages/data-table-demo.page.ts:534:143:
+      534 │ ...function DataTableDemoPage_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal
+ [unsupported-dynamic-import]
+    libs/auth/feature/src/lib/login/login.component.ts:45:140:
+      45 │ ...t"; function LoginComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal
+ [unsupported-dynamic-import]
+    libs/store/feature/src/lib/pages/store-placeholder-page.component.ts:59:188:
+      59 │ ...orePlaceholderPageComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] 
+This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/feature/src/lib/cms-editor-page.component.ts:95:157:
+      95 │ ...tion CmsEditorPageComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    apps/client/src/app/core/layout/shell/shell.component.ts:186:148:
+      186 │ ..."; function ShellComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    apps/client/src/app/core/layout/layouts/settings-layout/settings-sidebar.component.ts:181:199:
+      181 │ ...n SettingsSidebarComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] 
+This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    apps/client/src/app/core/layout/layouts/main-layout/main-sidebar.component.ts:288:183:
+      288 │ ...ction MainSidebarComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] 
+This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/auth/ui/src/lib/login-form/login-form.component.ts:167:153:
+      167 │ ...unction LoginFormComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] 
+This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    apps/client/src/app/shared/i18n/language-switcher.component.ts:74:174:
+      74 │ ...n LanguageSwitcherComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [
+DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/components/progress-bar/progress-bar.component.ts:34:184:
+      34 │ ...on FlexProgressBarComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/components/checkbox/checkbox.component.ts:97:170:
+      97 │ ...ction FlexCheckboxComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/components/divider/divider.component.ts:49:166:
+      49 │ ...nction FlexDividerComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    apps/client/src/app/core/layout/components/notifications/notifications.component.ts:190:193:
+      190 │ ...ion NotificationsComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] 
+This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    apps/client/src/app/core/layout/components/user-menu/user-menu.component.ts:302:175:
+      302 │ ...function UserMenuComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    apps/client/src/app/core/layout/components/nav-item/nav-item.component.ts:455:171:
+      455 │ ... function NavItemComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/store/feature/src/lib/pages/collections/collections.page.ts:62:186:
+      62 │ ...oreCollectionsPageComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             
+~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/store/feature/src/lib/pages/customers/customers.page.ts:62:178:
+      62 │ ...StoreCustomersPageComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/store/feature/src/lib/pages/price-lists/price-lists.page.ts:62:184:
+      62 │ ...torePriceListsPageComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/store/feature/src/lib/pages/promotions/promotions.page.ts:62:182:
+      62 │ ...torePromotionsPageComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/store/feature/src/lib/pages/categories/categories.page.ts:62:182:
+      62 │ ...toreCategoriesPageComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal
+ [unsupported-dynamic-import]
+    libs/store/feature/src/lib/pages/inventory/inventory.page.ts:62:178:
+      62 │ ...StoreInventoryPageComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/store/feature/src/lib/pages/orders/orders.page.ts:62:166:
+      62 │ ...on StoreOrdersPageComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/store/feature/src/lib/product-list/product-list.component.ts:98:167:
+      98 │ ...nction ProductListComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] 
+This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/store/feature/src/lib/product-editor/product-create.component.ts:123:175:
+      123 │ ...ion ProductCreateComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            
+~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/store/feature/src/lib/product-editor/product-edit.component.ts:170:169:
+      170 │ ...ction ProductEditComponent_HmrLoad(t) { 
+import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal
+ [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-search.component.ts:82:187:
+      82 │ ...on DataTableSearchComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-filter-menu.component.ts:217:200:
+      217 │ ...taTableFilterMenuComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-column-visibility-menu.component.ts:242:231:
+      242 │ ...umnVisibilityMenuComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal
+ [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-sorting-icon.component.ts:61:203:
+      61 │ ...taTableSortingIconComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-filter-bar.component.ts:299:197:
+      299 │ ...ataTableFilterBarComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] 
+This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-sorting-menu.component.ts:324:203:
+      324 │ ...aTableSortingMenuComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table.component.ts:95:168:
+      95 │ ...function DataTableComponent_HmrLoad(t) { 
+import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-toolbar.component.ts:82:190:
+      82 │ ...n DataTableToolbarComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/primitives/data-table-icon-button.component.ts:60:200:
+      60 │ ...ataTableIconButtonComponent_HmrLoad(t) { 
+import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG
+] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-pagination.component.ts:131:199:
+      131 │ ...taTablePaginationComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-command-bar.component.ts:142:200:
+      142 │ ...taTableCommandBarComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG
+] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-select-cell.component.ts:47:200:
+      47 │ ...ataTableSelectCellComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-select-cell.component.ts:92:204:
+      92 │ ...aTableSelectHeaderComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● 
+[DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/primitives/button/cms-button.component.ts:67:161:
+      67 │ ...function CmsButtonComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [
+DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-sortable-header-cell.component.ts:62:225:
+      62 │ ...SortableHeaderCellComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-sortable-header-cell.component.ts:101:231:
+      101 │ ...ortableHeaderCellComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [
+DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/primitives/resizable/cms-resizable-panel.component.ts:64:189:
+      64 │ ... CmsResizablePanelComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             
+~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/primitives/switch/cms-switch.component.ts:58:161:
+      58 │ ...function CmsSwitchComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/primitives/resizable/cms-resizable-handle.component.ts:37:192:
+      37 │ ...CmsResizableHandleComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/primitives/tabs/cms-tabs.component.ts:87:153:
+      87 │ ...; function CmsTabsComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/editor/editor-shell.component.ts:187:160:
+      187 │ ...on CmsEditorShellComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/primitives/input/cms-input.component.ts:68:157:
+      68 │ ... function CmsInputComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/primitives/resizable/cms-resizable-group.component.ts:132:189:
+      132 │ ...CmsResizableGroupComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/primitives/dialog/cms-dialog.component.ts:61:161:
+      61 │ ...function CmsDialogComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/primitives/data-table-skeleton.component.ts:30:193:
+      30 │ ... DataTableSkeletonComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● 
+[DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/primitives/sheet/cms-sheet.component.ts:61:157:
+      61 │ ... function CmsSheetComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal
+ [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/primitives/data-table-checkbox.component.ts:97:193:
+      97 │ ... DataTableCheckboxComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/primitives/textarea/cms-textarea.component.ts:60:169:
+      60 │ ...nction CmsTextareaComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/primitives/scroll-area/cms-scroll-area.component.ts:36:179:
+      36 │ ...tion CmsScrollAreaComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             
+~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/primitives/popover/cms-popover.component.ts:54:165:
+      54 │ ...unction CmsPopoverComponent_HmrLoad(t) { 
+import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal
+ [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-render-outlet.component.ts:94:206:
+      94 │ ...aTableRenderOutletComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/primitives/select/cms-select.component.ts:147:161:
+      147 │ ...unction CmsSelectComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/primitives/slider/cms-slider.component.ts:78:161:
+      78 │ ...function CmsSliderComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-action-cell.component.ts:247:200:
+      247 │ ...taTableActionCellComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/editor/section-library-modal.component.ts:164:185:
+      164 │ ...ctionLibraryModalComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/editor/top-bar.component.ts:277:145:
+      277 │ ...unction CmsTopBarComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/editor/onboarding-screen.component.ts:198:175:
+      198 │ ...sOnboardingScreenComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/primitives/dialog/dialog.component.ts:149:162:
+      149 │ ...nction FlexDialogComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] 
+This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/editor/sections-tree.component.ts:309:163:
+      309 │ ...n CmsSectionsTreeComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] 
+This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-filter.component.ts:532:213:
+      532 │ ...lterSelectContentComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-filter.component.ts:634:211:
+      634 │ ...ilterRadioContentComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-filter.component.ts:878:209:
+      878 │ ...FilterDateContentComponent_HmrLoad(t) { import
+(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-filter.component.ts:1006:223:
+      1006 │ ...ltiselectContentComponent_HmrLoad(t) { import(/* @vite-ignore */
+           ╵                                           ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-filter.component.ts:1099:213:
+      1099 │ ...terStringContentComponent_HmrLoad(t) { import(/* @vite-ignore */
+           ╵                                           ~~~~~~
+● [DEBUG]
+ This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-filter.component.ts:1289:213:
+      1289 │ ...terNumberContentComponent_HmrLoad(t) { import(/* @vite-ignore */
+           ╵                                           ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-filter.component.ts:1718:187:
+      1718 │ ... DataTableFilterComponent_HmrLoad(t) { import(/* @vite-ignore */
+           ╵                                           ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/shared/ui/src/lib/data-table/components/data-table-table.component.ts:764:184:
+      764 │ ...on DataTableTableComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/editor/inspector-panel.component.ts:581:169:
+      581 │ ...CmsInspectorPanelComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] 
+This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/cms/ui/src/lib/editor/preview-canvas.component.ts:623:166:
+      623 │ ... CmsPreviewCanvasComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] 
+This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/store/ui/src/lib/store-shell/store-shell.component.ts:23:158:
+      23 │ ...unction StoreShellComponent_HmrLoad(t) { import(/* @vite-ignore */
+         ╵                                             ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/store/ui/src/lib/product-table/product-table.component.ts:111:166:
+      111 │ ...tion ProductTableComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+● [DEBUG] This "import" expression will not be bundled because the argument is not a string literal [unsupported-dynamic-import]
+    libs/store/ui/src/lib/product-form/product-form.component.ts:268:162:
+      268 │ ...ction ProductFormComponent_HmrLoad(t) { import(/* @vite-ignore */
+          ╵                                            ~~~~~~
+2 warnings
+[32m√[39m Building...
+[37m[1mInitial chunk files[22m[2m | [22m[1mNames[22m        [2m | [22m [1mRaw size[22m[39m
+[37m[32mchunk-JSH2AFIV.js[39m[37m  [2m | [22m[2m-[22m            [2m | [22m[36m388.85 kB[39m[37m[2m | [22m[39m
+[37m[32mmain.js[39m[37m            [2m | [22m[2mmain[22m         [2m | [22m[36m208.16 kB[39m[37m[2m | [22m[39m
+[37m[32mstyles.css[39m[37m         [2m | [22m[2mstyles[22m       [2m | [22m[36m138.14 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-CVZNZUAH.js[39m[37m  [2m | [22m[2m-[22m            [2m | [22m [36m23.67 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-ZDZPYV4K.js[39m[37m  [2m | [22m[2m-[22m            [2m | [22m [36m16.29 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-PHSYYOF4.js[39m[37m  [2m | [22m[2m-[22m            [2m | [22m  [36m2.18 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-WDMUDEB6.js[39m[37m  [2m | [22m[2m-[22m            [2m | [22m  [36m1.93 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-RDIWNV27.js[39m[37m  [2m | [22m[2m-[22m            [2m | [22m[36m669 bytes[39m[37m[2m | [22m[39m
+[37m[32mchunk-AAMIYWIF.js[39m[37m  [2m | [22m[2m-[22m            [2m | [22m[36m208 bytes[39m[37m[2m | [22m[39m
+[37m[32mpolyfills.js[39m[37m       [2m | [22m[2mpolyfills[22m    [2m | [22m [36m95 bytes[39m[37m[2m | [22m[39m
+[37m[39m
+[37m[1m [22m                  [2m | [22m[1mInitial total[22m[2m | [22m[1m780.20 kB[22m[39m
+[37m[39m
+[37m[1mLazy chunk files[22m   [2m | [22m[1mNames[22m        [2m | [22m [1mRaw size[22m[39m
+[37m[32mchunk-IPSGMYSU.js[39m[37m  [2m | [22m[2mindex[22m        [2m | [22m[36m334.18 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-OV3E5YA2.js[39m[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m86.11 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-64EFCBQ7.js[39m[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m21.08 kB[39m[37m[2m | [22m[39m
+[37m[39m
+[37mApplication bundle generation complete. [4.425 seconds] - 2026-01-27T15:08:18.479Z[39m
+[37m[39m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: CmsButtonComponent is not used within the template of CmsSectionLibraryModalComponent[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[33m[39m[22m
+[1m[33m    libs/cms/ui/src/lib/editor/section-library-modal.component.ts:40:4:[39m[22m
+[1m[33m[37m      40 │     [32mCmsButtonComponent[37m,[39m[22m
+[1m[33m         ╵     [32m~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[33m[39m[22m
+[1m[33m[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8102: The left side of this nullish coalescing operation does not include 'null' or 'undefined' in its type, therefore the '??' operator can be safely removed.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[33m[39m[22m
+[1m[33m    libs/cms/ui/src/lib/primitives/switch/cms-switch.component.ts:12:42:[39m[22m
+[1m[33m[37m      12 │       (checkedChange)="checkedChange.emit([32m$event ?? false[37m)"[39m[22m
+[1m[33m         ╵                                           [32m~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[33m[39m[22m
+[1m[33m[39m[22m
+[37mWatch mode enabled. Watching for file changes...[39m
+[37mNOTE: Raw file sizes do not reflect development server per-request transformations.[39m
+[0m[7m[1m[31m NX [39m[22m[27m[0m  [31mPort 4200 is already in use[39m
+Error: Port 4200 is already in use
+    at Server.onError$1 (file:///C:/Projects/flex_erp/node_modules/vite/dist/node/chunks/config.js:14932:28)
+    at Server.emit (node:events:518:28)
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+Task "client:serve:development" is continuous but exited with code 1
+
+
+
+ NX   Successfully ran target serve for project client
+
+
+
+ NX   Storing terminal outputs for client:serve:development with hash 197402652094598689
+
+
+ NX   Nx Cloud: Storing 197402652094598689 with storeV2
+
+
+ NX   Nx Cloud: Stored 197402652094598689 C:\Projects\flex_erp\.nx\cache\terminalOutputs\197402652094598689
+
+
+ NX   Timing for storing artifacts to the remote cache: 0ms
+
+[Nx Cloud] Unable to detect a VCS context from the environment.
+
+ NX   RunEnd. Completed tasks
+
+
+[
+  "client:serve:development"
+]
+
+RunEnd duration: 138
+View logs and run details at https://cloud.nx.app/runs/oxNLiLfzzl
+

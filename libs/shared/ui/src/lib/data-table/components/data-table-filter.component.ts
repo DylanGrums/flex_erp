@@ -9,6 +9,7 @@ import {
   computed,
   signal,
 } from '@angular/core';
+import { Check, ChevronDown, LucideAngularModule, Search, X } from 'lucide-angular';
 import {
   FlexPopoverAlign,
   FlexPopoverDirective,
@@ -42,11 +43,11 @@ interface DataTableFilterUpdateEvent {
 @Component({
   selector: 'flex-data-table-filter-select-content',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LucideAngularModule],
   template: `
     <div class="w-[250px]">
       <div class="flex items-center gap-x-2 border-b border-ui-border-base bg-ui-bg-base px-3 py-2">
-        <i class="pi pi-search h-4 w-4 text-ui-fg-muted"></i>
+        <i-lucide [img]="Search" class="h-4 w-4 text-ui-fg-muted"></i-lucide>
         <input
           [value]="search()"
           (input)="onSearchInput($event)"
@@ -60,7 +61,7 @@ interface DataTableFilterUpdateEvent {
             class="text-ui-fg-muted transition-fg hover:text-ui-fg-subtle"
             (click)="search.set('')"
           >
-            <i class="pi pi-times text-xs"></i>
+            <i-lucide [img]="X" class="h-3 w-3"></i-lucide>
           </button>
         }
       </div>
@@ -78,7 +79,7 @@ interface DataTableFilterUpdateEvent {
           >
             <div class="flex size-[15px] items-center justify-center">
               @if (isSelected(option.value)) {
-                <i class="pi pi-check text-xs"></i>
+                <i-lucide [img]="Check" class="h-3 w-3"></i-lucide>
               }
             </div>
             <span>{{ option.label }}</span>
@@ -90,6 +91,10 @@ interface DataTableFilterUpdateEvent {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableFilterSelectContentComponent {
+  readonly Search = Search;
+  readonly X = X;
+  readonly Check = Check;
+
   @Input({ required: true }) id!: string;
   @Input() filter: string | undefined;
   @Input() options: DataTableFilterOption<string>[] = [];
@@ -441,12 +446,12 @@ export class DataTableFilterDateContentComponent {
 @Component({
   selector: 'flex-data-table-filter-multiselect-content',
   standalone: true,
-  imports: [CommonModule, DataTableCheckboxComponent],
+  imports: [CommonModule, DataTableCheckboxComponent, LucideAngularModule],
   template: `
     <div class="w-[250px]">
       @if (searchable) {
         <div class="flex items-center gap-x-2 border-b border-ui-border-base bg-ui-bg-base px-3 py-2">
-          <i class="pi pi-search h-4 w-4 text-ui-fg-muted"></i>
+          <i-lucide [img]="Search" class="h-4 w-4 text-ui-fg-muted"></i-lucide>
           <input
             [value]="search()"
             (input)="onSearchInput($event)"
@@ -460,7 +465,7 @@ export class DataTableFilterDateContentComponent {
               class="text-ui-fg-muted transition-fg hover:text-ui-fg-subtle"
               (click)="search.set('')"
             >
-              <i class="pi pi-times text-xs"></i>
+              <i-lucide [img]="X" class="h-3 w-3"></i-lucide>
             </button>
           }
         </div>
@@ -490,6 +495,9 @@ export class DataTableFilterDateContentComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableFilterMultiselectContentComponent {
+  readonly Search = Search;
+  readonly X = X;
+
   @Input({ required: true }) id!: string;
   @Input() filter: string[] | undefined = [];
   @Input() options: DataTableFilterOption<string>[] = [];
@@ -635,6 +643,7 @@ export class DataTableFilterStringContentComponent {
     FlexSelectPortalDirective,
     FlexSelectDropdownDirective,
     FlexSelectOptionDirective,
+    LucideAngularModule,
   ],
   template: `
     <div class="w-[250px] space-y-3 p-3">
@@ -647,7 +656,7 @@ export class DataTableFilterStringContentComponent {
         >
           <span>{{ selectedOperatorLabel }}</span>
           <span class="ms-auto text-ui-fg-muted">
-            <i class="pi pi-chevron-down text-xs"></i>
+            <i-lucide [img]="ChevronDown" class="h-3 w-3"></i-lucide>
           </span>
           <div
             *flexSelectPortal
@@ -663,7 +672,7 @@ export class DataTableFilterStringContentComponent {
                 <span>{{ op.label }}</span>
                 @if (operator() === op.value) {
                   <span class="ms-auto text-ui-fg-interactive">
-                    <i class="pi pi-check text-xs"></i>
+                    <i-lucide [img]="Check" class="h-3 w-3"></i-lucide>
                   </span>
                 }
               </div>
@@ -686,6 +695,9 @@ export class DataTableFilterStringContentComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableFilterNumberContentComponent {
+  readonly ChevronDown = ChevronDown;
+  readonly Check = Check;
+
   @Input({ required: true }) id!: string;
   @Input() filter: unknown;
   @Input() placeholder = 'Enter number...';
@@ -813,6 +825,7 @@ export class DataTableFilterNumberContentComponent {
     DataTableFilterMultiselectContentComponent,
     DataTableFilterStringContentComponent,
     DataTableFilterNumberContentComponent,
+    LucideAngularModule,
   ],
   template: `
     @if (!meta) {
@@ -854,7 +867,7 @@ export class DataTableFilterNumberContentComponent {
               class="flex size-8 items-center justify-center text-ui-fg-muted outline-none transition-fg hover:bg-ui-bg-base-hover active:bg-ui-bg-base-pressed"
               (click)="removeFilter()"
             >
-              <i class="pi pi-times text-xs"></i>
+              <i-lucide [img]="X" class="h-3 w-3"></i-lucide>
             </button>
           }
         </div>
@@ -945,6 +958,8 @@ export class DataTableFilterNumberContentComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableFilterComponent {
+  readonly X = X;
+
   @Input({ required: true }) id!: string;
   @Input() filter: unknown;
   @Input() isNew = false;

@@ -63,15 +63,8 @@ export const VisibilityInteraction: Story = {
   render: renderStory,
   play: async ({ canvasElement }) => {
     const user = userEvent.setup();
-    const trigger = Array.from(
-      canvasElement.querySelectorAll('button[flexdatatableiconbutton]')
-    ).find((button) => button.querySelector('.pi-sliders-h')) as HTMLElement | undefined;
-
-    if (!trigger) {
-      return;
-    }
-
     const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: /toggle columns/i });
     const before = canvas.getByText(/Visible:/i).textContent;
     await user.click(trigger);
     // Column visibility menu renders in a portal attached to document.body.

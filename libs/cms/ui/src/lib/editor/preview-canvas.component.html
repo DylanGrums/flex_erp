@@ -51,12 +51,12 @@
             </div>
             <div class="flex items-center gap-4">
               @if (section.settings['showSearch']) {
-              <i class="pi pi-search text-gray-600"></i>
+              <i-lucide [img]="Search" class="h-4 w-4 text-gray-600"></i-lucide>
               }
               @if (section.settings['showCart']) {
-              <i class="pi pi-shopping-cart text-gray-600"></i>
+              <i-lucide [img]="ShoppingCart" class="h-4 w-4 text-gray-600"></i-lucide>
               }
-              <i class="pi pi-bars text-gray-600 md:hidden"></i>
+              <i-lucide [img]="Menu" class="h-4 w-4 text-gray-600 md:hidden"></i-lucide>
             </div>
           </div>
         </header>
@@ -126,7 +126,8 @@
               <h2 class="text-2xl font-bold">{{ section.settings['heading'] || ('cms.preview.featuredHeading' | transloco) }}</h2>
               @if (section.settings['showViewAll']) {
               <button class="text-sm text-indigo-600 hover:text-indigo-700 flex items-center gap-1">
-                {{ 'cms.preview.viewAll' | transloco }} <i class="pi pi-angle-right text-sm"></i>
+                {{ 'cms.preview.viewAll' | transloco }}
+                <i-lucide [img]="ChevronRight" class="h-4 w-4"></i-lucide>
               </button>
               }
             </div>
@@ -178,8 +179,13 @@
               'shield', description: 'cms.preview.highlight.securePaymentDescription' } }]; track block.id; let i = $index) {
               <div class="text-center">
                 <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mx-auto mb-4">
-                  <i class="pi text-indigo-600" [class.pi-truck]="i % 3 === 0" [class.pi-refresh]="i % 3 === 1"
-                    [class.pi-shield]="i % 3 === 2"></i>
+                  @if (i % 3 === 0) {
+                    <i-lucide [img]="Truck" class="h-5 w-5 text-indigo-600"></i-lucide>
+                  } @else if (i % 3 === 1) {
+                    <i-lucide [img]="RefreshCw" class="h-5 w-5 text-indigo-600"></i-lucide>
+                  } @else {
+                    <i-lucide [img]="Shield" class="h-5 w-5 text-indigo-600"></i-lucide>
+                  }
                 </div>
                 <h3 class="font-semibold mb-2">{{ block.name | transloco }}</h3>
                 <p class="text-sm text-gray-600">{{ ($any(block.settings['description']) || '') | transloco }}</p>
@@ -197,7 +203,7 @@
             <div class="bg-white rounded-2xl p-8 shadow-sm">
               <div class="flex gap-1 mb-4">
                 @for (_ of [1,2,3,4,5]; track $index) {
-                <i class="pi pi-star-fill text-yellow-400"></i>
+                <i-lucide [img]="Star" class="h-4 w-4 text-yellow-400 fill-current"></i-lucide>
                 }
               </div>
               <p class="text-lg text-gray-700 mb-6">{{ 'cms.preview.testimonialQuote' | transloco }}</p>
@@ -215,7 +221,7 @@
         @case ('newsletter') {
         <div class="py-16 px-6" [style.backgroundColor]="section.settings['backgroundColor'] || '#F8FAFC'">
           <div class="max-w-xl mx-auto text-center">
-            <i class="pi pi-envelope text-indigo-600 text-3xl mb-4"></i>
+            <i-lucide [img]="Mail" class="h-8 w-8 text-indigo-600 mb-4 mx-auto"></i-lucide>
             <h2 class="text-2xl font-bold mb-2">{{ section.settings['heading'] || ('cms.preview.newsletterHeading' | transloco) }}</h2>
             <p class="text-gray-600 mb-6">{{ section.settings['subheading'] || ('cms.preview.newsletterSubheading' | transloco) }}</p>
             <div class="flex gap-2 max-w-md mx-auto">
@@ -263,9 +269,18 @@
                 <h3 class="font-semibold mb-4">{{ 'cms.preview.footer.followUs' | transloco }}</h3>
                 @if (section.settings['showSocialLinks']) {
                 <div class="flex gap-4">
-                  <i class="pi pi-facebook text-gray-400 hover:text-white cursor-pointer"></i>
-                  <i class="pi pi-twitter text-gray-400 hover:text-white cursor-pointer"></i>
-                  <i class="pi pi-instagram text-gray-400 hover:text-white cursor-pointer"></i>
+                  <i-lucide
+                    [img]="Facebook"
+                    class="h-4 w-4 text-gray-400 hover:text-white cursor-pointer"
+                  ></i-lucide>
+                  <i-lucide
+                    [img]="Twitter"
+                    class="h-4 w-4 text-gray-400 hover:text-white cursor-pointer"
+                  ></i-lucide>
+                  <i-lucide
+                    [img]="Instagram"
+                    class="h-4 w-4 text-gray-400 hover:text-white cursor-pointer"
+                  ></i-lucide>
                 </div>
                 }
               </div>

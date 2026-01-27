@@ -1,4 +1,5 @@
 import { defineFeatureNav } from '@flex-erp/shared/nav';
+import { Building2, DollarSign, Percent, ShoppingCart, Tags, Users } from 'lucide-angular';
 
 export const STORE_NAV = defineFeatureNav({
   id: 'store',
@@ -8,7 +9,7 @@ export const STORE_NAV = defineFeatureNav({
       label: 'store.nav.section',
       items: [
         {
-          icon: 'pi pi-shopping-cart',
+          icon: ShoppingCart,
           label: 'store.nav.orders',
           to: '/orders',
           type: 'core',
@@ -20,7 +21,7 @@ export const STORE_NAV = defineFeatureNav({
         },
 
         {
-          icon: 'pi pi-tags',
+          icon: Tags,
           label: 'store.nav.products',
           to: '/products',
           type: 'core',
@@ -52,7 +53,7 @@ export const STORE_NAV = defineFeatureNav({
         },
 
         {
-          icon: 'pi pi-building',
+          icon: Building2,
           label: 'store.nav.inventory',
           to: '/inventory',
           type: 'core',
@@ -68,7 +69,7 @@ export const STORE_NAV = defineFeatureNav({
         },
 
         {
-          icon: 'pi pi-users',
+          icon: Users,
           label: 'store.nav.customers',
           to: '/customers',
           type: 'core',
@@ -81,7 +82,7 @@ export const STORE_NAV = defineFeatureNav({
         },
 
         {
-          icon: 'pi pi-percentage',
+          icon: Percent,
           label: 'store.nav.promotions',
           to: '/promotions',
           type: 'core',
@@ -94,7 +95,7 @@ export const STORE_NAV = defineFeatureNav({
         },
 
         {
-          icon: 'pi pi-dollar',
+          icon: DollarSign,
           label: 'store.nav.priceLists',
           to: '/price-lists',
           type: 'core',

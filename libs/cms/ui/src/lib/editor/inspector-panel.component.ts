@@ -21,6 +21,14 @@ import {
   FlexCollapsibleRootDirective,
   FlexCollapsibleTriggerDirective,
 } from '@flex-erp/shared/ui';
+import {
+  ChevronDown,
+  ChevronRight,
+  Image,
+  LucideAngularModule,
+  RefreshCw,
+  X,
+} from 'lucide-angular';
 
 @Component({
   selector: 'cms-inspector-panel',
@@ -33,6 +41,7 @@ import {
     CmsSliderComponent,
     CmsSelectComponent,
     CmsScrollAreaComponent,
+    LucideAngularModule,
     FlexCollapsibleRootDirective,
     FlexCollapsibleTriggerDirective,
     FlexCollapsibleContentDirective,
@@ -49,6 +58,12 @@ import {
   ],
 })
 export class CmsInspectorPanelComponent implements OnChanges {
+  readonly ChevronDown = ChevronDown;
+  readonly ChevronRight = ChevronRight;
+  readonly Image = Image;
+  readonly X = X;
+  readonly RefreshCw = RefreshCw;
+
   @Input() selectedSection: Section | null = null;
   @Input() sectionDefinitions: SectionDefinition[] = [];
   @Input() collections: Collection[] = [];

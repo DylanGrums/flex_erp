@@ -1,1 +1,1 @@
-export * from './lib/types/types';
+export * from './lib/store-types';

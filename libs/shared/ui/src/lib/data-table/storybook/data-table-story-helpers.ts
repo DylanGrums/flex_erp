@@ -1,4 +1,5 @@
 import { signal, type WritableSignal } from '@angular/core';
+import { Archive, Pencil } from 'lucide-angular';
 
 import { createDataTable, type DataTableInstance } from '../create-data-table';
 import {
@@ -174,12 +175,12 @@ export const storyColumns: DataTableColumnDef<StoryRow>[] = [
     actions: [
       {
         label: 'Edit',
-        icon: 'pi pi-pencil',
+        icon: Pencil,
         onClick: () => {},
       },
       {
         label: 'Archive',
-        icon: 'pi pi-archive',
+        icon: Archive,
         onClick: () => {},
       },
     ],

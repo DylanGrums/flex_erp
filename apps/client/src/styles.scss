@@ -1,7 +1,6 @@
 @use 'themes/tailwind';
 
 @import '@angular/cdk/overlay-prebuilt.css';
-@import url('primeicons/primeicons.css');
 
 /* ---- RESET SYSTEM COLORS ---- */
 
@@ -56,23 +55,9 @@ button {
   src: url('./assets/fonts/RobotoMono-Medium.ttf') format('truetype');
 }
 
-/* PrimeNG Overrides for Medusa Look */
-.p-component {
-  @apply font-sans text-sm;
-}
-
 /* Panel/Card style */
 .medusa-panel {
   @apply bg-ui-bg-base border border-ui-border-base rounded-lg shadow-sm;
-}
-
-.p-button-text,
-.p-button.p-button-text {
-  @apply text-ui-fg-muted bg-ui-button-transparent hover:bg-ui-button-transparent-hover border-ui-border-transparent;
-}
-
-.p-dialog {
-  max-height: 100%;
 }
 
 /* Ensure ng-primitives overlays render above the app shell. */

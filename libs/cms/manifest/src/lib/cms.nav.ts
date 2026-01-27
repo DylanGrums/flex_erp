@@ -1,4 +1,5 @@
 import { defineFeatureNav } from '@flex-erp/shared/nav';
+import { Pencil } from 'lucide-angular';
 
 export const CMS_NAV = defineFeatureNav({
   id: 'cms',
@@ -8,7 +9,7 @@ export const CMS_NAV = defineFeatureNav({
       label: 'cms.nav.section',
       items: [
         {
-          icon: 'pi pi-pencil',
+          icon: Pencil,
           label: 'cms.nav.editor',
           to: 'cms/editor',
           type: 'core',

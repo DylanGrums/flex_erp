@@ -1,23 +1,31 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostListener, inject, signal } from '@angular/core';
-
-import { ButtonModule } from 'primeng/button';
-import { DrawerModule } from 'primeng/drawer';
-import { DividerModule } from 'primeng/divider';
+import { Bell, BellOff, Info, LucideAngularModule } from 'lucide-angular';
 
 import { NotificationsService, NotificationData } from './notifications.service';
 import { TranslocoModule } from '@jsverse/transloco';
+import { FlexDialogComponent, FlexDividerComponent } from '@flex-erp/shared/ui';
 
 const LAST_READ_NOTIFICATION_KEY = 'notificationsLastReadAt';
 
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [CommonModule, ButtonModule, DrawerModule, DividerModule, TranslocoModule],
+  imports: [
+    CommonModule,
+    FlexDialogComponent,
+    FlexDividerComponent,
+    LucideAngularModule,
+    TranslocoModule,
+  ],
   templateUrl: './notifications.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationsComponent {
+  readonly Bell = Bell;
+  readonly BellOff = BellOff;
+  readonly Info = Info;
+
   private readonly api = inject(NotificationsService);
 
   readonly open = signal(false);

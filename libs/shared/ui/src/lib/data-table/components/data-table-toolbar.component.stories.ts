@@ -91,14 +91,8 @@ export const FilterMenuInteraction: Story = {
   render: renderStory,
   play: async ({ canvasElement }) => {
     const user = userEvent.setup();
-    const trigger = Array.from(
-      canvasElement.querySelectorAll('button[flexdatatableiconbutton]')
-    ).find((button) => button.querySelector('.pi-filter')) as HTMLElement | undefined;
-
-    if (!trigger) {
-      return;
-    }
-
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: /add filter/i });
     await user.click(trigger);
     // Filter menu renders in a portal attached to document.body.
     await expect(screen.getByText('Status')).toBeTruthy();

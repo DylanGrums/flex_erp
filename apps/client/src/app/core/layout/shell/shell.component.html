@@ -1,7 +1,7 @@
 <!-- NavigationBar loading progress (fixed top) -->
 <div class="fixed inset-x-0 top-0 z-50 h-1">
   @if (loading()) {
-  <p-progressBar mode="indeterminate" [style]="{ height: '4px' }" />
+  <fe-progress-bar className="h-1" />
   }
 </div>
 
@@ -9,36 +9,29 @@
   class="relative flex h-screen flex-col items-start overflow-hidden lg:flex-row bg-ui-bg-subtle"
 >
   <div>
-    <p-dialog
-      [visible]="sidebar.mobileOpen()"
-      (visibleChange)="sidebar.setMobile($event)"
+    <flex-dialog
+      [open]="sidebar.mobileOpen()"
+      (openChange)="sidebar.setMobile($event)"
       [modal]="true"
-      [dismissableMask]="true"
-      [draggable]="false"
-      [resizable]="false"
-      [closable]="false"
-      [style]="{ width: '304px', maxWidth: '304px', height: '100vh' }"
-      [contentStyle]="{ padding: '0' }"
-      position="left"
+      mode="sheet-left"
+      contentClass="h-full w-full max-w-[304px] rounded-none border-r border-ui-border-base bg-ui-bg-base shadow-lg"
     >
-      <ng-template pTemplate="header">
-        <div class="w-full p-3">
-          <button
-            pButton
-            type="button"
-            class="p-button-text p-button-sm"
-            icon="pi pi-times"
-            [attr.aria-label]="'layout.shell.closeNavigation' | transloco"
-            (click)="closeMobile()"
-          ></button>
-          <span class="sr-only">{{ 'layout.shell.navigation' | transloco }}</span>
-        </div>
-      </ng-template>
+      <div class="w-full p-3 border-b border-ui-border-base">
+        <button
+          type="button"
+          class="inline-flex h-8 w-8 items-center justify-center rounded-md text-ui-fg-muted transition-fg hover:bg-ui-bg-subtle-hover"
+          [attr.aria-label]="'layout.shell.closeNavigation' | transloco"
+          (click)="closeMobile()"
+        >
+          <i-lucide [img]="X" class="h-4 w-4"></i-lucide>
+        </button>
+        <span class="sr-only">{{ 'layout.shell.navigation' | transloco }}</span>
+      </div>
 
       @if (sidebarTemplate) {
       <ng-container *ngTemplateOutlet="sidebarTemplate"></ng-container>
       }
-    </p-dialog>
+    </flex-dialog>
 
     @if (sidebar.desktopOpen()) {
     <div class="hidden h-screen w-[220px] border-e lg:flex">
@@ -54,24 +47,22 @@
       <div class="flex items-center gap-x-1.5">
         <div>
           <button
-            pButton
             type="button"
-            class="hidden p-button-text p-button-sm lg:flex"
-            icon="pi pi-bars"
-            size="small"
+            class="hidden h-8 w-8 items-center justify-center rounded-md text-ui-fg-muted transition-fg hover:bg-ui-bg-subtle-hover lg:flex"
             [attr.aria-label]="'layout.shell.toggleNavigation' | transloco"
             (click)="toggleDesktop()"
-          ></button>
+          >
+            <i-lucide [img]="Menu" class="h-4 w-4"></i-lucide>
+          </button>
 
           <button
-            pButton
             type="button"
-            class="flex p-button-text p-button-sm lg:hidden"
-            icon="pi pi-bars"
+            class="flex h-8 w-8 items-center justify-center rounded-md text-ui-fg-muted transition-fg hover:bg-ui-bg-subtle-hover lg:hidden"
             [attr.aria-label]="'layout.shell.openNavigation' | transloco"
-            size="small"
             (click)="toggleMobile()"
-          ></button>
+          >
+            <i-lucide [img]="Menu" class="h-4 w-4"></i-lucide>
+          </button>
         </div>
 
         <div *transloco="let t" class="flex flex-col leading-tight">
@@ -88,7 +79,6 @@
             type="button"
             class="bg-ui-bg-subtle text-ui-fg-subtle flex w-full items-center gap-x-2.5 rounded-md px-2 py-1 outline-none hover:bg-ui-bg-subtle-hover focus-visible:shadow-borders-focus"
           >
-            <i class="pi pi-search"></i>
             <div class="flex-1 text-start">
               <span class="text-sm font-semibold">Search</span>
             </div>
@@ -119,7 +109,7 @@
 
               @if (i < breadcrumbs.crumbs().length - 1) {
                 <span class="mx-2">
-                  <i class="pi pi-angle-right rtl:rotate-180"></i>
+                  <span class="text-ui-fg-muted">›</span>
                 </span>
               }
             </li>

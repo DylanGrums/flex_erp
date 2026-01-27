@@ -8,6 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { TranslocoModule } from '@jsverse/transloco';
+import { Box, Pencil, Trash2 } from 'lucide-angular';
 
 import {
   DataTableCommand,
@@ -385,19 +386,19 @@ export class StoreProductsPageComponent {
         [
           {
             label: 'Edit',
-            icon: 'pi pi-pencil',
+            icon: Pencil,
             onClick: () => alert(`Edit ${ctx.row.original.name}`),
           },
         ],
         [
           {
             label: 'Archive',
-            icon: 'pi pi-box',
+            icon: Box,
             onClick: () => alert(`Archive ${ctx.row.original.name}`),
           },
           {
             label: 'Delete',
-            icon: 'pi pi-trash',
+            icon: Trash2,
             onClick: () => alert(`Delete ${ctx.row.original.name}`),
           },
         ],

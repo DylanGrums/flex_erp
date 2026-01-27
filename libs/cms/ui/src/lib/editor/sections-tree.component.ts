@@ -6,8 +6,25 @@ import { CmsDialogComponent } from '../primitives/dialog/cms-dialog.component';
 import { TranslocoModule } from '@jsverse/transloco';
 
 import {
-  LucideAngularModule, GripVertical, ChevronRight, LayoutTemplate, LucideIconData, Columns2, Grid3x3, Mail, PanelBottom, Megaphone, CreditCard, Quote, FolderKanban, ImageIcon
-
+  LucideAngularModule,
+  GripVertical,
+  ChevronRight,
+  LayoutTemplate,
+  LucideIconData,
+  Columns2,
+  Grid3x3,
+  Mail,
+  PanelBottom,
+  Megaphone,
+  CreditCard,
+  Quote,
+  FolderKanban,
+  Image as ImageIcon,
+  Eye,
+  EyeOff,
+  Copy,
+  Trash2,
+  Plus,
 } from 'lucide-angular';
 
 @Component({
@@ -44,6 +61,11 @@ export class CmsSectionsTreeComponent {
   GripVertical = GripVertical;
   ChevronRight = ChevronRight;
   LayoutTemplate = LayoutTemplate;
+  Eye = Eye;
+  EyeOff = EyeOff;
+  Copy = Copy;
+  Trash2 = Trash2;
+  Plus = Plus;
 
 
 

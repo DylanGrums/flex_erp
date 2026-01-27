@@ -7,10 +7,15 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, RouterModule } from '@angular/router';
-
-import { DividerModule } from 'primeng/divider';
-import { PopoverModule } from 'primeng/popover';
-import { ButtonModule } from 'primeng/button';
+import {
+  Check,
+  ChevronDown,
+  LogOut,
+  LucideAngularModule,
+  Settings,
+  Store,
+  CircleX,
+} from 'lucide-angular';
 
 import { NavItemComponent } from '../../components/nav-item/nav-item.component';
 import { UserMenuComponent } from '../../components/user-menu/user-menu.component';
@@ -37,15 +42,13 @@ import { ContextFacade } from '@flex-erp/shared/context/data-access';
   imports: [
     CommonModule,
     RouterModule,
-    DividerModule,
-    PopoverModule,
-    ButtonModule,
     NavItemComponent,
     UserMenuComponent,
     FlexDropdownMenuTriggerDirective,
     FlexDropdownMenuContentDirective,
     FlexDropdownMenuItemDirective,
     FlexDividerComponent,
+    LucideAngularModule,
     TranslocoModule,
   ],
   templateUrl: './main-sidebar.component.html',
@@ -59,6 +62,13 @@ import { ContextFacade } from '@flex-erp/shared/context/data-access';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainSidebarComponent {
+  readonly ChevronDown = ChevronDown;
+  readonly Store = Store;
+  readonly Check = Check;
+  readonly CircleX = CircleX;
+  readonly LogOut = LogOut;
+  readonly Settings = Settings;
+
   readonly search = inject(SearchService);
   readonly shortcuts = inject(ShortcutsService);
   readonly context = inject(ContextFacade);

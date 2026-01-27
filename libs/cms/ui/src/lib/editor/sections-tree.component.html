@@ -84,11 +84,10 @@
                 "
                 class="p-1.5 rounded hover:bg-ui-bg-subtle-hover text-ui-fg-muted hover:text-ui-fg-base transition-colors"
               >
-                <i
-                  class="pi"
-                  [class.pi-eye]="section.visible"
-                  [class.pi-eye-slash]="!section.visible"
-                ></i>
+                <i-lucide
+                  [img]="section.visible ? Eye : EyeOff"
+                  class="h-4 w-4"
+                ></i-lucide>
               </button>
               <button
                 type="button"
@@ -97,14 +96,14 @@
                 "
                 class="p-1.5 rounded hover:bg-ui-bg-subtle-hover text-ui-fg-muted hover:text-ui-fg-base transition-colors"
               >
-                <i class="pi pi-copy text-xs"></i>
+                <i-lucide [img]="Copy" class="h-4 w-4"></i-lucide>
               </button>
               <button
                 type="button"
                 (click)="$event.stopPropagation(); confirmDelete(section)"
                 class="p-1.5 rounded hover:bg-ui-button-danger/10 text-ui-fg-muted hover:text-ui-fg-error transition-colors"
               >
-                <i class="pi pi-trash text-xs"></i>
+                <i-lucide [img]="Trash2" class="h-4 w-4"></i-lucide>
               </button>
             </div>
           </div>
@@ -150,7 +149,7 @@
       className="w-full gap-2"
       (click)="openSectionLibrary.emit()"
     >
-      <i class="pi pi-plus text-xs"></i>
+      <i-lucide [img]="Plus" class="h-4 w-4"></i-lucide>
       {{ 'cms.editor.sections.addSection' | transloco }}
     </cms-button>
   </div>

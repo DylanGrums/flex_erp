@@ -27,9 +27,9 @@
             >
               {{ group.key }}
               @if (openGroups[group.key] !== false) {
-                <i class="pi pi-chevron-down text-xs"></i>
+                <i-lucide [img]="ChevronDown" class="h-3 w-3"></i-lucide>
               } @else {
-                <i class="pi pi-chevron-right text-xs"></i>
+                <i-lucide [img]="ChevronRight" class="h-3 w-3"></i-lucide>
               }
             </button>
 
@@ -159,7 +159,7 @@
                       @if (selectedSection.settings[field.key]) {
                         <div class="relative aspect-video rounded-lg border border-ui-border-base bg-ui-bg-subtle overflow-hidden group">
                           <div class="absolute inset-0 flex items-center justify-center text-ui-fg-muted">
-                            <i class="pi pi-image text-2xl"></i>
+                            <i-lucide [img]="Image" class="h-6 w-6"></i-lucide>
                           </div>
                           <img
                             [src]="$any(selectedSection.settings[field.key])"
@@ -182,7 +182,7 @@
                             (click)="fileInput.click()"
                             class="w-full aspect-video border-2 border-dashed rounded-lg flex flex-col items-center justify-center gap-2 text-ui-fg-muted hover:border-ui-border-interactive hover:text-ui-fg-base transition-colors cursor-pointer"
                           >
-                            <i class="pi pi-image text-2xl"></i>
+                            <i-lucide [img]="Image" class="h-6 w-6"></i-lucide>
                             <span class="text-sm">{{ 'cms.editor.clickToUpload' | transloco }}</span>
                           </button>
                       }
@@ -194,7 +194,7 @@
                       @if (selectedCollection()) {
                         <div class="flex items-center gap-3 p-3 bg-ui-bg-subtle rounded-lg">
                           <div class="w-12 h-12 bg-ui-bg-field rounded-lg flex items-center justify-center">
-                            <i class="pi pi-image text-ui-fg-muted"></i>
+                            <i-lucide [img]="Image" class="h-5 w-5 text-ui-fg-muted"></i-lucide>
                           </div>
                           <div class="flex-1 min-w-0">
                             <p class="font-medium text-sm truncate">{{ selectedCollection()?.name }}</p>
@@ -203,7 +203,7 @@
                             </p>
                           </div>
                           <cms-button variant="ghost" size="sm" (click)="clearCollection()">
-                            <i class="pi pi-times text-sm"></i>
+                            <i-lucide [img]="X" class="h-4 w-4"></i-lucide>
                           </cms-button>
                         </div>
                       } @else {
@@ -213,7 +213,11 @@
                           (click)="collectionOpen = !collectionOpen"
                         >
                           {{ 'cms.editor.selectCollection' | transloco }}
-                          <i class="pi pi-chevron-down text-xs" [class.rotate-180]="collectionOpen"></i>
+                          <i-lucide
+                            [img]="ChevronDown"
+                            class="h-3 w-3"
+                            [class.rotate-180]="collectionOpen"
+                          ></i-lucide>
                         </cms-button>
                         @if (collectionOpen) {
                           <div class="mt-2 space-y-2">
@@ -230,7 +234,7 @@
                                 class="p-3 bg-ui-bg-subtle rounded-lg hover:bg-ui-bg-subtle-hover transition-colors text-left cursor-pointer"
                               >
                                   <div class="w-full aspect-square bg-ui-bg-field rounded-lg mb-2 flex items-center justify-center">
-                                    <i class="pi pi-image text-ui-fg-muted"></i>
+                                    <i-lucide [img]="Image" class="h-5 w-5 text-ui-fg-muted"></i-lucide>
                                   </div>
                                   <p class="font-medium text-sm truncate">{{ collection.name }}</p>
                                   <p class="text-xs text-ui-fg-muted">
@@ -254,7 +258,7 @@
 
     <div class="p-4 border-t border-ui-border-base">
       <cms-button variant="outline" size="sm" className="w-full gap-2 text-ui-fg-muted hover:text-ui-fg-base">
-        <i class="pi pi-refresh text-sm"></i>
+        <i-lucide [img]="RefreshCw" class="h-4 w-4"></i-lucide>
         {{ 'cms.editor.resetSection' | transloco }}
       </cms-button>
     </div>

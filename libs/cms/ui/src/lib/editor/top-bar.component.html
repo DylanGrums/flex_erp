@@ -5,7 +5,7 @@
     <div
       class="w-8 h-8 rounded-lg bg-ui-bg-interactive flex items-center justify-center"
     >
-      <i class="pi pi-palette text-ui-fg-on-color text-sm"></i>
+      <i-lucide [img]="Palette" class="h-4 w-4 text-ui-fg-on-color"></i-lucide>
     </div>
 
     @if (isEditingName) {
@@ -34,7 +34,7 @@
       class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-ui-border-base bg-ui-bg-base hover:bg-ui-bg-subtle-hover h-8 px-3 gap-2"
     >
       {{ currentPageLabel | transloco }}
-      <i class="pi pi-chevron-down text-xs text-ui-fg-muted"></i>
+      <i-lucide [img]="ChevronDown" class="h-3 w-3 text-ui-fg-muted"></i-lucide>
     </button>
 
     <ng-template #pageMenu>
@@ -51,7 +51,7 @@
         >
           {{ page.label | transloco }}
           @if (currentPage === page.value) {
-          <i class="pi pi-check ms-auto text-xs text-ui-fg-interactive"></i>
+          <i-lucide [img]="Check" class="ms-auto h-3 w-3 text-ui-fg-interactive"></i-lucide>
           }
         </button>
         }
@@ -74,7 +74,7 @@
         [class.hover:bg-ui-bg-subtle-hover]="viewportMode !== device.value"
         [class.border-none]="viewportMode !== device.value"
       >
-        <i [class]="device.icon + ' text-sm'"></i>
+        <i-lucide [img]="device.icon" class="h-4 w-4"></i-lucide>
       </button>
       <ng-template #deviceTooltip>
         <div
@@ -133,12 +133,12 @@
       (click)="save.emit()"
       className="gap-1.5"
     >
-      <i class="pi pi-save text-sm"></i>
+      <i-lucide [img]="Save" class="h-4 w-4"></i-lucide>
       {{ 'cms.editor.actions.save' | transloco }}
     </cms-button>
 
     <cms-button size="sm" (click)="publish.emit()" className="gap-1.5">
-      <i class="pi pi-send text-sm"></i>
+      <i-lucide [img]="Send" class="h-4 w-4"></i-lucide>
       {{ 'cms.editor.actions.publish' | transloco }}
     </cms-button>
   </div>

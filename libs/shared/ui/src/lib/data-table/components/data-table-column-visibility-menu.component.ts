@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { LucideAngularModule, SlidersHorizontal } from 'lucide-angular';
 import {
   FlexDropdownMenuContentDirective,
   FlexDropdownMenuItemDirective,
@@ -24,6 +25,7 @@ import { DataTableIconButtonComponent } from '../primitives/data-table-icon-butt
     CommonModule,
     DataTableCheckboxComponent,
     DataTableIconButtonComponent,
+    LucideAngularModule,
     FlexDropdownMenuTriggerDirective,
     FlexDropdownMenuContentDirective,
     FlexDropdownMenuItemDirective,
@@ -40,8 +42,9 @@ import { DataTableIconButtonComponent } from '../primitives/data-table-icon-butt
           size="small"
           [flexDropdownMenuTrigger]="menu"
           [flexTooltipTrigger]="tooltipTemplate"
+          [attr.aria-label]="tooltip || 'Toggle columns'"
         >
-          <i class="pi pi-sliders-h text-sm"></i>
+          <i-lucide [img]="SlidersHorizontal" class="h-4 w-4"></i-lucide>
         </button>
         <ng-template #tooltipTemplate>
           <div
@@ -52,8 +55,13 @@ import { DataTableIconButtonComponent } from '../primitives/data-table-icon-butt
           </div>
         </ng-template>
       } @else {
-        <button flexDataTableIconButton size="small" [flexDropdownMenuTrigger]="menu">
-          <i class="pi pi-sliders-h text-sm"></i>
+        <button
+          flexDataTableIconButton
+          size="small"
+          [flexDropdownMenuTrigger]="menu"
+          [attr.aria-label]="tooltip || 'Toggle columns'"
+        >
+          <i-lucide [img]="SlidersHorizontal" class="h-4 w-4"></i-lucide>
         </button>
       }
 
@@ -96,6 +104,8 @@ import { DataTableIconButtonComponent } from '../primitives/data-table-icon-butt
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableColumnVisibilityMenuComponent {
+  readonly SlidersHorizontal = SlidersHorizontal;
+
   @Input() tooltip?: string;
 
   readonly context = injectDataTableContext();

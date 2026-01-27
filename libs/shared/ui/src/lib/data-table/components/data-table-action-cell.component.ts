@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, TemplateRef } from '@angular/core';
+import { Ellipsis, LucideAngularModule, LucideIconData } from 'lucide-angular';
 import {
   FlexDropdownMenuContentDirective,
   FlexDropdownMenuItemDirective,
@@ -21,6 +22,7 @@ import {
   imports: [
     CommonModule,
     DataTableIconButtonComponent,
+    LucideAngularModule,
     FlexDropdownMenuTriggerDirective,
     FlexDropdownMenuContentDirective,
     FlexDropdownMenuItemDirective,
@@ -35,7 +37,7 @@ import {
         [flexDropdownMenuTrigger]="menu"
         class="mx-auto"
       >
-        <i class="pi pi-ellipsis-h text-sm"></i>
+        <i-lucide [img]="Ellipsis" class="h-4 w-4"></i-lucide>
       </button>
 
       <ng-template #menu>
@@ -76,10 +78,10 @@ import {
       </ng-template>
 
       <ng-template #iconTemplate let-icon>
-        @if (isStringIcon(icon)) {
-          <i [class]="icon"></i>
-        } @else {
+        @if (isTemplateIcon(icon)) {
           <ng-container *ngTemplateOutlet="icon"></ng-container>
+        } @else {
+          <i-lucide [img]="icon" class="h-4 w-4 text-ui-fg-subtle"></i-lucide>
         }
       </ng-template>
     }
@@ -87,6 +89,8 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableActionCellComponent<TData extends DataTableRowData> {
+  readonly Ellipsis = Ellipsis;
+
   @Input({ required: true }) ctx!: DataTableCellContext<TData, unknown>;
 
   get hasActions(): boolean {
@@ -114,8 +118,8 @@ export class DataTableActionCellComponent<TData extends DataTableRowData> {
     return index === this.resolvedActions.length - 1;
   }
 
-  isStringIcon(icon: string | unknown): icon is string {
-    return typeof icon === 'string';
+  isTemplateIcon(icon: TemplateRef<unknown> | LucideIconData | unknown): icon is TemplateRef<unknown> {
+    return icon instanceof TemplateRef;
   }
 
   onActionClick(event: MouseEvent, action: DataTableAction<TData>): void {

@@ -18,10 +18,11 @@ import {
   Undo2,
   Redo2,
   Save,
-  Rocket,
+  Send,
   ChevronDown,
   Check,
-  Palette
+  Palette,
+  LucideIconData
 } from 'lucide-angular';
 
 const PAGES: { value: PageType; label: string }[] = [
@@ -30,10 +31,10 @@ const PAGES: { value: PageType; label: string }[] = [
   { value: 'product', label: 'cms.editor.pages.product' },
 ];
 
-const DEVICES: { value: DeviceType; label: string; icon: string }[] = [
-  { value: 'desktop', label: 'cms.editor.devices.desktop', icon: 'pi pi-desktop' },
-  { value: 'tablet', label: 'cms.editor.devices.tablet', icon: 'pi pi-tablet' },
-  { value: 'mobile', label: 'cms.editor.devices.mobile', icon: 'pi pi-mobile' },
+const DEVICES: { value: DeviceType; label: string; icon: LucideIconData }[] = [
+  { value: 'desktop', label: 'cms.editor.devices.desktop', icon: Monitor },
+  { value: 'tablet', label: 'cms.editor.devices.tablet', icon: Tablet },
+  { value: 'mobile', label: 'cms.editor.devices.mobile', icon: Smartphone },
 ];
 
 
@@ -73,7 +74,7 @@ export class CmsTopBarComponent {
   public Undo2 = Undo2;
   public Redo2 = Redo2;
   public Save = Save;
-  public Rocket = Rocket;
+  public Send = Send;
   public ChevronDown = ChevronDown;
   public Check = Check;
   public Palette = Palette;

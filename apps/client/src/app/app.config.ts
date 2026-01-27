@@ -9,9 +9,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { providePrimeNG } from 'primeng/config';
 import { provideTransloco, translocoConfig } from '@jsverse/transloco';
-import { FlexPreset } from '../themes/flex.preset';
 import { NgxsModule, Store } from '@ngxs/store';
 import {
   AuthState,
@@ -27,7 +25,6 @@ import {
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { environment } from '../environments/environment';
-import { DynamicDialogModule, DialogService } from 'primeng/dynamicdialog';
 import { catchError, of, firstValueFrom } from 'rxjs';
 import { API_BASE_URL } from '@flex-erp/auth/util';
 import { ThemeService } from './shared/theme/theme.service';
@@ -62,7 +59,6 @@ export const appConfig: ApplicationConfig = {
       NgxsReduxDevtoolsPluginModule.forRoot({
         disabled: environment.production,
       }),
-      DynamicDialogModule,
     ),
 
     // Silent refresh on app start (uses refresh cookie)
@@ -92,19 +88,6 @@ export const appConfig: ApplicationConfig = {
       },
     },
     provideAnimationsAsync(),
-    providePrimeNG({
-      theme: {
-        preset: FlexPreset,
-        options: {
-          darkModeSelector: '.dark',
-          cssLayer: {
-            name: 'primeng',
-            order: 'app-styles, primeng',
-          },
-        },
-      },
-    }),
-    DialogService,
     provideNavManifest(STORE_NAV.nav.manifest),
     provideNavManifest(CMS_NAV.nav.manifest),
     ...provideAppContext(),

@@ -1,4 +1,5 @@
 import { Signal, TemplateRef, Type } from '@angular/core';
+import type { LucideIconData } from 'lucide-angular';
 
 export type MaybeSignal<T> = T | Signal<T>;
 
@@ -65,7 +66,7 @@ export type DataTableAlignableColumnDefMeta = {
 export type DataTableAction<TData extends DataTableRowData> = {
   label: string;
   onClick: (ctx: DataTableCellContext<TData, unknown>) => void;
-  icon?: string | TemplateRef<unknown>;
+  icon?: LucideIconData | TemplateRef<unknown>;
 };
 
 export interface DataTableActionColumnDef<TData extends DataTableRowData>

@@ -1,1 +1,1 @@
-export * from './lib/store-types';
+export * from '@flex-erp/store/types';

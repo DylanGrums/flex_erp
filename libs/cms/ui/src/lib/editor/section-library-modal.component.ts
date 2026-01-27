@@ -6,6 +6,22 @@ import { CmsScrollAreaComponent } from '../primitives/scroll-area/cms-scroll-are
 import { CmsDialogComponent } from '../primitives/dialog/cms-dialog.component';
 import { CmsTabsComponent, CmsTabItem } from '../primitives/tabs/cms-tabs.component';
 import { TranslocoModule } from '@jsverse/transloco';
+import {
+  Columns2,
+  CreditCard,
+  FolderKanban,
+  Grid3x3,
+  Image,
+  LayoutTemplate,
+  LucideAngularModule,
+  LucideIconData,
+  Mail,
+  Megaphone,
+  PanelBottom,
+  Quote,
+  Search,
+  SlidersHorizontal,
+} from 'lucide-angular';
 
 const CATEGORIES: CmsTabItem[] = [
   { value: 'all', label: 'cms.editor.categories.all' },
@@ -26,6 +42,7 @@ const CATEGORIES: CmsTabItem[] = [
     CmsScrollAreaComponent,
     CmsDialogComponent,
     CmsTabsComponent,
+    LucideAngularModule,
     TranslocoModule,
   ],
   templateUrl: './section-library-modal.component.html',
@@ -56,20 +73,22 @@ export class CmsSectionLibraryModalComponent {
     });
   }
 
-  iconClass(icon: string): string {
-    const map: Record<string, string> = {
-      'layout-template': 'pi pi-table',
-      image: 'pi pi-image',
-      columns: 'pi pi-sliders-h',
-      'grid-3x3': 'pi pi-th-large',
-      mail: 'pi pi-envelope',
-      'panel-bottom': 'pi pi-window-maximize',
-      megaphone: 'pi pi-megaphone',
-      'credit-card': 'pi pi-credit-card',
-      quote: 'pi pi-quote-left',
-      'folder-kanban': 'pi pi-sitemap',
+  readonly Search = Search;
+
+  iconClass(icon: string): LucideIconData {
+    const map: Record<string, LucideIconData> = {
+      'layout-template': LayoutTemplate,
+      image: Image,
+      columns: SlidersHorizontal,
+      'grid-3x3': Grid3x3,
+      mail: Mail,
+      'panel-bottom': PanelBottom,
+      megaphone: Megaphone,
+      'credit-card': CreditCard,
+      quote: Quote,
+      'folder-kanban': FolderKanban,
     };
-    return map[icon] || 'pi pi-table';
+    return map[icon] || LayoutTemplate;
   }
 
   handleAdd(definition: SectionDefinition): void {

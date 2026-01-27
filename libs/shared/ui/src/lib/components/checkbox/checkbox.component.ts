@@ -1,17 +1,11 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
-import { LucideAngularModule, Check, Minus } from 'lucide-angular';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Check, LucideAngularModule, Minus } from 'lucide-angular';
 import { FlexCheckboxDirective } from '../../primitives/checkbox/checkbox.directive';
 
-export type DataTableCheckboxState = boolean | 'indeterminate';
+export type FlexCheckboxState = boolean | 'indeterminate';
 
 @Component({
-  selector: 'flex-data-table-checkbox',
+  selector: 'fe-checkbox',
   standalone: true,
   imports: [FlexCheckboxDirective, LucideAngularModule],
   template: `
@@ -36,19 +30,19 @@ export type DataTableCheckboxState = boolean | 'indeterminate';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DataTableCheckboxComponent {
+export class FlexCheckboxComponent {
   readonly Check = Check;
   readonly Minus = Minus;
 
-  @Input() checked: DataTableCheckboxState = false;
+  @Input() checked: FlexCheckboxState = false;
   @Input() disabled = false;
   @Input() className = '';
 
-  @Output() checkedChange = new EventEmitter<DataTableCheckboxState>();
+  @Output() checkedChange = new EventEmitter<FlexCheckboxState>();
 
   get classes(): string {
     const base =
-      'flex size-[18px] items-center justify-center rounded border border-ui-border-base bg-ui-bg-base text-ui-fg-on-color shadow-borders-base transition-fg';
+      'flex size-4 items-center justify-center rounded border border-ui-border-base bg-ui-bg-base text-ui-fg-on-color shadow-borders-base transition-fg';
     const stateClass = this.checked
       ? 'bg-ui-bg-interactive border-ui-border-interactive'
       : 'bg-ui-bg-base';

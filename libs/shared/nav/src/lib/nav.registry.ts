@@ -1,9 +1,10 @@
 import { InjectionToken, Provider } from '@angular/core';
+import type { LucideIconData } from 'lucide-angular';
 
 export type NavItem = {
   label: string;
   to: string;
-  icon?: string;
+  icon?: LucideIconData;
   type?: 'core' | 'settings' | string;
   items?: NavItem[];
 };

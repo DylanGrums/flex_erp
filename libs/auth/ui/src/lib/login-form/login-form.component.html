@@ -9,18 +9,20 @@
           'auth.login.invalidCredentials' | transloco
         }}</span>
       </div>
-      <span class="p-input-icon-left w-full">
-        <i class="pi pi-envelope text-ui-fg-muted"></i>
+      <div class="relative">
+        <i-lucide
+          [img]="Mail"
+          class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ui-fg-muted"
+        ></i-lucide>
         <input
-          pInputText
           id="email"
           type="email"
           formControlName="email"
           autocomplete="email"
-          class="w-full !bg-ui-bg-field !border-ui-border-base !text-ui-fg-base placeholder:!text-ui-fg-muted focus:!border-ui-border-strong focus:!ring-ui-border-strong"
+          class="h-10 w-full rounded-md border border-ui-border-base bg-ui-bg-field px-3 pl-9 text-sm text-ui-fg-base placeholder:text-ui-fg-muted shadow-borders-base focus:border-ui-border-strong focus:outline-none focus:ring-2 focus:ring-ui-border-strong"
           [placeholder]="'auth.login.emailPlaceholder' | transloco"
         />
-      </span>
+      </div>
       <small [hidden]="!(submitted && f['email'].errors)" class="text-xs text-ui-fg-error">
         {{ 'auth.login.emailInvalid' | transloco }}
       </small>
@@ -30,15 +32,26 @@
       <label for="password" class="text-sm font-medium text-ui-fg-base">{{
         'auth.login.passwordLabel' | transloco
       }}</label>
-      <p-password
-        inputId="password"
-        formControlName="password"
-        [feedback]="false"
-        toggleMask
-        [placeholder]="'auth.login.passwordPlaceholder' | transloco"
-        inputStyleClass="w-full !bg-ui-bg-field !border-ui-border-base !text-ui-fg-base placeholder:!text-ui-fg-muted focus:!border-ui-border-strong focus:!ring-ui-border-strong"
-      >
-      </p-password>
+      <div class="relative">
+        <input
+          id="password"
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          autocomplete="current-password"
+          class="h-10 w-full rounded-md border border-ui-border-base bg-ui-bg-field px-3 pr-10 text-sm text-ui-fg-base placeholder:text-ui-fg-muted shadow-borders-base focus:border-ui-border-strong focus:outline-none focus:ring-2 focus:ring-ui-border-strong"
+          [placeholder]="'auth.login.passwordPlaceholder' | transloco"
+        />
+        <button
+          type="button"
+          class="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-ui-fg-muted transition-fg hover:text-ui-fg-base"
+          (click)="togglePasswordVisibility()"
+          [attr.aria-label]="
+            (showPassword ? 'auth.login.hidePassword' : 'auth.login.showPassword') | transloco
+          "
+        >
+          <i-lucide [img]="showPassword ? EyeOff : Eye" class="h-4 w-4"></i-lucide>
+        </button>
+      </div>
       <small [hidden]="!(submitted && f['password'].errors)" class="text-xs text-ui-fg-error">
         {{ 'auth.login.passwordInvalid' | transloco }}
       </small>
@@ -46,15 +59,17 @@
 
     <div class="flex items-center justify-between text-sm text-ui-fg-subtle">
       <div class="flex items-center gap-2">
-        <p-checkbox
-          inputId="rememberMe"
-          binary="true"
-          [(ngModel)]="rememberMe"
-          [ngModelOptions]="{ standalone: true }"
-        ></p-checkbox>
-        <label for="rememberMe" class="cursor-pointer">{{
-          'auth.login.rememberMe' | transloco
-        }}</label>
+        <fe-checkbox
+          [checked]="rememberMe"
+          (checkedChange)="rememberMe = $event === true"
+        ></fe-checkbox>
+        <button
+          type="button"
+          class="cursor-pointer"
+          (click)="rememberMe = !rememberMe"
+        >
+          {{ 'auth.login.rememberMe' | transloco }}
+        </button>
       </div>
       <a class="text-ui-fg-interactive hover:text-ui-fg-interactive-hover cursor-pointer">{{
         'auth.login.forgotPassword' | transloco
@@ -62,12 +77,11 @@
     </div>
 
     <button
-      pButton
       type="submit"
-      icon="pi pi-sign-in"
       [disabled]="loading"
-      class="w-full !bg-ui-bg-interactive !border-ui-border-interactive !text-ui-fg-on-color hover:!bg-ui-bg-interactive/90"
+      class="inline-flex w-full items-center justify-center gap-2 rounded-md border border-ui-border-interactive bg-ui-bg-interactive px-4 py-2 text-sm font-medium text-ui-fg-on-color shadow-borders-base transition-fg hover:bg-ui-bg-interactive/90 disabled:cursor-not-allowed disabled:opacity-60"
     >
+      <i-lucide [img]="LogIn" class="h-4 w-4"></i-lucide>
       {{ 'auth.login.submit' | transloco }}
     </button>
   </form>

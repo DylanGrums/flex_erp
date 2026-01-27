@@ -15,7 +15,7 @@
             >
             <span class="truncate text-sm font-medium">{{ storeLabel() }}</span>
           </div>
-          <i class="pi pi-angle-down text-xs text-ui-fg-muted"></i>
+          <i-lucide [img]="ChevronDown" class="h-3 w-3 text-ui-fg-muted"></i-lucide>
         </button>
 
         <ng-template #storeSwitcherMenu>
@@ -36,7 +36,7 @@
               <div
                 class="flex h-7 w-7 items-center justify-center rounded-md bg-ui-bg-subtle"
               >
-                <i class="pi pi-shop text-xs text-ui-fg-subtle"></i>
+                <i-lucide [img]="Store" class="h-4 w-4 text-ui-fg-subtle"></i-lucide>
               </div>
               <div class="flex min-w-0 flex-1 flex-col">
                 <span class="truncate text-sm font-medium">{{
@@ -46,10 +46,12 @@
                   store.id
                 }}</span>
               </div>
-              <i
+              <span
                 *ngIf="storeId() === store.id"
-                class="pi pi-check text-xs text-ui-fg-subtle"
-              ></i>
+                class="text-ui-fg-subtle"
+              >
+                <i-lucide [img]="Check" class="h-3 w-3"></i-lucide>
+              </span>
             </button>
 
             <div class="my-1 h-px bg-ui-border-base"></div>
@@ -60,7 +62,7 @@
               class="flex w-full items-center gap-x-2 rounded-md px-2 py-2 text-start hover:bg-ui-bg-subtle-hover"
               (click)="selectStore(null)"
             >
-              <i class="pi pi-times-circle text-ui-fg-subtle"></i>
+              <i-lucide [img]="CircleX" class="h-4 w-4 text-ui-fg-subtle"></i-lucide>
               <span class="text-sm">Clear selection</span>
             </button>
           </div>
@@ -137,7 +139,7 @@
               class="flex w-full items-center gap-x-2 rounded-md px-2 py-2 text-start hover:bg-ui-bg-subtle-hover"
               [routerLink]="'/settings/store'"
             >
-              <i class="pi pi-shop text-ui-fg-subtle"></i>
+              <i-lucide [img]="Store" class="h-4 w-4 text-ui-fg-subtle"></i-lucide>
               <span class="text-sm">{{ 'nav.storeSettings' | transloco }}</span>
             </button>
 
@@ -149,7 +151,7 @@
               class="flex w-full items-center gap-x-2 rounded-md px-2 py-2 text-start hover:bg-ui-bg-subtle-hover"
               [routerLink]="'/login'"
             >
-              <i class="pi pi-sign-out text-ui-fg-subtle"></i>
+              <i-lucide [img]="LogOut" class="h-4 w-4 text-ui-fg-subtle"></i-lucide>
               <span class="text-sm">{{ 'common.logout' | transloco }}</span>
             </button>
           </div>
@@ -194,7 +196,7 @@
       <div class="flex flex-col gap-y-0.5 py-3">
         <app-nav-item
           [item]="{
-            icon: 'pi pi-cog',
+            icon: Settings,
             label: 'nav.settings',
             to: '/settings',
             type: 'core',

@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Store } from '@ngxs/store';
 import { TranslocoTestingModule } from '@jsverse/transloco';
 import { LoginComponent } from './login.component';
@@ -9,7 +8,6 @@ describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let storeMock: { dispatch: jest.Mock; selectSnapshot: jest.Mock };
-  let dialogRefMock: { close: jest.Mock };
 
   beforeEach(
     waitForAsync(() => {
@@ -17,7 +15,6 @@ describe('LoginComponent', () => {
         dispatch: jest.fn(),
         selectSnapshot: jest.fn().mockReturnValue(false),
       };
-      dialogRefMock = { close: jest.fn() };
 
       TestBed.configureTestingModule({
         imports: [
@@ -25,7 +22,6 @@ describe('LoginComponent', () => {
           TranslocoTestingModule.forRoot({ langs: {}, preloadLangs: true }),
         ],
         providers: [
-          { provide: DynamicDialogRef, useValue: dialogRefMock },
           { provide: Store, useValue: storeMock },
         ],
       }).compileComponents();
@@ -42,14 +38,12 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should dispatch login and close when authenticated', () => {
+  it('should dispatch login when authenticated', () => {
     storeMock.dispatch.mockReturnValue(of({ user: 'test' }));
-    storeMock.selectSnapshot.mockImplementation((selector: any) => selector(true));
 
     component.onSubmit({ email: 'user@test.com', password: '123456' });
 
     expect(storeMock.dispatch).toHaveBeenCalled();
-    expect(dialogRefMock.close).toHaveBeenCalledWith({ user: 'test' });
   });
 
   it('should set error flag when dispatch throws', () => {

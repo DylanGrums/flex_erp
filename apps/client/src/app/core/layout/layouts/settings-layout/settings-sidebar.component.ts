@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
-import { DividerModule } from 'primeng/divider';
-import { ButtonModule } from 'primeng/button';
+import { ArrowLeft, LucideAngularModule } from 'lucide-angular';
 
 import { NavItemComponent } from '../../components/nav-item/nav-item.component';
 import { UserMenuComponent } from '../../components/user-menu/user-menu.component';
@@ -17,8 +15,7 @@ import { TranslocoModule } from '@jsverse/transloco';
   imports: [
     CommonModule,
     RouterModule,
-    DividerModule,
-    ButtonModule,
+    LucideAngularModule,
     NavItemComponent,
     UserMenuComponent,
     FlexDividerComponent,
@@ -35,6 +32,7 @@ import { TranslocoModule } from '@jsverse/transloco';
   ],
 })
 export class SettingsSidebarComponent {
+  readonly ArrowLeft = ArrowLeft;
 
   readonly generalOpen = signal(true);
   readonly developerOpen = signal(true);

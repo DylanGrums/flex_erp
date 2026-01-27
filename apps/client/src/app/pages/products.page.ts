@@ -8,6 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { TranslocoModule } from '@jsverse/transloco';
+import { Box, Pencil, Trash2 } from 'lucide-angular';
 
 import {
   DataTableCommand,
@@ -15,11 +16,13 @@ import {
   DataTableColumnOrderState,
   DataTableColumnVisibilityState,
   DataTableCustomFilterContext,
+  DataTableCellContext,
   DataTableEmptyStateProps,
   DataTableFilteringState,
   DataTableFilter,
   DataTableNumberComparisonOperator,
   DataTablePaginationState,
+  DataTableRow,
   DataTableRowSelectionState,
   DataTableSortingState,
   createDataTable,
@@ -315,7 +318,7 @@ export class ProductsPage {
 
   readonly rowCount = computed(() => this.processedRows().length);
 
-  readonly columns: DataTableColumnDef<Product>[] = [
+  readonly columns: DataTableColumnDef<Product, any>[] = [
     columnHelper.select(),
     columnHelper.accessor('name', {
       header: 'Name',
@@ -343,20 +346,22 @@ export class ProductsPage {
       sortAscLabel: 'Low to High',
       sortDescLabel: 'High to Low',
       headerAlign: 'right',
-      cell: ({ row }) => `$${row.original.price.toFixed(2)}`,
+      cell: ({ row }: DataTableCellContext<Product, number>) =>
+        `$${row.original.price.toFixed(2)}`,
     }),
     columnHelper.accessor('inventory', {
       header: 'Inventory',
       enableSorting: true,
       headerAlign: 'right',
-      cell: ({ row }) => row.original.inventory,
+      cell: ({ row }: DataTableCellContext<Product, number>) =>
+        row.original.inventory,
     }),
     columnHelper.accessor('createdAt', {
       header: 'Created',
       enableSorting: true,
       sortAscLabel: 'Oldest',
       sortDescLabel: 'Newest',
-      cell: ({ row }) =>
+      cell: ({ row }: DataTableCellContext<Product, Date>) =>
         row.original.createdAt.toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'short',
@@ -365,26 +370,27 @@ export class ProductsPage {
     }),
     columnHelper.accessor('tags', {
       header: 'Tags',
-      cell: ({ row }) => row.original.tags.join(', '),
+      cell: ({ row }: DataTableCellContext<Product, string[]>) =>
+        row.original.tags.join(', '),
     }),
     columnHelper.action({
-      actions: (ctx) => [
+      actions: (ctx: DataTableCellContext<Product, unknown>) => [
         [
           {
             label: 'Edit',
-            icon: 'pi pi-pencil',
+            icon: Pencil,
             onClick: () => alert(`Edit ${ctx.row.original.name}`),
           },
         ],
         [
           {
             label: 'Archive',
-            icon: 'pi pi-box',
+            icon: Box,
             onClick: () => alert(`Archive ${ctx.row.original.name}`),
           },
           {
             label: 'Delete',
-            icon: 'pi pi-trash',
+            icon: Trash2,
             onClick: () => alert(`Delete ${ctx.row.original.name}`),
           },
         ],
@@ -411,39 +417,45 @@ export class ProductsPage {
     filters: this.filters,
     commands: this.commands,
     rowCount: this.rowCount,
-    getRowId: (row) => row.id,
-    onRowClick: (_event, row) => {
+    getRowId: (row: Product) => row.id,
+    onRowClick: (_event: MouseEvent, row: Product) => {
       alert(`Open ${row.name}`);
     },
     search: {
       state: this.search,
-      onSearchChange: (value) => this.search.set(value),
+      onSearchChange: (value: string) => this.search.set(value),
       debounce: 300,
     },
     filtering: {
       state: this.filtering,
-      onFilteringChange: (state) => this.filtering.set(state),
+      onFilteringChange: (state: DataTableFilteringState) => this.filtering.set(state),
     },
     sorting: {
       state: this.sorting,
-      onSortingChange: (state) => this.sorting.set(state),
+      onSortingChange: (state: DataTableSortingState | null) =>
+        this.sorting.set(state),
     },
     pagination: {
       state: this.pagination,
-      onPaginationChange: (state) => this.pagination.set(state),
+      onPaginationChange: (state: DataTablePaginationState) =>
+        this.pagination.set(state),
     },
     rowSelection: {
       state: this.rowSelection,
-      onRowSelectionChange: (state) => this.rowSelection.set(state),
-      enableRowSelection: (row) => row.original.status !== 'Archived',
+      onRowSelectionChange: (state: DataTableRowSelectionState) =>
+        this.rowSelection.set(state),
+      enableRowSelection: (row: DataTableRow<Product>) =>
+        row.original.status !== 'Archived',
     },
     columnVisibility: {
       state: this.columnVisibility,
-      onColumnVisibilityChange: (state) => this.columnVisibility.set(state),
+      onColumnVisibilityChange: (state: DataTableColumnVisibilityState) =>
+        this.columnVisibility.set(state),
     },
     columnOrder: {
       state: this.columnOrder,
-      onColumnOrderChange: (state) => this.columnOrder.set(state),
+      onColumnOrderChange: (state: DataTableColumnOrderState) =>
+        this.columnOrder.set(state),
     },
   });
 
@@ -507,14 +519,14 @@ export class ProductsPage {
       commandHelper.command({
         label: 'Archive',
         shortcut: 'A',
-        action: (selection) => {
+        action: (selection: DataTableRowSelectionState) => {
           alert(`Archive ${Object.keys(selection).length} products`);
         },
       }),
       commandHelper.command({
         label: 'Delete',
         shortcut: 'D',
-        action: (selection) => {
+        action: (selection: DataTableRowSelectionState) => {
           alert(`Delete ${Object.keys(selection).length} products`);
         },
       }),

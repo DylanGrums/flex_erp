@@ -19,7 +19,9 @@
     >
       @if (!isSetting()) {
         <div class="flex size-6 items-center justify-center">
-          <i class="text-base leading-none" [class]="item().icon"></i>
+          @if (item().icon) {
+            <i-lucide [img]="item().icon" class="h-4 w-4"></i-lucide>
+          }
         </div>
       }
       <span class="font-medium font-sans txt-compact-small">{{
@@ -73,7 +75,9 @@
     >
       @if (!isSetting()) {
         <div class="flex size-6 items-center justify-center">
-          <i class="text-base leading-none" [class]="item().icon"></i>
+          @if (item().icon) {
+            <i-lucide [img]="item().icon" class="h-4 w-4"></i-lucide>
+          }
         </div>
       }
       <span class="font-medium font-sans txt-compact-small">{{ item().label | transloco }}</span>
@@ -94,7 +98,9 @@
         "
       >
         <div class="flex size-6 items-center justify-center">
-          <i class="text-base leading-none" [class]="item().icon"></i>
+          @if (item().icon) {
+            <i-lucide [img]="item().icon" class="h-4 w-4"></i-lucide>
+          }
         </div>
         <span class="font-medium font-sans txt-compact-small">{{ item().label | transloco }}</span>
       </button>

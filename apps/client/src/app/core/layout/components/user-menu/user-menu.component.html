@@ -1,129 +1,141 @@
 <div class="p-3">
-  <p-popover  #menuPanel [styleClass]="'min-w-[220px] max-w-[220px]'">
-    <div class="flex items-center gap-x-3 overflow-hidden px-2 py-1">
-      <div
-        class="flex h-8 w-8 items-center justify-center rounded-full bg-ui-bg-base"
-      >
-        <span class="text-xs font-semibold">{{ fallback() }}</span>
-      </div>
-      <div
-        class="block w-full min-w-0 max-w-[187px] overflow-hidden whitespace-nowrap"
-      >
+  <ng-template #menuPanel>
+    <div
+      flexDropdownMenuContent
+      class="min-w-[220px] max-w-[220px] rounded-md border border-ui-border-base bg-ui-bg-base p-1 shadow"
+    >
+      <div class="flex items-center gap-x-3 overflow-hidden px-2 py-1">
         <div
-          class="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold"
+          class="flex h-8 w-8 items-center justify-center rounded-full bg-ui-bg-base"
         >
-          {{ displayName() }}
+          <span class="text-xs font-semibold">{{ fallback() }}</span>
         </div>
         <div
-          class="text-xs text-ui-fg-subtle overflow-hidden text-ellipsis whitespace-nowrap"
+          class="block w-full min-w-0 max-w-[187px] overflow-hidden whitespace-nowrap"
         >
-          {{ user()?.email }}
+          <div
+            class="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold"
+          >
+            {{ displayName() }}
+          </div>
+          <div
+            class="text-xs text-ui-fg-subtle overflow-hidden text-ellipsis whitespace-nowrap"
+          >
+            {{ user()?.email }}
+          </div>
         </div>
       </div>
+
+      <div flexDropdownMenuSeparator class="my-2 h-px bg-ui-border-base"></div>
+
+      <a
+        flexDropdownMenuItem
+        class="flex items-center rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover"
+        [routerLink]="'/settings/profile'"
+      >
+        <i-lucide [img]="User" class="me-2 h-4 w-4 text-ui-fg-subtle"></i-lucide>
+        <span class="text-sm">{{ 'layout.userMenu.profileSettings' | transloco }}</span>
+      </a>
+
+      <div flexDropdownMenuSeparator class="my-2 h-px bg-ui-border-base"></div>
+
+      <a
+        flexDropdownMenuItem
+        class="flex items-center rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover"
+        href="https://docs.medusajs.com"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <i-lucide [img]="Book" class="me-2 h-4 w-4 text-ui-fg-subtle"></i-lucide>
+        <span class="text-sm">{{ 'layout.userMenu.documentation' | transloco }}</span>
+      </a>
+
+      <a
+        flexDropdownMenuItem
+        class="flex items-center rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover"
+        href="https://medusajs.com/changelog/"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <i-lucide [img]="Clock" class="me-2 h-4 w-4 text-ui-fg-subtle"></i-lucide>
+        <span class="text-sm">{{ 'layout.userMenu.changelog' | transloco }}</span>
+      </a>
+
+      <div flexDropdownMenuSeparator class="my-2 h-px bg-ui-border-base"></div>
+
+      <button
+        type="button"
+        flexDropdownMenuItem
+        class="w-full text-left flex items-center rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover"
+        (click)="openShortcuts()"
+      >
+        <i-lucide [img]="Keyboard" class="me-2 h-4 w-4 text-ui-fg-subtle"></i-lucide>
+        <span class="text-sm">{{ 'layout.userMenu.shortcuts' | transloco }}</span>
+      </button>
+
+      <div class="mt-1">
+        <div class="px-2 py-1 text-xs text-ui-fg-muted">
+          {{ 'layout.userMenu.theme' | transloco }}
+        </div>
+
+        <button
+          type="button"
+          flexDropdownMenuItem
+          class="w-full text-left flex items-center rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover"
+          (click)="setTheme('system')"
+        >
+          <i-lucide
+            [img]="isTheme('system') ? Check : Circle"
+            class="me-2 h-4 w-4"
+          ></i-lucide>
+          <span class="text-sm">{{ 'layout.userMenu.themeSystem' | transloco }}</span>
+        </button>
+
+        <button
+          type="button"
+          flexDropdownMenuItem
+          class="w-full text-left flex items-center rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover"
+          (click)="setTheme('light')"
+        >
+          <i-lucide
+            [img]="isTheme('light') ? Check : Circle"
+            class="me-2 h-4 w-4"
+          ></i-lucide>
+          <span class="text-sm">{{ 'layout.userMenu.themeLight' | transloco }}</span>
+        </button>
+
+        <button
+          type="button"
+          flexDropdownMenuItem
+          class="w-full text-left flex items-center rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover"
+          (click)="setTheme('dark')"
+        >
+          <i-lucide
+            [img]="isTheme('dark') ? Check : Circle"
+            class="me-2 h-4 w-4"
+          ></i-lucide>
+          <span class="text-sm">{{ 'layout.userMenu.themeDark' | transloco }}</span>
+        </button>
+      </div>
+
+      <div flexDropdownMenuSeparator class="my-2 h-px bg-ui-border-base"></div>
+
+      <button
+        type="button"
+        flexDropdownMenuItem
+        class="w-full text-left flex items-center rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover"
+        (click)="logout()"
+      >
+        <i-lucide [img]="LogOut" class="me-2 h-4 w-4 text-ui-fg-subtle"></i-lucide>
+        <span class="text-sm">{{ 'layout.userMenu.logout' | transloco }}</span>
+      </button>
     </div>
-
-    <p-divider styleClass="my-2" />
-
-    <a
-      class="flex items-center rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover"
-      [routerLink]="'/settings/profile'"
-    >
-      <i class="pi pi-user text-ui-fg-subtle me-2"></i>
-      <span class="text-sm">{{ 'layout.userMenu.profileSettings' | transloco }}</span>
-    </a>
-
-    <p-divider styleClass="my-2" />
-
-    <a
-      class="flex items-center rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover"
-      href="https://docs.medusajs.com"
-      target="_blank"
-      rel="noreferrer"
-    >
-      <i class="pi pi-book text-ui-fg-subtle me-2"></i>
-      <span class="text-sm">{{ 'layout.userMenu.documentation' | transloco }}</span>
-    </a>
-
-    <a
-      class="flex items-center rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover"
-      href="https://medusajs.com/changelog/"
-      target="_blank"
-      rel="noreferrer"
-    >
-      <i class="pi pi-clock text-ui-fg-subtle me-2"></i>
-      <span class="text-sm">{{ 'layout.userMenu.changelog' | transloco }}</span>
-    </a>
-
-    <p-divider styleClass="my-2" />
-
-    <button
-      type="button"
-      class="w-full text-left flex items-center rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover"
-      (click)="menuPanel.hide(); openShortcuts()"
-    >
-      <i class="pi pi-keyboard text-ui-fg-subtle me-2"></i>
-      <span class="text-sm">{{ 'layout.userMenu.shortcuts' | transloco }}</span>
-    </button>
-
-    <div class="mt-1">
-      <div class="px-2 py-1 text-xs text-ui-fg-muted">{{ 'layout.userMenu.theme' | transloco }}</div>
-
-      <button
-        type="button"
-        class="w-full text-left flex items-center rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover"
-        (click)="setTheme('system')"
-      >
-        <i
-          class="pi me-2"
-          [class.pi-check]="isTheme('system')"
-          [class.pi-circle]="!isTheme('system')"
-        ></i>
-        <span class="text-sm">{{ 'layout.userMenu.themeSystem' | transloco }}</span>
-      </button>
-
-      <button
-        type="button"
-        class="w-full text-left flex items-center rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover"
-        (click)="setTheme('light')"
-      >
-        <i
-          class="pi me-2"
-          [class.pi-check]="isTheme('light')"
-          [class.pi-circle]="!isTheme('light')"
-        ></i>
-        <span class="text-sm">{{ 'layout.userMenu.themeLight' | transloco }}</span>
-      </button>
-
-      <button
-        type="button"
-        class="w-full text-left flex items-center rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover"
-        (click)="setTheme('dark')"
-      >
-        <i
-          class="pi me-2"
-          [class.pi-check]="isTheme('dark')"
-          [class.pi-circle]="!isTheme('dark')"
-        ></i>
-        <span class="text-sm">{{ 'layout.userMenu.themeDark' | transloco }}</span>
-      </button>
-    </div>
-
-    <p-divider styleClass="my-2" />
-
-    <button
-      type="button"
-      class="w-full text-left flex items-center rounded-md px-2 py-2 hover:bg-ui-bg-subtle-hover"
-      (click)="logout()"
-    >
-      <i class="pi pi-sign-out text-ui-fg-subtle me-2"></i>
-      <span class="text-sm">{{ 'layout.userMenu.logout' | transloco }}</span>
-    </button>
-  </p-popover>
+  </ng-template>
 
   <button
     type="button"
     class="bg-ui-bg-subtle grid w-full cursor-pointer grid-cols-[24px_1fr_15px] items-center gap-2 rounded-md py-1 ps-0.5 pe-2 outline-none hover:bg-ui-bg-subtle-hover focus-visible:shadow-borders-focus"
-    (click)="menuPanel.toggle($event)"
+    [flexDropdownMenuTrigger]="menuPanel"
   >
     <div
       class="flex size-6 items-center justify-center rounded-full bg-ui-bg-base"
@@ -135,49 +147,42 @@
       <span class="truncate text-xs font-semibold">{{ displayName() }}</span>
     </div>
 
-    <i class="pi pi-ellipsis-h text-ui-fg-muted"></i>
+    <i-lucide [img]="Ellipsis" class="h-4 w-4 text-ui-fg-muted"></i-lucide>
   </button>
 </div>
 
-<p-dialog
-  [visible]="shortcutsOpen()"
-  (visibleChange)="shortcutsOpen.set($event)"
+<flex-dialog
+  [open]="shortcutsOpen()"
+  (openChange)="shortcutsOpen.set($event)"
   [modal]="true"
-  [dismissableMask]="true"
-  [draggable]="false"
-  [resizable]="false"
-  [style]="{ width: '560px', maxWidth: 'calc(100vw - 24px)' }"
-  styleClass="!overflow-hidden"
+  contentClass="w-full max-w-[560px] max-h-[80vh] overflow-hidden rounded-lg border border-ui-border-base bg-ui-bg-base shadow-lg"
 >
-  <ng-template pTemplate="header">
-    <div class="flex w-full items-center justify-between">
-      <div class="text-base font-semibold">{{ 'layout.userMenu.shortcuts' | transloco }}</div>
-      <div class="flex items-center gap-x-2">
-        <span class="px-2 py-1 rounded border text-xs">esc</span>
-        <button
-          pButton
-          type="button"
-          class="p-button-text p-button-sm"
-          icon="pi pi-times"
-          (click)="closeShortcuts()"
-        >
-          x
-        </button>
-      </div>
+  <div class="flex w-full items-center justify-between border-b border-ui-border-base px-6 py-4">
+    <div class="text-base font-semibold">{{ 'layout.userMenu.shortcuts' | transloco }}</div>
+    <div class="flex items-center gap-x-2">
+      <span class="px-2 py-1 rounded border text-xs">esc</span>
+      <button
+        type="button"
+        class="inline-flex h-8 w-8 items-center justify-center rounded-md text-ui-fg-muted transition-fg hover:bg-ui-bg-subtle-hover"
+        (click)="closeShortcuts()"
+        [attr.aria-label]="'common.close' | transloco"
+      >
+        <i-lucide [img]="X" class="h-4 w-4"></i-lucide>
+      </button>
     </div>
-  </ng-template>
+  </div>
 
-  <div class="flex flex-col gap-y-3 px-1 py-2">
+  <div class="flex flex-col gap-y-3 px-6 py-4">
     <input
-      pInputText
       type="search"
-      [(ngModel)]="searchValue"
-      class="w-full"
+      class="h-9 w-full rounded-md border border-ui-border-base bg-ui-bg-base px-3 text-sm text-ui-fg-base shadow-borders-base"
+      [value]="searchValue()"
+      (input)="onSearchInput($event)"
       [placeholder]="'layout.userMenu.searchShortcuts' | transloco"
     />
   </div>
 
-  <div class="flex flex-col divide-y overflow-y-auto -mx-6 px-6">
+  <div class="flex flex-col divide-y overflow-y-auto -mx-6 px-6 pb-4">
     <div
       *ngFor="let s of filteredShortcuts()"
       class="text-ui-fg-subtle flex items-center justify-between py-3"
@@ -196,4 +201,4 @@
       </div>
     </div>
   </div>
-</p-dialog>
+</flex-dialog>
