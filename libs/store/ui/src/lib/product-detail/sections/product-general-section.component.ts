@@ -23,7 +23,7 @@ import {
   template: `
     <div class="medusa-panel divide-y p-0">
       <div class="flex items-center justify-between px-6 py-4">
-        <h2 class="text-base font-semibold text-ui-fg-base">General</h2>
+        <h2 class="font-sans font-medium h2-core text-ui-fg-base">General</h2>
         <button
           type="button"
           class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-ui-border-base text-ui-fg-subtle transition-fg hover:bg-ui-bg-subtle-hover"
@@ -40,7 +40,7 @@ import {
           >
             <a
               flexDropdownMenuItem
-              class="flex items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-ui-bg-subtle-hover"
+              class="flex items-center gap-2 rounded px-2 py-1.5 txt-compact-small hover:bg-ui-bg-subtle-hover"
               [routerLink]="['edit']"
             >
               <i-lucide [img]="Pencil" class="h-4 w-4 text-ui-fg-subtle"></i-lucide>
@@ -52,14 +52,14 @@ import {
 
       <div class="grid gap-4 px-6 py-4 md:grid-cols-2">
         <div>
-          <div class="text-xs font-semibold text-ui-fg-muted">Description</div>
-          <div class="mt-1 text-sm text-ui-fg-base">
+          <div class="text-ui-fg-muted txt-compact-small-plus">Description</div>
+          <div class="mt-1 text-ui-fg-base txt-compact-small">
             {{ product.description || 'No description' }}
           </div>
         </div>
         <div>
-          <div class="text-xs font-semibold text-ui-fg-muted">Handle</div>
-          <div class="mt-1 text-sm text-ui-fg-base">
+          <div class="text-ui-fg-muted txt-compact-small-plus">Handle</div>
+          <div class="mt-1 text-ui-fg-base txt-compact-small">
             {{ product.handle ? '/' + product.handle : 'No handle set' }}
           </div>
         </div>

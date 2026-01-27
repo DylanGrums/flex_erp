@@ -18,9 +18,8 @@ import {
   ],
   template: `
     <div class="medusa-panel divide-y p-0">
-      <div class="px-6 py-4">
-        <h2 class="text-base font-semibold text-ui-fg-base">Collections</h2>
-        <p class="text-xs text-ui-fg-muted">Group this product into collections.</p>
+      <div class="flex items-center justify-between px-6 py-4">
+        <h2 class="font-sans font-medium h2-core text-ui-fg-base">Collections</h2>
       </div>
 
       @if (product.collections?.length) {
@@ -28,10 +27,10 @@ import {
           @for (collection of product.collections; track collection.id) {
             <div class="flex items-center justify-between gap-4 px-6 py-4">
               <div class="min-w-0">
-                <div class="text-sm font-semibold text-ui-fg-base">
+                <div class="text-ui-fg-base txt-compact-small-plus">
                   {{ collection.title }}
                 </div>
-                <div class="text-xs text-ui-fg-muted">
+                <div class="text-ui-fg-muted txt-compact-small">
                   {{ collection.handle ? '/' + collection.handle : 'No handle' }}
                 </div>
               </div>
@@ -52,7 +51,7 @@ import {
                 <ng-template #popover>
                   <div
                     flexPopover
-                    class="max-w-[220px] rounded-md border border-ui-border-base bg-ui-bg-base p-3 text-xs text-ui-fg-base shadow"
+                    class="max-w-[220px] rounded-md border border-ui-border-base bg-ui-bg-base p-3 text-ui-fg-base txt-compact-xsmall shadow"
                   >
                     {{ collection.description }}
                   </div>
@@ -62,7 +61,9 @@ import {
           }
         </div>
       } @else {
-        <div class="px-6 py-6 text-sm text-ui-fg-muted">No collections assigned.</div>
+        <div class="px-6 py-6 text-ui-fg-muted txt-compact-small">
+          No collections assigned.
+        </div>
       }
     </div>
   `,

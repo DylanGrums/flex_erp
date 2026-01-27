@@ -23,20 +23,17 @@ import {
     FlexDropdownMenuSeparatorDirective,
   ],
   template: `
-    <div class="medusa-panel p-6">
-      <div class="flex flex-wrap items-start justify-between gap-4">
-        <div class="min-w-0">
-          <h1 class="text-2xl font-semibold text-ui-fg-base truncate">
+    <div class="medusa-panel divide-y p-0">
+      <div class="flex items-center justify-between px-6 py-4">
+        <div>
+          <h1 class="font-sans font-medium h1-core">
             {{ product.title }}
           </h1>
-          <div class="mt-1 text-sm text-ui-fg-muted">
-            {{ product.handle ? '/' + product.handle : 'No handle set' }}
-          </div>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-x-4">
           <span
-            class="inline-flex items-center rounded-full border px-2 py-1 text-xs font-semibold"
+            class="inline-flex items-center rounded-full border px-2 py-1 txt-compact-xsmall-plus"
             [ngClass]="statusClass"
           >
             {{ statusLabel }}
@@ -58,7 +55,7 @@ import {
             >
               <a
                 flexDropdownMenuItem
-                class="flex items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-ui-bg-subtle-hover"
+                class="flex items-center gap-2 rounded px-2 py-1.5 txt-compact-small hover:bg-ui-bg-subtle-hover"
                 [routerLink]="['edit']"
               >
                 <i-lucide [img]="Pencil" class="h-4 w-4 text-ui-fg-subtle"></i-lucide>
@@ -66,7 +63,7 @@ import {
               </a>
               <a
                 flexDropdownMenuItem
-                class="flex items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-ui-bg-subtle-hover"
+                class="flex items-center gap-2 rounded px-2 py-1.5 txt-compact-small hover:bg-ui-bg-subtle-hover"
                 [routerLink]="['media', 'edit']"
               >
                 <i-lucide [img]="Image" class="h-4 w-4 text-ui-fg-subtle"></i-lucide>
@@ -75,7 +72,7 @@ import {
               <div flexDropdownMenuSeparator class="my-1 h-px bg-ui-border-base"></div>
               <a
                 flexDropdownMenuItem
-                class="flex items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-ui-bg-subtle-hover"
+                class="flex items-center gap-2 rounded px-2 py-1.5 txt-compact-small hover:bg-ui-bg-subtle-hover"
                 [routerLink]="['variants', 'create']"
               >
                 <span class="text-ui-fg-subtle">Create variant</span>

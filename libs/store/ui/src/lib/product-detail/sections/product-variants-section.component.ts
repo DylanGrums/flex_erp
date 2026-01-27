@@ -21,6 +21,7 @@ import {
 } from '@flex-erp/shared/ui';
 
 import { IconPlaceholderCellComponent } from '../variants/icon-placeholder-cell.component';
+import { VariantOptionValueCellComponent } from '../variants/variant-option-value-cell.component';
 
 type VariantRow = DataTableRowData & {
   id: string;
@@ -46,14 +47,13 @@ const sortOptions = (options: ProductOption[]) =>
     DataTableTableComponent,
   ],
   template: `
-    <div class="medusa-panel p-0">
+    <div class="medusa-panel divide-y p-0">
       <div class="flex items-center justify-between px-6 py-4">
         <div>
-          <h2 class="text-base font-semibold text-ui-fg-base">Variants</h2>
-          <p class="text-xs text-ui-fg-muted">Manage variant pricing and options.</p>
+          <h2 class="font-sans font-medium h2-core text-ui-fg-base">Variants</h2>
         </div>
         <a
-          class="inline-flex items-center gap-2 rounded-md border border-ui-border-base px-3 py-2 text-xs font-semibold text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover"
+          class="inline-flex items-center gap-2 rounded-md border border-ui-border-base px-3 py-2 text-ui-fg-base txt-compact-small-plus transition-fg hover:bg-ui-bg-subtle-hover"
           [routerLink]="['variants', 'create']"
         >
           <i-lucide [img]="Plus" class="h-3 w-3"></i-lucide>
@@ -108,7 +108,12 @@ export class ProductVariantsSectionComponent {
       columnHelper.display({
         id: `option_${option.id}`,
         header: option.name,
-        cell: ({ row }) => this.getOptionValue(row.original.variant, option),
+        cell: ({ row }) => ({
+          component: VariantOptionValueCellComponent,
+          inputs: {
+            value: this.getOptionValue(row.original.variant, option),
+          },
+        }),
       }),
     );
 
@@ -174,9 +179,9 @@ export class ProductVariantsSectionComponent {
     onRowClick: (_event, row) => this.openVariantEdit(row.id),
   });
 
-  private getOptionValue(variant: ProductVariantDetail, option: ProductOption): string {
+  private getOptionValue(variant: ProductVariantDetail, option: ProductOption): string | null {
     const match = variant.optionValues?.find((value) => value.optionId === option.id);
-    return match?.value ?? '-';
+    return match?.value ?? null;
   }
 
   private openVariantEdit(variantId: string) {

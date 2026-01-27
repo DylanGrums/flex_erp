@@ -27,9 +27,9 @@ import {
   template: `
     <div class="medusa-panel divide-y p-0">
       <div class="flex items-center justify-between px-6 py-4">
-        <h2 class="text-base font-semibold text-ui-fg-base">Options</h2>
+        <h2 class="font-sans font-medium h2-core text-ui-fg-base">Options</h2>
         <a
-          class="inline-flex items-center gap-2 rounded-md border border-ui-border-base px-3 py-2 text-xs font-semibold text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover"
+          class="inline-flex items-center gap-2 rounded-md border border-ui-border-base px-3 py-2 text-ui-fg-base txt-compact-small-plus transition-fg hover:bg-ui-bg-subtle-hover"
           [routerLink]="['options', 'create']"
         >
           <i-lucide [img]="Plus" class="h-3 w-3"></i-lucide>
@@ -42,11 +42,11 @@ import {
           @for (option of product.options; track option.id) {
             <div class="flex items-start justify-between gap-4 px-6 py-4">
               <div class="min-w-0">
-                <div class="text-sm font-semibold text-ui-fg-base">{{ option.name }}</div>
+                <div class="text-ui-fg-base txt-compact-small-plus">{{ option.name }}</div>
                 <div class="mt-2 flex flex-wrap gap-2">
                   @for (value of option.values ?? []; track value.id) {
                     <span
-                      class="inline-flex items-center rounded-full border border-ui-border-base px-2 py-0.5 text-xs text-ui-fg-base"
+                      class="flex min-w-[20px] items-center justify-center"
                       [flexTooltipTrigger]="tooltip"
                     >
                       {{ value.value }}
@@ -54,14 +54,14 @@ import {
                     <ng-template #tooltip>
                       <div
                         flexTooltip
-                        class="rounded-md border border-ui-border-base bg-ui-bg-base px-2 py-1 text-xs shadow"
+                        class="rounded-md border border-ui-border-base bg-ui-bg-base px-2 py-1 txt-compact-xsmall shadow"
                       >
                         {{ value.value }}
                       </div>
                     </ng-template>
                   }
                   @if (!(option.values?.length)) {
-                    <span class="text-xs text-ui-fg-muted">No values</span>
+                    <span class="text-ui-fg-muted txt-compact-small">No values</span>
                   }
                 </div>
               </div>
@@ -82,7 +82,7 @@ import {
                 >
                   <a
                     flexDropdownMenuItem
-                    class="flex items-center gap-2 rounded px-2 py-1.5 text-sm hover:bg-ui-bg-subtle-hover"
+                    class="flex items-center gap-2 rounded px-2 py-1.5 txt-compact-small hover:bg-ui-bg-subtle-hover"
                     [routerLink]="['options', option.id, 'edit']"
                   >
                     <i-lucide [img]="Pencil" class="h-4 w-4 text-ui-fg-subtle"></i-lucide>
@@ -94,7 +94,7 @@ import {
           }
         </div>
       } @else {
-        <div class="px-6 py-6 text-sm text-ui-fg-muted">No options yet.</div>
+        <div class="px-6 py-6 text-ui-fg-muted txt-compact-small">No options yet.</div>
       }
     </div>
   `,

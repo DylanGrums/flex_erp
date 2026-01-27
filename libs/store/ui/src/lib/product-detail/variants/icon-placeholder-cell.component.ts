@@ -6,7 +6,7 @@ import { Image, LucideAngularModule } from 'lucide-angular';
   standalone: true,
   imports: [LucideAngularModule],
   template: `
-    <div class="flex h-full w-full items-center justify-center">
+    <div class="flex items-center pl-[1px]">
       <span class="flex h-7 w-7 items-center justify-center rounded-md border border-ui-border-base bg-ui-bg-subtle">
         <i-lucide [img]="Image" class="h-3.5 w-3.5 text-ui-fg-muted"></i-lucide>
       </span>
