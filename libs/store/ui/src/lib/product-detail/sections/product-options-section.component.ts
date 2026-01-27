@@ -28,13 +28,30 @@ import {
     <div class="medusa-panel divide-y p-0">
       <div class="flex items-center justify-between px-6 py-4">
         <h2 class="font-sans font-medium h2-core text-ui-fg-base">Options</h2>
-        <a
-          class="inline-flex items-center gap-2 rounded-md border border-ui-border-base px-3 py-2 text-ui-fg-base txt-compact-small-plus transition-fg hover:bg-ui-bg-subtle-hover"
-          [routerLink]="['options', 'create']"
+        <button
+          type="button"
+          class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-ui-border-base text-ui-fg-subtle transition-fg hover:bg-ui-bg-subtle-hover"
+          [flexDropdownMenuTrigger]="menu"
+          aria-label="Options actions"
         >
-          <i-lucide [img]="Plus" class="h-3 w-3"></i-lucide>
-          Add option
-        </a>
+          <i-lucide [img]="Ellipsis" class="h-4 w-4"></i-lucide>
+        </button>
+
+        <ng-template #menu>
+          <div
+            flexDropdownMenuContent
+            class="min-w-[180px] rounded-md border border-ui-border-base bg-ui-bg-base p-1 shadow"
+          >
+            <a
+              flexDropdownMenuItem
+              class="flex items-center gap-2 rounded px-2 py-1.5 txt-compact-small hover:bg-ui-bg-subtle-hover"
+              [routerLink]="['options', 'create']"
+            >
+              <i-lucide [img]="Plus" class="h-4 w-4 text-ui-fg-subtle"></i-lucide>
+              <span>Add option</span>
+            </a>
+          </div>
+        </ng-template>
       </div>
 
       @if (product.options?.length) {

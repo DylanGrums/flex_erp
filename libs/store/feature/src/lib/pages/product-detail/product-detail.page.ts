@@ -5,7 +5,6 @@ import { ProductsFacade } from '@flex-erp/store/data-access';
 import {
   ProductCollectionsSectionComponent,
   ProductGeneralSectionComponent,
-  ProductHeaderSectionComponent,
   ProductMediaSectionComponent,
   ProductOptionsSectionComponent,
   ProductVariantsSectionComponent,
@@ -17,7 +16,6 @@ import {
   imports: [
     CommonModule,
     RouterOutlet,
-    ProductHeaderSectionComponent,
     ProductGeneralSectionComponent,
     ProductMediaSectionComponent,
     ProductOptionsSectionComponent,
@@ -36,7 +34,6 @@ import {
       @if (product(); as detail) {
         <div class="grid gap-6 grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px]">
           <div class="space-y-6">
-            <fe-product-header-section [product]="detail"></fe-product-header-section>
             <fe-product-general-section [product]="detail"></fe-product-general-section>
             <fe-product-media-section [product]="detail"></fe-product-media-section>
             <fe-product-options-section [product]="detail"></fe-product-options-section>
