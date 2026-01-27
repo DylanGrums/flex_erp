@@ -2,8 +2,6 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  TemplateRef,
-  ViewChild,
   computed,
   inject,
   signal,
@@ -11,25 +9,25 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoModule } from '@jsverse/transloco';
 import { Box, Pencil, Trash2 } from 'lucide-angular';
+import { Product } from '@flex-erp/store/util';
+import { ProductsFacade } from '@flex-erp/store/data-access';
 
 import {
   DataTableCommand,
   DataTableColumnDef,
   DataTableColumnOrderState,
   DataTableColumnVisibilityState,
-  DataTableCustomFilterContext,
   DataTableEmptyStateProps,
   DataTableFilteringState,
   DataTableFilter,
-  DataTableNumberComparisonOperator,
   DataTablePaginationState,
+  DataTableRowData,
   DataTableRowSelectionState,
   DataTableSortingState,
   createDataTable,
   createDataTableColumnHelper,
   createDataTableCommandHelper,
   createDataTableFilterHelper,
-  isDateComparisonOperator,
   DataTableCommandBarComponent,
   DataTableComponent,
   DataTableFilterMenuComponent,
@@ -40,57 +38,19 @@ import {
   DataTableToolbarComponent,
 } from '@flex-erp/shared/ui';
 
-type Product = {
+type ProductRow = DataTableRowData & {
   id: string;
-  name: string;
-  sku: string;
-  category: string;
-  status: string;
-  price: number;
-  inventory: number;
-  createdAt: Date;
-  tags: string[];
+  title: string;
+  handle: string | null;
+  status: string | null;
+  product: Product;
 };
 
-const CATEGORIES = ['Apparel', 'Accessories', 'Electronics', 'Home', 'Beauty'];
-const STATUSES = ['Active', 'Draft', 'Archived'];
-const TAGS = ['featured', 'promo', 'bestseller', 'limited', 'new'];
-
-const buildProducts = (count: number): Product[] => {
-  return Array.from({ length: count }, (_, index) => {
-    const category = CATEGORIES[index % CATEGORIES.length];
-    const status = STATUSES[index % STATUSES.length];
-    const price = 25 + (index % 20) * 7 + (index % 4) * 0.99;
-    const inventory = 5 + (index * 3) % 120;
-    const createdAt = new Date(2023, (index * 2) % 12, (index * 5) % 28 + 1);
-    const id = `prod-${index + 1}`;
-    const tags = TAGS.filter((_, tagIndex) => (index + tagIndex) % 2 === 0).slice(0, 3);
-
-    return {
-      id,
-      name: `Product ${index + 1}`,
-      sku: `SKU-${1000 + index}`,
-      category,
-      status,
-      price: Number(price.toFixed(2)),
-      inventory,
-      createdAt,
-      tags,
-    };
-  });
-};
-
-const PRODUCTS = buildProducts(64);
-
-const columnHelper = createDataTableColumnHelper<Product>();
-const filterHelper = createDataTableFilterHelper<Product>();
+const columnHelper = createDataTableColumnHelper<ProductRow>();
+const filterHelper = createDataTableFilterHelper<ProductRow>();
 const commandHelper = createDataTableCommandHelper();
 
 const compareValues = (a: unknown, b: unknown, desc: boolean): number => {
-  if (a instanceof Date && b instanceof Date) {
-    return desc ? b.getTime() - a.getTime() : a.getTime() - b.getTime();
-  }
-
   if (typeof a === 'number' && typeof b === 'number') {
     return desc ? b - a : a - b;
   }
@@ -101,95 +61,23 @@ const compareValues = (a: unknown, b: unknown, desc: boolean): number => {
 };
 
 const applyFilters = (
-  rows: Product[],
-  filters: DataTableFilteringState
-): Product[] => {
-  return rows.filter((row) => {
-    return Object.entries(filters ?? {}).every(([key, filter]) => {
-      if (filter === null || filter === undefined) {
-        return true;
-      }
+  rows: ProductRow[],
+  filters: DataTableFilteringState,
+): ProductRow[] =>
+  rows.filter((row) =>
+    Object.entries(filters ?? {}).every(([key, filter]) => {
+      if (filter === null || filter === undefined) return true;
+      if (typeof filter === 'string' && filter.trim().length === 0) return true;
 
-      if (typeof filter === 'string' && filter.trim().length === 0) {
-        return true;
-      }
-
-      const value = (row as Record<string, unknown>)[key];
-
-      if (Array.isArray(filter)) {
-        if (filter.length === 0) {
-          return true;
-        }
-
-        if (Array.isArray(value)) {
-          return filter.some((entry) => value.includes(entry));
-        }
-
-        return filter.includes(value as string);
-      }
-
-      if (isDateComparisonOperator(filter)) {
-        if (!(value instanceof Date)) {
-          return false;
-        }
-
-        const dateValue = value.getTime();
-        const min = filter.$gte ? new Date(filter.$gte).getTime() : undefined;
-        const max = filter.$lte ? new Date(filter.$lte).getTime() : undefined;
-        const gt = filter.$gt ? new Date(filter.$gt).getTime() : undefined;
-        const lt = filter.$lt ? new Date(filter.$lt).getTime() : undefined;
-
-        if (min !== undefined && dateValue < min) {
-          return false;
-        }
-
-        if (max !== undefined && dateValue > max) {
-          return false;
-        }
-
-        if (gt !== undefined && dateValue <= gt) {
-          return false;
-        }
-
-        if (lt !== undefined && dateValue >= lt) {
-          return false;
-        }
-
-        return true;
-      }
-
-      if (typeof filter === 'object') {
-        const operator = Object.keys(filter as DataTableNumberComparisonOperator)[0];
-        const operand = (filter as DataTableNumberComparisonOperator)[
-          operator as keyof DataTableNumberComparisonOperator
-        ];
-
-        if (typeof operand === 'number' && typeof value === 'number') {
-          switch (operator) {
-            case '$gt':
-              return value > operand;
-            case '$gte':
-              return value >= operand;
-            case '$lt':
-              return value < operand;
-            case '$lte':
-              return value <= operand;
-            case '$eq':
-              return value === operand;
-            default:
-              return true;
-          }
-        }
-      }
+      const value = row[key];
 
       if (typeof filter === 'string') {
         return String(value ?? '').toLowerCase().includes(filter.toLowerCase());
       }
 
       return value === filter;
-    });
-  });
-};
+    }),
+  );
 
 @Component({
   selector: 'fe-store-products-page',
@@ -219,7 +107,7 @@ const applyFilters = (
         <div class="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
             <div class="text-lg font-semibold">Catalog</div>
-            <div class="text-sm text-ui-fg-muted">Products overview with mock data.</div>
+            <div class="text-sm text-ui-fg-muted">Products from your store.</div>
           </div>
           <div class="text-xs text-ui-fg-muted">Total: {{ rowCount() }}</div>
         </div>
@@ -246,50 +134,15 @@ const applyFilters = (
       </div>
     </section>
 
-    <ng-template
-      #categoryFilter
-      let-value="value"
-      let-onChange="onChange"
-      let-onRemove="onRemove"
-    >
-      <div class="w-[240px] p-3">
-        <div class="text-xs font-semibold text-ui-fg-muted">Category</div>
-        <div class="mt-2 flex flex-wrap gap-2">
-          @for (category of categories; track category) {
-            <button
-              type="button"
-              class="rounded-md border px-2 py-1 text-xs transition-fg"
-              [ngClass]="{
-                'border-ui-border-interactive bg-ui-bg-subtle text-ui-fg-base': value === category,
-                'border-ui-border-base bg-ui-bg-base text-ui-fg-muted hover:bg-ui-bg-base-hover': value !== category
-              }"
-              (click)="value === category ? onRemove() : onChange(category)"
-            >
-              {{ category }}
-            </button>
-          }
-        </div>
-        <button
-          type="button"
-          class="mt-3 text-xs text-ui-fg-muted hover:text-ui-fg-subtle"
-          (click)="onRemove()"
-        >
-          Clear category filter
-        </button>
-      </div>
-    </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StoreProductsPageComponent {
+  private readonly facade = inject(ProductsFacade);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
-  @ViewChild('categoryFilter', { static: true })
-  private categoryFilterTemplate!: TemplateRef<DataTableCustomFilterContext>;
-
-  readonly categories = CATEGORIES;
-
+  readonly products = this.facade.items;
   readonly search = signal('');
   readonly sorting = signal<DataTableSortingState | null>(null);
   readonly filtering = signal<DataTableFilteringState>({});
@@ -303,14 +156,21 @@ export class StoreProductsPageComponent {
 
   readonly processedRows = computed(() => {
     const query = this.search().trim().toLowerCase();
-    let rows = applyFilters(PRODUCTS, this.filtering());
+    const productRows = this.products().map((product) => ({
+      id: product.id,
+      title: product.title,
+      handle: product.handle ?? null,
+      status: product.status ?? null,
+      product,
+    }));
+    let rows = applyFilters(productRows, this.filtering());
 
     if (query) {
       rows = rows.filter((row) => {
         return (
-          row.name.toLowerCase().includes(query) ||
-          row.sku.toLowerCase().includes(query) ||
-          row.category.toLowerCase().includes(query)
+          row.title.toLowerCase().includes(query) ||
+          (row.handle ?? '').toLowerCase().includes(query) ||
+          (row.status ?? '').toLowerCase().includes(query)
         );
       });
     }
@@ -318,7 +178,7 @@ export class StoreProductsPageComponent {
     const sorting = this.sorting();
     if (sorting) {
       rows = [...rows].sort((a, b) => {
-        const key = sorting.id as keyof Product;
+        const key = sorting.id as keyof ProductRow;
         return compareValues(a[key], b[key], sorting.desc);
       });
     }
@@ -334,57 +194,23 @@ export class StoreProductsPageComponent {
 
   readonly rowCount = computed(() => this.processedRows().length);
 
-  readonly columns: DataTableColumnDef<Product>[] = [
+  readonly columns: DataTableColumnDef<ProductRow>[] = [
     columnHelper.select(),
-    columnHelper.accessor('name', {
-      header: 'Name',
+    columnHelper.accessor('title', {
+      header: 'Title',
       enableSorting: true,
       sortAscLabel: 'A-Z',
       sortDescLabel: 'Z-A',
     }),
-    columnHelper.accessor('sku', {
-      header: 'SKU',
+    columnHelper.accessor('handle', {
+      header: 'Handle',
       enableSorting: true,
-      maxSize: 140,
-    }),
-    columnHelper.accessor('category', {
-      header: 'Category',
-      enableSorting: true,
+      maxSize: 200,
+      cell: ({ row }) => row.original.handle ?? '-',
     }),
     columnHelper.accessor('status', {
       header: 'Status',
       enableSorting: true,
-    }),
-    columnHelper.accessor('price', {
-      header: 'Price',
-      enableSorting: true,
-      sortLabel: 'Price',
-      sortAscLabel: 'Low to High',
-      sortDescLabel: 'High to Low',
-      headerAlign: 'right',
-      cell: ({ row }) => `$${row.original.price.toFixed(2)}`,
-    }),
-    columnHelper.accessor('inventory', {
-      header: 'Inventory',
-      enableSorting: true,
-      headerAlign: 'right',
-      cell: ({ row }) => row.original.inventory,
-    }),
-    columnHelper.accessor('createdAt', {
-      header: 'Created',
-      enableSorting: true,
-      sortAscLabel: 'Oldest',
-      sortDescLabel: 'Newest',
-      cell: ({ row }) =>
-        row.original.createdAt.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        }),
-    }),
-    columnHelper.accessor('tags', {
-      header: 'Tags',
-      cell: ({ row }) => row.original.tags.join(', '),
     }),
     columnHelper.action({
       actions: (ctx) => [
@@ -392,19 +218,19 @@ export class StoreProductsPageComponent {
           {
             label: 'Edit',
             icon: Pencil,
-            onClick: () => alert(`Edit ${ctx.row.original.name}`),
+            onClick: () => alert(`Edit ${ctx.row.original.title}`),
           },
         ],
         [
           {
             label: 'Archive',
             icon: Box,
-            onClick: () => alert(`Archive ${ctx.row.original.name}`),
+            onClick: () => alert(`Archive ${ctx.row.original.title}`),
           },
           {
             label: 'Delete',
             icon: Trash2,
-            onClick: () => alert(`Delete ${ctx.row.original.name}`),
+            onClick: () => alert(`Delete ${ctx.row.original.title}`),
           },
         ],
       ],
@@ -424,7 +250,7 @@ export class StoreProductsPageComponent {
 
   readonly selectedLabel = (count: number) => `${count} selected`;
 
-  readonly table = createDataTable<Product>({
+  readonly table = createDataTable<ProductRow>({
     data: this.pageData,
     columns: this.columns,
     filters: this.filters,
@@ -454,7 +280,8 @@ export class StoreProductsPageComponent {
     rowSelection: {
       state: this.rowSelection,
       onRowSelectionChange: (state) => this.rowSelection.set(state),
-      enableRowSelection: (row) => row.original.status !== 'Archived',
+      enableRowSelection: (row) =>
+        (row.original.status ?? '').toLowerCase() !== 'archived',
     },
     columnVisibility: {
       state: this.columnVisibility,
@@ -467,58 +294,21 @@ export class StoreProductsPageComponent {
   });
 
   ngOnInit(): void {
-    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-    const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
-
     this.filters.set([
       filterHelper.accessor('status', {
         label: 'Status',
-        type: 'select',
-        options: STATUSES.map((status) => ({ label: status, value: status })),
-      }),
-      filterHelper.accessor('category', {
-        label: 'Category',
-        type: 'custom',
-        template: this.categoryFilterTemplate,
-      }),
-      filterHelper.accessor('tags', {
-        label: 'Tags',
-        type: 'multiselect',
-        searchable: true,
-        options: TAGS.map((tag) => ({ label: tag, value: tag })),
-      }),
-      filterHelper.accessor('name', {
-        label: 'Name',
         type: 'string',
-        placeholder: 'Search name...'
+        placeholder: 'Status...',
       }),
-      filterHelper.accessor('price', {
-        label: 'Price',
-        type: 'number',
-        includeOperators: true,
-        placeholder: 'Price...'
+      filterHelper.accessor('title', {
+        label: 'Title',
+        type: 'string',
+        placeholder: 'Search title...',
       }),
-      filterHelper.accessor('createdAt', {
-        label: 'Created',
-        type: 'date',
-        format: 'date',
-        rangeOptionLabel: 'Custom range',
-        rangeOptionStartLabel: 'Starting',
-        rangeOptionEndLabel: 'Ending',
-        options: [
-          {
-            label: 'Last 30 days',
-            value: { $gte: thirtyDaysAgo.toISOString() },
-          },
-          {
-            label: 'Last 90 days',
-            value: { $gte: ninetyDaysAgo.toISOString() },
-          },
-          {
-            label: 'Before 2024',
-            value: { $lt: new Date('2024-01-01').toISOString() },
-          },
-        ],
+      filterHelper.accessor('handle', {
+        label: 'Handle',
+        type: 'string',
+        placeholder: 'Search handle...',
       }),
     ]);
 
@@ -538,5 +328,7 @@ export class StoreProductsPageComponent {
         },
       }),
     ]);
+
+    this.facade.loadProducts();
   }
 }
