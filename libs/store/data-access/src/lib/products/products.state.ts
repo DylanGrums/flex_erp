@@ -8,6 +8,9 @@ import {
   CreateProductFailed,
   CreateProductSuccess,
   LoadProduct,
+  LoadProductDetail,
+  LoadProductDetailFailed,
+  LoadProductDetailSuccess,
   LoadProductFailed,
   LoadProductSuccess,
   LoadProducts,
@@ -24,6 +27,8 @@ import { ProductsStateModel } from './products.models';
 const DEFAULT_STATE: ProductsStateModel = {
   items: [],
   selectedId: null,
+  selectedDetailId: null,
+  selectedDetail: null,
   loading: false,
   error: null,
 };
@@ -49,6 +54,16 @@ export class ProductsState {
   @Selector()
   static selected(state: ProductsStateModel) {
     return state.items.find((item) => item.id === state.selectedId) ?? null;
+  }
+
+  @Selector()
+  static selectedDetailId(state: ProductsStateModel) {
+    return state.selectedDetailId;
+  }
+
+  @Selector()
+  static selectedDetail(state: ProductsStateModel) {
+    return state.selectedDetail ?? null;
   }
 
   @Selector()
@@ -104,6 +119,32 @@ export class ProductsState {
     );
   }
 
+  @Action(LoadProductDetail)
+  loadProductDetail(ctx: StateContext<ProductsStateModel>, action: LoadProductDetail) {
+    ctx.patchState({
+      loading: true,
+      error: null,
+      selectedDetailId: action.productId,
+      selectedDetail: null,
+    });
+    return this.api.getDetail(action.productId).pipe(
+      tap((product) => {
+        if (!product) {
+          ctx.dispatch(new LoadProductDetailFailed('Product not found'));
+          return;
+        }
+        ctx.dispatch(new LoadProductDetailSuccess(product));
+      }),
+      catchError((err) => {
+        const msg = err?.error?.message ?? 'Failed to load product details';
+        ctx.dispatch(
+          new LoadProductDetailFailed(Array.isArray(msg) ? msg.join(', ') : msg),
+        );
+        return of(null);
+      }),
+    );
+  }
+
   @Action(LoadProductsSuccess)
   loadProductsSuccess(
     ctx: StateContext<ProductsStateModel>,
@@ -130,6 +171,18 @@ export class ProductsState {
     ctx.patchState({ items: nextItems, loading: false, error: null });
   }
 
+  @Action(LoadProductDetailSuccess)
+  loadProductDetailSuccess(
+    ctx: StateContext<ProductsStateModel>,
+    action: LoadProductDetailSuccess,
+  ) {
+    ctx.patchState({
+      selectedDetail: action.product,
+      loading: false,
+      error: null,
+    });
+  }
+
   @Action(LoadProductsFailed)
   loadProductsFailed(
     ctx: StateContext<ProductsStateModel>,
@@ -142,6 +195,14 @@ export class ProductsState {
   loadProductFailed(
     ctx: StateContext<ProductsStateModel>,
     action: LoadProductFailed,
+  ) {
+    ctx.patchState({ loading: false, error: action.error });
+  }
+
+  @Action(LoadProductDetailFailed)
+  loadProductDetailFailed(
+    ctx: StateContext<ProductsStateModel>,
+    action: LoadProductDetailFailed,
   ) {
     ctx.patchState({ loading: false, error: action.error });
   }

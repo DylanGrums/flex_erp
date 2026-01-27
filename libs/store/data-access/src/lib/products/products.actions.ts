@@ -1,4 +1,4 @@
-import { Product } from '@flex-erp/store/util';
+import { Product, ProductDetail } from '@flex-erp/store/util';
 
 export class LoadProducts {
   static readonly type = '[Store Products] Load';
@@ -30,9 +30,25 @@ export class LoadProductFailed {
   constructor(public error: string) {}
 }
 
+export class LoadProductDetail {
+  static readonly type = '[Store Products] Load Detail';
+  constructor(public productId: string) {}
+}
+
+export class LoadProductDetailSuccess {
+  static readonly type = '[Store Products] Load Detail Success';
+  constructor(public product: ProductDetail) {}
+}
+
+export class LoadProductDetailFailed {
+  static readonly type = '[Store Products] Load Detail Failed';
+  constructor(public error: string) {}
+}
+
 export type ProductUpsertPayload = {
   title: string;
   handle: string | null;
+  description?: string | null;
   status: string;
   options: string[];
   variants: Array<{

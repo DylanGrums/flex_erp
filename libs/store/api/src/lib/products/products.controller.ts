@@ -60,6 +60,7 @@ export class ProductsController {
     return this.products.create(storeId, tenantId, {
       title: payload.title,
       handle: payload.handle ?? null,
+      description: payload.description ?? null,
       status: payload.status ?? 'DRAFT',
       options: payload.options ?? [],
       variants: payload.variants ?? [],

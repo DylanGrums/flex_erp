@@ -91,7 +91,7 @@ type DataTableDensity = 'default' | 'compact';
                           <flex-data-table-sortable-header-cell
                             [id]="header.id"
                             className="whitespace-nowrap align-middle"
-                            [ngClass]="[headerPaddingClass, getHeaderCellClasses(header, idx)]"
+                            [ngClass]="getHeaderCellClassName(header, idx)"
                             [ngStyle]="getHeaderCellStyle(header)"
                             [isFirstColumn]="isFirstColumn(idx)"
                           >
@@ -101,7 +101,7 @@ type DataTableDensity = 'default' | 'compact';
                           <flex-data-table-non-sortable-header-cell
                             [id]="header.id"
                             className="whitespace-nowrap align-middle"
-                            [ngClass]="[headerPaddingClass, getHeaderCellClasses(header, idx)]"
+                            [ngClass]="getHeaderCellClassName(header, idx)"
                             [ngStyle]="getHeaderCellStyle(header)"
                           >
                             <ng-container *ngTemplateOutlet="headerContent; context: { $implicit: header }"></ng-container>
@@ -123,7 +123,7 @@ type DataTableDensity = 'default' | 'compact';
                       @for (cell of row.getVisibleCells(); track cell.id; let idx = $index) {
                         <td
                           class="items-stretch truncate whitespace-nowrap align-middle text-ui-fg-base"
-                          [ngClass]="[cellPaddingClass, cellTextClass, getCellClasses(cell.column, idx)]"
+                          [ngClass]="getCellClassName(cell.column, idx)"
                           [ngStyle]="getCellStyle(cell.column)"
                         >
                           <flex-data-table-render-outlet
@@ -156,7 +156,7 @@ type DataTableDensity = 'default' | 'compact';
                       @for (header of headerGroup.headers; track header.id; let idx = $index) {
                         <th
                           class="whitespace-nowrap align-middle"
-                          [ngClass]="[headerPaddingClass, getHeaderCellClasses(header, idx)]"
+                          [ngClass]="getHeaderCellClassName(header, idx)"
                           [ngStyle]="getHeaderCellStyle(header)"
                         >
                           <ng-container *ngTemplateOutlet="headerContent; context: { $implicit: header }"></ng-container>
@@ -177,7 +177,7 @@ type DataTableDensity = 'default' | 'compact';
                       @for (cell of row.getVisibleCells(); track cell.id; let idx = $index) {
                         <td
                           class="items-stretch truncate whitespace-nowrap align-middle text-ui-fg-base"
-                          [ngClass]="[cellPaddingClass, cellTextClass, getCellClasses(cell.column, idx)]"
+                          [ngClass]="getCellClassName(cell.column, idx)"
                           [ngStyle]="getCellStyle(cell.column)"
                         >
                           <flex-data-table-render-outlet
@@ -475,6 +475,18 @@ export class DataTableTableComponent<TData extends DataTableRowData> implements 
     };
   }
 
+  getHeaderCellClassName(header: DataTableHeader<TData>, index: number): string {
+    return this.joinClassTokens(this.headerPaddingClass, this.getHeaderCellClasses(header, index));
+  }
+
+  getCellClassName(column: DataTableColumn<TData>, index: number): string {
+    return this.joinClassTokens(
+      this.cellPaddingClass,
+      this.cellTextClass,
+      this.getCellClasses(column, index)
+    );
+  }
+
   getCellStyle(column: DataTableColumn<TData>): Record<string, string | number> | null {
     if (this.isSpecialColumnId(column.id)) {
       return null;
@@ -524,6 +536,29 @@ export class DataTableTableComponent<TData extends DataTableRowData> implements 
       'justify-end': this.isRightAligned(header),
       'justify-center': this.isCenterAligned(header),
     };
+  }
+
+  private joinClassTokens(
+    ...tokens: Array<string | Record<string, boolean> | null | undefined | false>
+  ): string {
+    const classes: string[] = [];
+    for (const token of tokens) {
+      if (!token) {
+        continue;
+      }
+      if (typeof token === 'string') {
+        if (token.trim()) {
+          classes.push(token);
+        }
+      } else {
+        for (const [name, enabled] of Object.entries(token)) {
+          if (enabled) {
+            classes.push(name);
+          }
+        }
+      }
+    }
+    return classes.join(' ');
   }
 
   @HostListener('document:keydown', ['$event'])

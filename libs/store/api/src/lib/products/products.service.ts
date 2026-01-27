@@ -5,6 +5,7 @@ import { PrismaClient } from 'generated/prisma/client';
 export type ProductCreatePayload = {
   title: string;
   handle: string | null;
+  description?: string | null;
   status: string;
   options: string[];
   variants: Array<{
@@ -21,6 +22,7 @@ type ProductDto = {
   id: string;
   title: string;
   handle: string | null;
+  description?: string | null;
   status: string;
   options: string[];
   variants: Array<{
@@ -30,6 +32,52 @@ type ProductDto = {
     optionValues: string[];
   }>;
   images: string[];
+};
+
+type ProductDetailDto = {
+  id: string;
+  title: string;
+  handle: string | null;
+  description: string | null;
+  status: string;
+  images: Array<{
+    id: string;
+    url: string;
+    alt: string | null;
+    position: number;
+  }>;
+  options: Array<{
+    id: string;
+    name: string;
+    position: number;
+    values: Array<{
+      id: string;
+      value: string;
+      position: number;
+    }>;
+  }>;
+  variants: Array<{
+    id: string;
+    title: string;
+    sku: string | null;
+    priceAmount: number;
+    price: number;
+    inventoryQuantity: number;
+    allowBackorder: boolean;
+    position: number;
+    optionValues: Array<{
+      id: string;
+      value: string;
+      optionId: string;
+      optionName: string | null;
+    }>;
+  }>;
+  collections: Array<{
+    id: string;
+    title: string;
+    handle: string;
+    description: string | null;
+  }>;
 };
 
 @Injectable()
@@ -66,13 +114,18 @@ export class ProductsService implements OnModuleInit {
         },
         variants: {
           orderBy: { position: 'asc' },
-          include: { optionValues: { include: { optionValue: true } } },
+          include: {
+            optionValues: {
+              include: { optionValue: { include: { option: true } } },
+            },
+          },
         },
+        collections: { include: { collection: true } },
       },
     });
 
     if (!product) return null;
-    return this.toDto(product);
+    return this.toDetailDto(product);
   }
 
   async create(
@@ -90,6 +143,7 @@ export class ProductsService implements OnModuleInit {
           storeId,
           title: normalized.title,
           handle,
+          description: normalized.description ?? null,
           status: normalized.status ?? 'DRAFT',
         },
       });
@@ -169,6 +223,7 @@ export class ProductsService implements OnModuleInit {
         data: {
           title: normalized.title ?? existing.title,
           handle: handle ?? existing.handle,
+          description: normalized.description ?? existing.description,
           status: normalized.status ?? existing.status,
         },
       });
@@ -237,6 +292,10 @@ export class ProductsService implements OnModuleInit {
 
   private normalizePayload<T extends ProductUpdatePayload>(payload: T) {
     const title = payload.title?.trim();
+    const description =
+      payload.description !== undefined
+        ? payload.description?.trim() || null
+        : undefined;
     const status = payload.status?.toUpperCase();
     const options = payload.options
       ?.filter(Boolean)
@@ -252,6 +311,7 @@ export class ProductsService implements OnModuleInit {
     return {
       ...payload,
       title,
+      description,
       status,
       options,
       variants,
@@ -389,6 +449,7 @@ export class ProductsService implements OnModuleInit {
       id: product.id,
       title: product.title,
       handle: product.handle,
+      description: product.description ?? null,
       status: product.status,
       options: product.options?.map((option: any) => option.name) ?? [],
       images: product.images?.map((image: any) => image.url) ?? [],
@@ -400,6 +461,60 @@ export class ProductsService implements OnModuleInit {
           optionValues:
             variant.optionValues?.map((item: any) => item.optionValue?.value) ??
             [],
+        })) ?? [],
+    };
+  }
+
+  private toDetailDto(product: any): ProductDetailDto {
+    return {
+      id: product.id,
+      title: product.title,
+      handle: product.handle,
+      description: product.description ?? null,
+      status: product.status,
+      images:
+        product.images?.map((image: any) => ({
+          id: image.id,
+          url: image.url,
+          alt: image.alt ?? null,
+          position: image.position ?? 0,
+        })) ?? [],
+      options:
+        product.options?.map((option: any) => ({
+          id: option.id,
+          name: option.name,
+          position: option.position ?? 0,
+          values:
+            option.values?.map((value: any) => ({
+              id: value.id,
+              value: value.value,
+              position: value.position ?? 0,
+            })) ?? [],
+        })) ?? [],
+      variants:
+        product.variants?.map((variant: any) => ({
+          id: variant.id,
+          title: variant.title,
+          sku: variant.sku,
+          priceAmount: variant.priceAmount ?? 0,
+          price: variant.priceAmount ? variant.priceAmount / 100 : 0,
+          inventoryQuantity: variant.inventoryQuantity ?? 0,
+          allowBackorder: variant.allowBackorder ?? false,
+          position: variant.position ?? 0,
+          optionValues:
+            variant.optionValues?.map((item: any) => ({
+              id: item.optionValue?.id ?? item.optionValueId,
+              value: item.optionValue?.value ?? '',
+              optionId: item.optionValue?.optionId ?? '',
+              optionName: item.optionValue?.option?.name ?? null,
+            })) ?? [],
+        })) ?? [],
+      collections:
+        product.collections?.map((link: any) => ({
+          id: link.collection?.id ?? link.collectionId,
+          title: link.collection?.title ?? '',
+          handle: link.collection?.handle ?? '',
+          description: link.collection?.description ?? null,
         })) ?? [],
     };
   }
