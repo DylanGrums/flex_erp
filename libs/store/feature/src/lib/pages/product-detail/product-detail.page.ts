@@ -23,7 +23,7 @@ import {
     ProductCollectionsSectionComponent,
   ],
   template: `
-    <section class="space-y-6">
+    <section class="flex w-full flex-col gap-y-3">
       @if (loading()) {
         <div class="medusa-panel p-6 text-sm text-ui-fg-muted">Loading product details...</div>
       }
@@ -32,14 +32,14 @@ import {
       }
 
       @if (product(); as detail) {
-        <div class="grid gap-6 grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <div class="space-y-6">
+        <div class="flex w-full flex-col items-start gap-x-4 gap-y-3 xl:grid xl:grid-cols-[minmax(0,_1fr)_440px]">
+          <div class="flex w-full min-w-0 flex-col gap-y-3">
             <fe-product-general-section [product]="detail"></fe-product-general-section>
             <fe-product-media-section [product]="detail"></fe-product-media-section>
             <fe-product-options-section [product]="detail"></fe-product-options-section>
             <fe-product-variants-section [product]="detail"></fe-product-variants-section>
           </div>
-          <div class="space-y-6">
+          <div class="flex w-full flex-col gap-y-3 xl:mt-0">
             <fe-product-collections-section
               [product]="detail"
             ></fe-product-collections-section>

@@ -9,7 +9,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, RouterModule } from '@angular/router';
 import {
   Check,
-  ChevronDown,
   LogOut,
   LucideAngularModule,
   Settings,
@@ -62,7 +61,6 @@ import { ContextFacade } from '@flex-erp/shared/context/data-access';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainSidebarComponent {
-  readonly ChevronDown = ChevronDown;
   readonly Store = Store;
   readonly Check = Check;
   readonly CircleX = CircleX;

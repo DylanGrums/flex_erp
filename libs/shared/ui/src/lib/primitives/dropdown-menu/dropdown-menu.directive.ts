@@ -9,12 +9,19 @@ import {
   inject,
   numberAttribute,
 } from '@angular/core';
-import { NgpMenu, NgpMenuItem, NgpMenuPlacement, NgpMenuTrigger } from 'ng-primitives/menu';
+import {
+  NgpMenu,
+  NgpMenuItem,
+  NgpMenuPlacement,
+  NgpMenuTrigger,
+  provideMenuConfig,
+} from 'ng-primitives/menu';
 import { NgpSeparator } from 'ng-primitives/separator';
 
 @Directive({
   selector: '[flexDropdownMenuTrigger]',
   standalone: true,
+  providers: [provideMenuConfig({ scrollBehavior: 'reposition' })],
   hostDirectives: [
     {
       directive: NgpMenuTrigger,
