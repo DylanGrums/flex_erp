@@ -5,14 +5,11 @@ import { RouterModule } from '@angular/router';
   selector: 'cms-shell',
   standalone: true,
   imports: [RouterModule],
-  template: '<section class=" min-h-full max-w-[1600px] "><router-outlet /></section>',
+  template:
+    '<section class="flex min-h-0 flex-1 flex-col bg-ui-bg-subtle overflow-auto max-w-[1600px]"><router-outlet /></section>',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: [
-    `
-      :host {
-        @apply w-full grid place-items-center;
-      }
-    `,
-  ],
+  host: {
+    class: 'flex min-h-0 flex-1 w-full justify-center',
+  },
 })
 export class CmsShellComponent {}

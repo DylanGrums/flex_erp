@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ContentChild, HostListener, TemplateRef, inject, signal } from '@angular/core';
-import { NavigationStart, Router, RouterModule } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
 
 import { TranslocoModule } from '@jsverse/transloco';
@@ -37,12 +37,17 @@ export class ShellComponent {
   readonly breadcrumbs = inject(BreadcrumbsService);
 
   readonly loading = signal(false);
+  readonly isCmsRoute = signal(false);
   @ContentChild('sidebar', { read: TemplateRef }) sidebarTemplate?: TemplateRef<unknown>;
 
   constructor() {
     this.router.events.pipe(filter((e) => e instanceof NavigationStart)).subscribe(() => {
       this.loading.set(true);
       setTimeout(() => this.loading.set(false), 300);
+    });
+    this.isCmsRoute.set(this.router.url.startsWith('/cms'));
+    this.router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe((e) => {
+      this.isCmsRoute.set(e.urlAfterRedirects.startsWith('/cms'));
     });
   }
 

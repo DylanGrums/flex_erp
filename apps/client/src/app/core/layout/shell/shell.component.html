@@ -124,10 +124,15 @@
     </div>
 
     <main
-      class="flex min-h-0 flex-1 w-full flex-col items-center transition-opacity delay-200 duration-200 overflow-y-auto"
+      class="flex min-h-0 flex-1 w-full flex-col items-center transition-opacity delay-200 duration-200"
       [class.opacity-25]="loading()"
+      [class.overflow-y-auto]="!isCmsRoute()"
     >
-      <div class="flex w-full flex-col">
+      <div
+        class="flex w-full flex-col"
+        [class.flex-1]="isCmsRoute()"
+        [class.min-h-0]="isCmsRoute()"
+      >
         <router-outlet />
       </div>
     </main>
