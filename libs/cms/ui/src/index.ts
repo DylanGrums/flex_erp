@@ -1,4 +1,5 @@
 export * from './lib/editor/editor-shell.component';
+export * from './lib/shell/cms-shell.component';
 export * from './lib/editor/top-bar.component';
 export * from './lib/editor/preview-canvas.component';
 export * from './lib/editor/inspector-panel.component';

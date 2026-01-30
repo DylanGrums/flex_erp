@@ -22,7 +22,6 @@ export const routes: Routes = [
         loadChildren: () =>
           import('@flex-erp/store/feature').then((m) => m.storeFeatureRoutes),
       },
-
       {
         path: 'cms',
         loadChildren: () =>

@@ -1,7 +1,7 @@
 <!-- NavigationBar loading progress (fixed top) -->
 <div class="fixed inset-x-0 top-0 z-50 h-1">
   @if (loading()) {
-  <fe-progress-bar className="h-1" />
+    <fe-progress-bar className="h-1" />
   }
 </div>
 
@@ -29,16 +29,16 @@
       </div>
 
       @if (sidebarTemplate) {
-      <ng-container *ngTemplateOutlet="sidebarTemplate"></ng-container>
+        <ng-container *ngTemplateOutlet="sidebarTemplate"></ng-container>
       }
     </flex-dialog>
 
     @if (sidebar.desktopOpen()) {
-    <div class="hidden h-screen w-[220px] border-e lg:flex">
-      @if (sidebarTemplate) {
-      <ng-container *ngTemplateOutlet="sidebarTemplate"></ng-container>
-      }
-    </div>
+      <div class="hidden h-screen w-[220px] border-e lg:flex">
+        @if (sidebarTemplate) {
+          <ng-container *ngTemplateOutlet="sidebarTemplate"></ng-container>
+        }
+      </div>
     }
   </div>
 
@@ -127,7 +127,7 @@
       class="flex min-h-0 flex-1 w-full flex-col items-center transition-opacity delay-200 duration-200 overflow-y-auto"
       [class.opacity-25]="loading()"
     >
-      <div class="flex w-full max-w-[1600px] flex-col">
+      <div class="flex w-full flex-col">
         <router-outlet />
       </div>
     </main>

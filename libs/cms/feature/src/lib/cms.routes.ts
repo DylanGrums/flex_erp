@@ -3,6 +3,7 @@ import { importProvidersFrom } from '@angular/core';
 import { NgxsModule } from '@ngxs/store';
 import { applyRouteMeta } from '@flex-erp/shared/nav';
 import { CMS_NAV } from '@flex-erp/cms/manifest';
+import { CmsShellComponent } from '@flex-erp/cms/ui';
 
 import { CmsEditorPageComponent } from './cms-editor-page.component';
 import { CmsEditorState } from '@flex-erp/cms/data-access';
@@ -11,6 +12,7 @@ import { provideDialogConfig } from 'ng-primitives/dialog';
 const rawRoutes: Routes = [
   {
     path: '',
+    component: CmsShellComponent,
     children: [
       {
         path: 'editor',

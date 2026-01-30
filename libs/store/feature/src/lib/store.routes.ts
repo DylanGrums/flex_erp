@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { applyRouteMeta } from '@flex-erp/shared/nav';
 import { STORE_NAV } from '@flex-erp/store/manifest';
+import { StoreShellComponent } from '@flex-erp/store/ui';
 
 import { StoreOrdersPageComponent } from './pages/orders/orders.page';
 import { ProductCreateComponent } from './product-editor/product-create.component';
@@ -22,6 +23,7 @@ import { StoreProductsPageComponent } from './pages/products/products.page';
 const rawRoutes: Routes = [
   {
     path: '',
+    component: StoreShellComponent,
     children: [
       { path: '', component: StoreProductsPageComponent },
       { path: 'orders', component: StoreOrdersPageComponent },
