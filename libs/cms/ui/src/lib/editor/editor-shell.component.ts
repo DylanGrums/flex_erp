@@ -45,6 +45,8 @@ export class CmsEditorShellComponent {
   @Input() sectionDefinitions: SectionDefinition[] = [];
   @Input() collections: Collection[] = [];
   @Input() isSectionLibraryOpen = false;
+  @Input() loading = false;
+  @Input() error: string | null = null;
 
   @Output() selectTemplate = new EventEmitter<Template>();
   @Output() storeNameChange = new EventEmitter<string>();

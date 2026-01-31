@@ -130,6 +130,7 @@
     <cms-button
       variant="outline"
       size="sm"
+      [disabled]="loading"
       (click)="save.emit()"
       className="gap-1.5"
     >
@@ -137,7 +138,7 @@
       {{ 'cms.editor.actions.save' | transloco }}
     </cms-button>
 
-    <cms-button size="sm" (click)="publish.emit()" className="gap-1.5">
+    <cms-button size="sm" [disabled]="loading" (click)="publish.emit()" className="gap-1.5">
       <i-lucide [img]="Send" class="h-4 w-4"></i-lucide>
       {{ 'cms.editor.actions.publish' | transloco }}
     </cms-button>

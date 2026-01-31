@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { CmsEditorFacade, mockCollections, sectionDefinitions, templates } from '@flex-erp/cms/data-access';
-import { Collection, DeviceType, PageType, SectionDefinition, Template } from '@flex-erp/cms/types';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
+import { CmsEditorFacade, sectionDefinitions, templates } from '@flex-erp/cms/data-access';
+import { DeviceType, PageType, SectionDefinition, Template } from '@flex-erp/cms/types';
 import { CmsEditorShellComponent } from '@flex-erp/cms/ui';
 
 @Component({
@@ -13,12 +13,12 @@ import { CmsEditorShellComponent } from '@flex-erp/cms/ui';
     class: 'block h-full min-h-0',
   },
 })
-export class CmsEditorPageComponent {
+export class CmsEditorPageComponent implements OnInit {
   private facade = inject(CmsEditorFacade);
 
   readonly sectionDefinitions = sectionDefinitions;
-  readonly collections: Collection[] = mockCollections;
   readonly templates: Template[] = templates;
+  readonly collections = this.facade.collections;
 
   readonly showOnboarding = computed(() => !this.facade.isOnboardingDone());
 
@@ -32,6 +32,12 @@ export class CmsEditorPageComponent {
   canUndo = this.facade.canUndo;
   canRedo = this.facade.canRedo;
   isSectionLibraryOpen = this.facade.isSectionLibraryOpen;
+  loading = this.facade.loading;
+  error = this.facade.error;
+
+  ngOnInit(): void {
+    this.facade.loadEditor();
+  }
 
   selectTemplate(template: Template): void {
     this.facade.initFromMock(template);

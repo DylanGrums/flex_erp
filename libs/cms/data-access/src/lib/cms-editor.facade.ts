@@ -6,6 +6,7 @@ import {
   AddSection,
   CloseSectionLibrary,
   DuplicateNode,
+  LoadEditor,
   InitFromMock,
   MoveNode,
   OpenSectionLibrary,
@@ -32,6 +33,9 @@ export class CmsEditorFacade {
   readonly currentPage$ = this.store.select(CmsEditorState.currentPage);
   readonly viewportMode$ = this.store.select(CmsEditorState.viewportMode);
   readonly sections$ = this.store.select(CmsEditorState.sections);
+  readonly collections$ = this.store.select(CmsEditorState.collections);
+  readonly loading$ = this.store.select(CmsEditorState.loading);
+  readonly error$ = this.store.select(CmsEditorState.error);
   readonly selectedNodeId$ = this.store.select(CmsEditorState.selectedNodeId);
   readonly selectedNodeKind$ = this.store.select(CmsEditorState.selectedNodeKind);
   readonly selectedNode$ = this.store.select(CmsEditorState.selectedNode);
@@ -49,6 +53,9 @@ export class CmsEditorFacade {
   readonly currentPage = toSignal(this.currentPage$, { initialValue: 'home' as PageType });
   readonly viewportMode = toSignal(this.viewportMode$, { initialValue: 'desktop' as DeviceType });
   readonly sections = toSignal(this.sections$, { initialValue: [] });
+  readonly collections = toSignal(this.collections$, { initialValue: [] });
+  readonly loading = toSignal(this.loading$, { initialValue: false });
+  readonly error = toSignal(this.error$, { initialValue: null });
   readonly selectedNodeId = toSignal(this.selectedNodeId$, { initialValue: null });
   readonly selectedNodeKind = toSignal(this.selectedNodeKind$, { initialValue: null });
   readonly selectedNode = toSignal(this.selectedNode$, { initialValue: null });
@@ -61,6 +68,10 @@ export class CmsEditorFacade {
   readonly canUndo = toSignal(this.canUndo$, { initialValue: false });
   readonly canRedo = toSignal(this.canRedo$, { initialValue: false });
   readonly isDirty = toSignal(this.isDirty$, { initialValue: false });
+
+  loadEditor() {
+    return this.store.dispatch(new LoadEditor());
+  }
 
   initFromMock(template?: Template) {
     return this.store.dispatch(new InitFromMock(template));

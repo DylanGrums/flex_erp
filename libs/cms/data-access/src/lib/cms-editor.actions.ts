@@ -1,6 +1,10 @@
 import { DeviceType, NodeId, PageType, SectionDefinition, Template } from '@flex-erp/cms/types';
 import { CmsNodePatch, InspectorTab } from './cms-editor.models';
 
+export class LoadEditor {
+  static readonly type = '[CMS Editor] Load Editor';
+}
+
 export class InitFromMock {
   static readonly type = '[CMS Editor] Init From Mock';
   constructor(public template?: Template) { }

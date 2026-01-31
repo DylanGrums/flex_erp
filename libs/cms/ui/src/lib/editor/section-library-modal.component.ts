@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { SectionDefinition } from '@flex-erp/cms/types';
-import { CmsButtonComponent } from '../primitives/button/cms-button.component';
 import { CmsInputComponent } from '../primitives/input/cms-input.component';
 import { CmsScrollAreaComponent } from '../primitives/scroll-area/cms-scroll-area.component';
 import { CmsDialogComponent } from '../primitives/dialog/cms-dialog.component';
@@ -37,7 +36,6 @@ const CATEGORIES: CmsTabItem[] = [
   selector: 'cms-section-library-modal',
   standalone: true,
   imports: [
-    CmsButtonComponent,
     CmsInputComponent,
     CmsScrollAreaComponent,
     CmsDialogComponent,

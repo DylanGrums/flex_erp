@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { catchError, forkJoin, map, of, switchMap, tap, Observable } from 'rxjs';
 import { CmsEditorStateModel, CmsNodePatch } from './cms-editor.models';
 import {
   AddSection,
   CloseSectionLibrary,
   DuplicateNode,
+  LoadEditor,
   InitFromMock,
   MoveNode,
   OpenSectionLibrary,
@@ -24,20 +26,28 @@ import {
   Block,
   CmsTreeNode,
   NodeId,
+  PageType,
   Section,
   SectionDefinition,
   Template,
 } from '@flex-erp/cms/types';
 import { classicStorefrontTemplate } from './mock-data';
+import { CmsApi } from './cms.api';
+import { CmsPage, CmsPageContent, CmsPageVersion, CmsSite } from './cms-api.models';
 
 const DEFAULT_STATE: CmsEditorStateModel = {
   storeName: 'My Store',
   currentPage: 'home',
   viewportMode: 'desktop',
-  sections: classicStorefrontTemplate.sections,
+  sections: [],
+  collections: [],
+  site: null,
+  page: null,
   selectedNodeId: null,
   selectedNodeKind: null,
   isDirty: false,
+  loading: false,
+  error: null,
   history: {
     past: [],
     future: [],
@@ -114,6 +124,8 @@ function cloneSections(sections: Section[]): Section[] {
 })
 @Injectable()
 export class CmsEditorState {
+  private api = inject(CmsApi);
+
   @Selector()
   static storeName(state: CmsEditorStateModel) {
     return state.storeName;
@@ -132,6 +144,31 @@ export class CmsEditorState {
   @Selector()
   static sections(state: CmsEditorStateModel) {
     return state.sections;
+  }
+
+  @Selector()
+  static collections(state: CmsEditorStateModel) {
+    return state.collections;
+  }
+
+  @Selector()
+  static site(state: CmsEditorStateModel) {
+    return state.site;
+  }
+
+  @Selector()
+  static page(state: CmsEditorStateModel) {
+    return state.page;
+  }
+
+  @Selector()
+  static loading(state: CmsEditorStateModel) {
+    return state.loading;
+  }
+
+  @Selector()
+  static error(state: CmsEditorStateModel) {
+    return state.error;
   }
 
   @Selector()
@@ -229,14 +266,67 @@ export class CmsEditorState {
     return state.isDirty;
   }
 
+  @Action(LoadEditor)
+  loadEditor(ctx: StateContext<CmsEditorStateModel>) {
+    ctx.patchState({ loading: true, error: null });
+    const state = ctx.getState();
+    return this.ensureSite(state.storeName).pipe(
+      switchMap((site) =>
+        forkJoin({
+          site: of(site),
+          collections: this.api
+            .listCollections()
+            .pipe(
+              map((items) => (Array.isArray(items) ? items : [])),
+              catchError(() => of([])),
+            ),
+        }),
+      ),
+      switchMap(({ site, collections }) =>
+        this.fetchPageData(site, state.currentPage).pipe(
+          tap(({ page, sections, hasContent }) => {
+            const nextState = ctx.getState();
+            ctx.setState({
+              ...nextState,
+              storeName: site.name,
+              site,
+              page,
+              collections,
+              sections: cloneSections(sections),
+              selectedNodeId: null,
+              selectedNodeKind: null,
+              isDirty: false,
+              loading: false,
+              error: null,
+              history: { past: [], future: [] },
+              ui: { ...nextState.ui, isOnboardingDone: hasContent },
+            });
+          }),
+        ),
+      ),
+      catchError((err) => {
+        ctx.patchState({
+          loading: false,
+          error: this.errorMessage(err, 'Failed to load CMS'),
+        });
+        return of(null);
+      }),
+    );
+  }
+
   @Action(InitFromMock)
   initFromMock(ctx: StateContext<CmsEditorStateModel>, action: InitFromMock) {
     const template: Template | undefined = action.template ?? classicStorefrontTemplate;
+    const state = ctx.getState();
     ctx.setState({
-      ...DEFAULT_STATE,
+      ...state,
       sections: cloneSections(template ? template.sections : []),
+      selectedNodeId: null,
+      selectedNodeKind: null,
+      isDirty: true,
+      history: { past: [], future: [] },
       ui: {
-        ...DEFAULT_STATE.ui,
+        ...state.ui,
         isOnboardingDone: true,
       },
     });
@@ -349,22 +439,153 @@ export class CmsEditorState {
 
   @Action(PublishDraft)
   publishDraft(ctx: StateContext<CmsEditorStateModel>) {
-    ctx.patchState({ isDirty: false });
+    const state = ctx.getState();
+    ctx.patchState({ loading: true, error: null });
+    const content = this.buildPageContent(state.sections);
+    return this.ensurePageReady(state).pipe(
+      switchMap(({ site, page }) =>
+        this.api
+          .createPageVersion(page.id, {
+            content,
+            contentSchemaVersion: 1,
+          })
+          .pipe(
+            switchMap((version) =>
+              this.api.publishPage(page.id, { versionId: version?.id ?? null }),
+            ),
+            map((updatedPage) => ({
+              site,
+              page: updatedPage ?? page,
+            })),
+          ),
+      ),
+      tap(({ site, page }) => {
+        const nextState = ctx.getState();
+        ctx.patchState({
+          site,
+          page,
+          storeName: site.name,
+          isDirty: false,
+          loading: false,
+          error: null,
+          ui: { ...nextState.ui, isOnboardingDone: true },
+        });
+      }),
+      catchError((err) => {
+        ctx.patchState({
+          loading: false,
+          error: this.errorMessage(err, 'Failed to publish draft'),
+        });
+        return of(null);
+      }),
+    );
   }
 
   @Action(SaveDraft)
   saveDraft(ctx: StateContext<CmsEditorStateModel>) {
-    ctx.patchState({ isDirty: false });
+    const state = ctx.getState();
+    ctx.patchState({ loading: true, error: null });
+    const content = this.buildPageContent(state.sections);
+    return this.ensurePageReady(state).pipe(
+      switchMap(({ site, page }) =>
+        this.api
+          .createPageVersion(page.id, {
+            content,
+            contentSchemaVersion: 1,
+          })
+          .pipe(
+            map(() => ({ site, page })),
+          ),
+      ),
+      tap(({ site, page }) => {
+        const nextState = ctx.getState();
+        ctx.patchState({
+          site,
+          page,
+          storeName: site.name,
+          isDirty: false,
+          loading: false,
+          error: null,
+          ui: { ...nextState.ui, isOnboardingDone: true },
+        });
+      }),
+      catchError((err) => {
+        ctx.patchState({
+          loading: false,
+          error: this.errorMessage(err, 'Failed to save draft'),
+        });
+        return of(null);
+      }),
+    );
   }
 
   @Action(SetStoreName)
   setStoreName(ctx: StateContext<CmsEditorStateModel>, action: SetStoreName) {
-    ctx.patchState({ storeName: action.name, isDirty: true });
+    const name = action.name.trim();
+    if (!name) return;
+    const state = ctx.getState();
+    const prevName = state.storeName;
+    ctx.patchState({ storeName: name });
+    if (!state.site) return;
+    ctx.patchState({ loading: true, error: null });
+    return this.api.updateSite(state.site.id, { name }).pipe(
+      tap((site) => {
+        if (!site) {
+          ctx.patchState({
+            storeName: prevName,
+            loading: false,
+            error: 'Site not found',
+          });
+          return;
+        }
+        ctx.patchState({
+          site,
+          storeName: site.name,
+          loading: false,
+          error: null,
+        });
+      }),
+      catchError((err) => {
+        ctx.patchState({
+          storeName: prevName,
+          loading: false,
+          error: this.errorMessage(err, 'Failed to update site'),
+        });
+        return of(null);
+      }),
+    );
   }
 
   @Action(SetCurrentPage)
   setCurrentPage(ctx: StateContext<CmsEditorStateModel>, action: SetCurrentPage) {
+    const state = ctx.getState();
     ctx.patchState({ currentPage: action.page });
+    if (!state.site) return;
+    ctx.patchState({ loading: true, error: null });
+    return this.fetchPageData(state.site, action.page).pipe(
+      tap(({ page, sections, hasContent }) => {
+        const nextState = ctx.getState();
+        ctx.setState({
+          ...nextState,
+          page,
+          sections: cloneSections(sections),
+          selectedNodeId: null,
+          selectedNodeKind: null,
+          isDirty: false,
+          loading: false,
+          error: null,
+          history: { past: [], future: [] },
+          ui: { ...nextState.ui, isOnboardingDone: hasContent },
+        });
+      }),
+      catchError((err) => {
+        ctx.patchState({
+          loading: false,
+          error: this.errorMessage(err, 'Failed to load page'),
+        });
+        return of(null);
+      }),
+    );
   }
 
   @Action(Undo)
@@ -443,5 +664,103 @@ export class CmsEditorState {
       selectedNodeId: newBlock.id,
       selectedNodeKind: 'block',
     });
+  }
+
+  private ensureSite(name: string): Observable<CmsSite> {
+    const safeName = name?.trim() || 'My Store';
+    return this.api.getCurrentSite().pipe(
+      switchMap((site) => {
+        if (site) return of(site);
+        return this.api.createSite({ name: safeName }).pipe(
+          map((created) => {
+            if (!created) {
+              throw new Error('Site not created');
+            }
+            return created;
+          }),
+        );
+      }),
+    );
+  }
+
+  private ensurePage(siteId: string, pageType: PageType): Observable<CmsPage> {
+    const slug = pageType;
+    const title = this.pageTitle(pageType);
+    return this.api.getPageBySlug(siteId, slug).pipe(
+      switchMap((page) => {
+        if (page) return of(page);
+        return this.api
+          .createPage({
+            siteId,
+            slug,
+            title,
+            status: 'DRAFT',
+          })
+          .pipe(
+            map((created) => {
+              if (!created) {
+                throw new Error('Page not created');
+              }
+              return created;
+            }),
+          );
+      }),
+    );
+  }
+
+  private ensurePageReady(state: CmsEditorStateModel): Observable<{ site: CmsSite; page: CmsPage }> {
+    const existingSite = state.site;
+    const site$ = existingSite ? of(existingSite) : this.ensureSite(state.storeName);
+    return site$.pipe(
+      switchMap((site) =>
+        this.ensurePage(site.id, state.currentPage).pipe(
+          map((page) => ({ site, page })),
+        ),
+      ),
+    );
+  }
+
+  private fetchPageData(site: CmsSite, pageType: PageType): Observable<{
+    page: CmsPage;
+    sections: Section[];
+    hasContent: boolean;
+  }> {
+    return this.ensurePage(site.id, pageType).pipe(
+      switchMap((page) =>
+        this.api.listPageVersions(page.id).pipe(
+          map((versions) => {
+            const list = Array.isArray(versions) ? versions : [];
+            const latest = list.length > 0 ? list[0] : null;
+            const sections = latest ? this.extractSections(latest) : [];
+            return { page, sections, hasContent: !!latest };
+          }),
+        ),
+      ),
+    );
+  }
+
+  private buildPageContent(sections: Section[]): CmsPageContent {
+    return { sections: cloneSections(sections) };
+  }
+
+  private extractSections(version: CmsPageVersion): Section[] {
+    const content = version?.content as any;
+    if (Array.isArray(content)) return content as Section[];
+    if (content && typeof content === 'object' && Array.isArray(content.sections)) {
+      return content.sections as Section[];
+    }
+    return [];
+  }
+
+  private pageTitle(pageType: PageType): string {
+    return pageType.charAt(0).toUpperCase() + pageType.slice(1);
+  }
+
+  private errorMessage(err: any, fallback: string): string {
+    if (err?.status === 401) {
+      return 'Select a store to save or publish changes.';
+    }
+    const msg = err?.error?.message ?? err?.message ?? fallback;
+    return Array.isArray(msg) ? msg.join(', ') : msg;
   }
 }

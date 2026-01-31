@@ -62,6 +62,7 @@ export class CmsTopBarComponent {
   @Input() viewportMode: DeviceType = 'desktop';
   @Input() canUndo = false;
   @Input() canRedo = false;
+  @Input() loading = false;
 
   @Output() storeNameChange = new EventEmitter<string>();
   @Output() currentPageChange = new EventEmitter<PageType>();
