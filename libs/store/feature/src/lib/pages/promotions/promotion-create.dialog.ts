@@ -99,7 +99,7 @@ type CampaignPickerMode = 'none' | 'existing' | 'new';
   template: `
     <flex-dialog
       [open]="true"
-      mode="sheet-right"
+      mode="fullscreen"
       [contentClass]="contentClass"
       (openChange)="onOpenChange($event)"
     >
@@ -279,7 +279,7 @@ type CampaignPickerMode = 'none' | 'existing' | 'new';
 export class PromotionCreateDialogComponent {
   readonly X = X;
   readonly contentClass =
-    'w-full max-w-[640px] h-full overflow-hidden border-l border-ui-border-base bg-ui-bg-base shadow-lg';
+    'w-screen h-screen overflow-hidden bg-ui-bg-base';
   readonly templates = templates;
 
   private readonly promotionsFacade = inject(PromotionsFacade);

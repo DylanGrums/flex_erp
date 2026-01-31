@@ -20,7 +20,8 @@ export type FlexDialogMode =
   | 'sheet-bottom'
   | 'sheet-top'
   | 'sheet-left'
-  | 'sheet-right';
+  | 'sheet-right'
+  | 'fullscreen';
 
 @Component({
   selector: 'flex-dialog',
@@ -93,7 +94,11 @@ export class FlexDialogComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   get panelClass(): string {
     const panel = this.panelClasses.length ? this.panelClasses.join(' ') : '';
-    return [this.contentClass, panel].filter(Boolean).join(' ');
+    const fullscreen =
+      this.mode === 'fullscreen'
+        ? 'w-screen h-screen max-w-none max-h-none rounded-none border-0'
+        : '';
+    return [this.contentClass, panel, fullscreen].filter(Boolean).join(' ');
   }
 
   private getModeOverlayClass(): string {
@@ -107,6 +112,8 @@ export class FlexDialogComponent implements AfterViewInit, OnChanges, OnDestroy 
         return 'items-start justify-center';
       case 'sheet-bottom':
         return 'items-end justify-center';
+      case 'fullscreen':
+        return 'items-stretch justify-center';
       case 'default':
       default:
         return 'items-center justify-center';

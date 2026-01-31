@@ -28,7 +28,7 @@ import { PromotionRuleInput } from '@flex-erp/store/util';
   template: `
     <flex-dialog
       [open]="true"
-      mode="sheet-right"
+      mode="fullscreen"
       [contentClass]="contentClass"
       (openChange)="onOpenChange($event)"
     >
@@ -88,7 +88,7 @@ import { PromotionRuleInput } from '@flex-erp/store/util';
 export class PromotionEditRulesDialogComponent {
   readonly X = X;
   readonly contentClass =
-    'w-full max-w-[640px] h-full overflow-hidden border-l border-ui-border-base bg-ui-bg-base shadow-lg';
+    'w-screen h-screen overflow-hidden bg-ui-bg-base';
 
   private readonly facade = inject(PromotionsFacade);
   private readonly fb = inject(FormBuilder);
