@@ -2,10 +2,12 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../../../dist/out-tsc",
-    "module": "commonjs",
+    "module": "node16",
     "target": "es2016",
+    "isolatedModules": true,
+    "esModuleInterop": true,
     "types": ["jest", "node"],
-    "moduleResolution": "node10"
+    "moduleResolution": "node16"
   },
   "files": ["src/test-setup.ts"],
   "include": [
