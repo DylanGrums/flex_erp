@@ -34,6 +34,69 @@ enum DiscountKind {
   @@schema("store")
 }
 
+enum CampaignBudgetType {
+  NONE
+  SPEND_LIMIT
+  USE_BY_ATTRIBUTE
+
+  @@schema("store")
+}
+
+enum PromotionStatus {
+  DRAFT
+  ACTIVE
+  DISABLED
+
+  @@schema("store")
+}
+
+enum PromotionType {
+  STANDARD
+
+  @@schema("store")
+}
+
+enum PromotionRuleScope {
+  PROMOTION
+  TARGET
+  BUY
+
+  @@schema("store")
+}
+
+enum PromotionRuleOperator {
+  EQ
+  NE
+  IN
+  NIN
+  GT
+  GTE
+  LT
+  LTE
+
+  @@schema("store")
+}
+
+enum PromotionApplicationMethodType {
+  FIXED
+  PERCENT
+
+  @@schema("store")
+}
+
+enum PromotionApplicationAllocation {
+  EACH
+  ACROSS
+
+  @@schema("store")
+}
+
+enum PromotionTargetType {
+  ITEMS
+
+  @@schema("store")
+}
+
 enum CustomerAddressKind {
   SHIPPING
   BILLING
@@ -267,6 +330,130 @@ model Discount {
   @@schema("store")
 }
 
+model Campaign {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  name        String
+  description String?
+  startsAt    DateTime?
+  endsAt      DateTime?
+  isActive    Boolean @default(true)
+
+  budgetType        CampaignBudgetType @default(NONE)
+  budgetLimitAmount Int?
+  budgetCurrency    CurrencyCode @default(EUR)
+  budgetAttribute   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  store Store @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
+
+  promotions CampaignPromotion[]
+
+  @@unique([tenantId, storeId, id])
+  @@index([tenantId, storeId])
+  @@index([tenantId, storeId, startsAt, endsAt])
+  @@schema("store")
+}
+
+model Promotion {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  code        String
+  type        PromotionType @default(STANDARD)
+  status      PromotionStatus @default(DRAFT)
+  isAutomatic Boolean @default(false)
+
+  startsAt DateTime?
+  endsAt   DateTime?
+  isActive Boolean @default(true)
+
+  usageLimit Int?
+  metadata   Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  store Store @relation(fields: [tenantId, storeId], references: [tenantId, id], onDelete: Cascade)
+
+  rules             PromotionRule[]
+  applicationMethod PromotionApplicationMethod?
+  campaignLinks     CampaignPromotion[]
+  cartAdjustments   CartPromotionAdjustment[]
+  orderAdjustments  OrderPromotionAdjustment[]
+
+  @@unique([tenantId, storeId, id])
+  @@unique([tenantId, storeId, code])
+  @@index([tenantId, storeId])
+  @@index([tenantId, storeId, status, isActive])
+  @@schema("store")
+}
+
+model PromotionRule {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  promotionId String @db.Uuid
+
+  scope     PromotionRuleScope
+  operator  PromotionRuleOperator
+  attribute String
+  values    Json
+
+  createdAt DateTime @default(now())
+
+  promotion Promotion @relation(fields: [tenantId, storeId, promotionId], references: [tenantId, storeId, id], onDelete: Cascade)
+
+  @@unique([tenantId, storeId, id])
+  @@index([tenantId, storeId, promotionId, scope])
+  @@schema("store")
+}
+
+model PromotionApplicationMethod {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  promotionId String @db.Uuid
+
+  type        PromotionApplicationMethodType
+  allocation  PromotionApplicationAllocation
+  targetType  PromotionTargetType
+  valueAmount Int?
+  valueBps    Int?
+  currency    CurrencyCode @default(EUR)
+  maxQuantity Int @default(1)
+  isTaxInclusive Boolean @default(false)
+
+  promotion Promotion @relation(fields: [tenantId, storeId, promotionId], references: [tenantId, storeId, id], onDelete: Cascade)
+
+  @@unique([tenantId, storeId, id])
+  @@unique([tenantId, storeId, promotionId])
+  @@index([tenantId, storeId, promotionId])
+  @@schema("store")
+}
+
+model CampaignPromotion {
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+  campaignId  String @db.Uuid
+  promotionId String @db.Uuid
+
+  campaign  Campaign  @relation(fields: [tenantId, storeId, campaignId], references: [tenantId, storeId, id], onDelete: Cascade)
+  promotion Promotion @relation(fields: [tenantId, storeId, promotionId], references: [tenantId, storeId, id], onDelete: Cascade)
+
+  @@id([tenantId, storeId, campaignId, promotionId])
+  @@index([tenantId, storeId, campaignId])
+  @@index([tenantId, storeId, promotionId])
+  @@schema("store")
+}
+
 model Cart {
   id       String @id @default(uuid()) @db.Uuid
   tenantId String @db.Uuid
@@ -289,6 +476,7 @@ model Cart {
 
   items       CartItem[]
   adjustments CartAdjustment[]
+  promotionAdjustments CartPromotionAdjustment[]
 
   @@unique([tenantId, storeId, id])
   @@index([tenantId, storeId, status])
@@ -332,6 +520,26 @@ model CartAdjustment {
   @@schema("store")
 }
 
+model CartPromotionAdjustment {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  cartId      String @db.Uuid
+  promotionId String @db.Uuid
+
+  amount      Int
+  description String?
+
+  cart      Cart      @relation(fields: [tenantId, storeId, cartId], references: [tenantId, storeId, id], onDelete: Cascade)
+  promotion Promotion @relation(fields: [tenantId, storeId, promotionId], references: [tenantId, storeId, id], onDelete: Restrict)
+
+  @@unique([tenantId, storeId, id])
+  @@index([tenantId, storeId, cartId])
+  @@index([tenantId, storeId, promotionId])
+  @@schema("store")
+}
+
 model Order {
   id       String @id @default(uuid()) @db.Uuid
   tenantId String @db.Uuid
@@ -363,6 +571,7 @@ model Order {
 
   items       OrderItem[]
   adjustments OrderAdjustment[]
+  promotionAdjustments OrderPromotionAdjustment[]
 
   @@unique([tenantId, storeId, id])
   @@unique([tenantId, storeId, number])
@@ -407,5 +616,25 @@ model OrderAdjustment {
   discount Discount @relation(fields: [tenantId, storeId, discountId], references: [tenantId, storeId, id], onDelete: Restrict)
 
   @@index([tenantId, storeId, orderId])
+  @@schema("store")
+}
+
+model OrderPromotionAdjustment {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  storeId  String @db.Uuid
+
+  orderId     String @db.Uuid
+  promotionId String @db.Uuid
+
+  amount      Int
+  description String?
+
+  order     Order     @relation(fields: [tenantId, storeId, orderId], references: [tenantId, storeId, id], onDelete: Cascade)
+  promotion Promotion @relation(fields: [tenantId, storeId, promotionId], references: [tenantId, storeId, id], onDelete: Restrict)
+
+  @@unique([tenantId, storeId, id])
+  @@index([tenantId, storeId, orderId])
+  @@index([tenantId, storeId, promotionId])
   @@schema("store")
 }

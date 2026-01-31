@@ -163,6 +163,8 @@ model Store {
   products    Product[]
   collections Collection[]
   discounts   Discount[]
+  promotions  Promotion[]
+  campaigns   Campaign[]
   carts       Cart[]
   orders      Order[]
   cmsAssets   CmsAsset[]

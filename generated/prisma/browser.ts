@@ -228,6 +228,31 @@ export type CollectionProduct = Prisma.CollectionProductModel
  */
 export type Discount = Prisma.DiscountModel
 /**
+ * Model Campaign
+ * 
+ */
+export type Campaign = Prisma.CampaignModel
+/**
+ * Model Promotion
+ * 
+ */
+export type Promotion = Prisma.PromotionModel
+/**
+ * Model PromotionRule
+ * 
+ */
+export type PromotionRule = Prisma.PromotionRuleModel
+/**
+ * Model PromotionApplicationMethod
+ * 
+ */
+export type PromotionApplicationMethod = Prisma.PromotionApplicationMethodModel
+/**
+ * Model CampaignPromotion
+ * 
+ */
+export type CampaignPromotion = Prisma.CampaignPromotionModel
+/**
  * Model Cart
  * 
  */
@@ -243,6 +268,11 @@ export type CartItem = Prisma.CartItemModel
  */
 export type CartAdjustment = Prisma.CartAdjustmentModel
 /**
+ * Model CartPromotionAdjustment
+ * 
+ */
+export type CartPromotionAdjustment = Prisma.CartPromotionAdjustmentModel
+/**
  * Model Order
  * 
  */
@@ -257,3 +287,8 @@ export type OrderItem = Prisma.OrderItemModel
  * 
  */
 export type OrderAdjustment = Prisma.OrderAdjustmentModel
+/**
+ * Model OrderPromotionAdjustment
+ * 
+ */
+export type OrderPromotionAdjustment = Prisma.OrderPromotionAdjustmentModel

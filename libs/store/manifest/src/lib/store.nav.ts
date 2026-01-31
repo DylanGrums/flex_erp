@@ -91,7 +91,17 @@ export const STORE_NAV = defineFeatureNav({
             title: 'store.routes.promotions.title',
             subtitle: 'store.routes.promotions.subtitle',
           },
-          items: [{ label: 'store.nav.campaigns', to: '/campaigns' }],
+          items: [
+            {
+              label: 'store.nav.campaigns',
+              to: '/campaigns',
+              route: {
+                breadcrumb: 'store.routes.campaigns.breadcrumb',
+                title: 'store.routes.campaigns.title',
+                subtitle: 'store.routes.campaigns.subtitle',
+              },
+            },
+          ],
         },
 
         {

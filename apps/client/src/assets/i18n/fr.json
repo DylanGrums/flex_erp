@@ -248,6 +248,11 @@
         "title": "Promotions",
         "subtitle": "Creez des remises et des campagnes."
       },
+      "campaigns": {
+        "breadcrumb": "Campagnes",
+        "title": "Campagnes",
+        "subtitle": "Planifiez et gerez les campagnes marketing."
+      },
       "priceLists": {
         "breadcrumb": "Listes de prix",
         "title": "Listes de prix",

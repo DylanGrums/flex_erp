@@ -248,6 +248,11 @@
         "title": "Promotions",
         "subtitle": "Create discounts and campaigns."
       },
+      "campaigns": {
+        "breadcrumb": "Campaigns",
+        "title": "Campaigns",
+        "subtitle": "Plan and manage marketing campaigns."
+      },
       "priceLists": {
         "breadcrumb": "Price lists",
         "title": "Price lists",

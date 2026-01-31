@@ -26,6 +26,7 @@ declare module 'generated/prisma/client' {
     authSession: any;
     $transaction: any;
     $connect: any;
+    [key: string]: any;
     constructor(...args: any[]);
   }
 }

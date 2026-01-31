@@ -93,12 +93,19 @@ export const ModelName = {
   Collection: 'Collection',
   CollectionProduct: 'CollectionProduct',
   Discount: 'Discount',
+  Campaign: 'Campaign',
+  Promotion: 'Promotion',
+  PromotionRule: 'PromotionRule',
+  PromotionApplicationMethod: 'PromotionApplicationMethod',
+  CampaignPromotion: 'CampaignPromotion',
   Cart: 'Cart',
   CartItem: 'CartItem',
   CartAdjustment: 'CartAdjustment',
+  CartPromotionAdjustment: 'CartPromotionAdjustment',
   Order: 'Order',
   OrderItem: 'OrderItem',
-  OrderAdjustment: 'OrderAdjustment'
+  OrderAdjustment: 'OrderAdjustment',
+  OrderPromotionAdjustment: 'OrderPromotionAdjustment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -688,6 +695,89 @@ export const DiscountScalarFieldEnum = {
 export type DiscountScalarFieldEnum = (typeof DiscountScalarFieldEnum)[keyof typeof DiscountScalarFieldEnum]
 
 
+export const CampaignScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  storeId: 'storeId',
+  name: 'name',
+  description: 'description',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  isActive: 'isActive',
+  budgetType: 'budgetType',
+  budgetLimitAmount: 'budgetLimitAmount',
+  budgetCurrency: 'budgetCurrency',
+  budgetAttribute: 'budgetAttribute',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CampaignScalarFieldEnum = (typeof CampaignScalarFieldEnum)[keyof typeof CampaignScalarFieldEnum]
+
+
+export const PromotionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  storeId: 'storeId',
+  code: 'code',
+  type: 'type',
+  status: 'status',
+  isAutomatic: 'isAutomatic',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  isActive: 'isActive',
+  usageLimit: 'usageLimit',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PromotionScalarFieldEnum = (typeof PromotionScalarFieldEnum)[keyof typeof PromotionScalarFieldEnum]
+
+
+export const PromotionRuleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  storeId: 'storeId',
+  promotionId: 'promotionId',
+  scope: 'scope',
+  operator: 'operator',
+  attribute: 'attribute',
+  values: 'values',
+  createdAt: 'createdAt'
+} as const
+
+export type PromotionRuleScalarFieldEnum = (typeof PromotionRuleScalarFieldEnum)[keyof typeof PromotionRuleScalarFieldEnum]
+
+
+export const PromotionApplicationMethodScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  storeId: 'storeId',
+  promotionId: 'promotionId',
+  type: 'type',
+  allocation: 'allocation',
+  targetType: 'targetType',
+  valueAmount: 'valueAmount',
+  valueBps: 'valueBps',
+  currency: 'currency',
+  maxQuantity: 'maxQuantity',
+  isTaxInclusive: 'isTaxInclusive'
+} as const
+
+export type PromotionApplicationMethodScalarFieldEnum = (typeof PromotionApplicationMethodScalarFieldEnum)[keyof typeof PromotionApplicationMethodScalarFieldEnum]
+
+
+export const CampaignPromotionScalarFieldEnum = {
+  tenantId: 'tenantId',
+  storeId: 'storeId',
+  campaignId: 'campaignId',
+  promotionId: 'promotionId'
+} as const
+
+export type CampaignPromotionScalarFieldEnum = (typeof CampaignPromotionScalarFieldEnum)[keyof typeof CampaignPromotionScalarFieldEnum]
+
+
 export const CartScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -730,6 +820,19 @@ export const CartAdjustmentScalarFieldEnum = {
 } as const
 
 export type CartAdjustmentScalarFieldEnum = (typeof CartAdjustmentScalarFieldEnum)[keyof typeof CartAdjustmentScalarFieldEnum]
+
+
+export const CartPromotionAdjustmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  storeId: 'storeId',
+  cartId: 'cartId',
+  promotionId: 'promotionId',
+  amount: 'amount',
+  description: 'description'
+} as const
+
+export type CartPromotionAdjustmentScalarFieldEnum = (typeof CartPromotionAdjustmentScalarFieldEnum)[keyof typeof CartPromotionAdjustmentScalarFieldEnum]
 
 
 export const OrderScalarFieldEnum = {
@@ -781,6 +884,19 @@ export const OrderAdjustmentScalarFieldEnum = {
 } as const
 
 export type OrderAdjustmentScalarFieldEnum = (typeof OrderAdjustmentScalarFieldEnum)[keyof typeof OrderAdjustmentScalarFieldEnum]
+
+
+export const OrderPromotionAdjustmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  storeId: 'storeId',
+  orderId: 'orderId',
+  promotionId: 'promotionId',
+  amount: 'amount',
+  description: 'description'
+} as const
+
+export type OrderPromotionAdjustmentScalarFieldEnum = (typeof OrderPromotionAdjustmentScalarFieldEnum)[keyof typeof OrderPromotionAdjustmentScalarFieldEnum]
 
 
 export const SortOrder = {

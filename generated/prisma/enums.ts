@@ -160,6 +160,77 @@ export const DiscountKind = {
 export type DiscountKind = (typeof DiscountKind)[keyof typeof DiscountKind]
 
 
+export const CampaignBudgetType = {
+  NONE: 'NONE',
+  SPEND_LIMIT: 'SPEND_LIMIT',
+  USE_BY_ATTRIBUTE: 'USE_BY_ATTRIBUTE'
+} as const
+
+export type CampaignBudgetType = (typeof CampaignBudgetType)[keyof typeof CampaignBudgetType]
+
+
+export const PromotionStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  DISABLED: 'DISABLED'
+} as const
+
+export type PromotionStatus = (typeof PromotionStatus)[keyof typeof PromotionStatus]
+
+
+export const PromotionType = {
+  STANDARD: 'STANDARD'
+} as const
+
+export type PromotionType = (typeof PromotionType)[keyof typeof PromotionType]
+
+
+export const PromotionRuleScope = {
+  PROMOTION: 'PROMOTION',
+  TARGET: 'TARGET',
+  BUY: 'BUY'
+} as const
+
+export type PromotionRuleScope = (typeof PromotionRuleScope)[keyof typeof PromotionRuleScope]
+
+
+export const PromotionRuleOperator = {
+  EQ: 'EQ',
+  NE: 'NE',
+  IN: 'IN',
+  NIN: 'NIN',
+  GT: 'GT',
+  GTE: 'GTE',
+  LT: 'LT',
+  LTE: 'LTE'
+} as const
+
+export type PromotionRuleOperator = (typeof PromotionRuleOperator)[keyof typeof PromotionRuleOperator]
+
+
+export const PromotionApplicationMethodType = {
+  FIXED: 'FIXED',
+  PERCENT: 'PERCENT'
+} as const
+
+export type PromotionApplicationMethodType = (typeof PromotionApplicationMethodType)[keyof typeof PromotionApplicationMethodType]
+
+
+export const PromotionApplicationAllocation = {
+  EACH: 'EACH',
+  ACROSS: 'ACROSS'
+} as const
+
+export type PromotionApplicationAllocation = (typeof PromotionApplicationAllocation)[keyof typeof PromotionApplicationAllocation]
+
+
+export const PromotionTargetType = {
+  ITEMS: 'ITEMS'
+} as const
+
+export type PromotionTargetType = (typeof PromotionTargetType)[keyof typeof PromotionTargetType]
+
+
 export const CustomerAddressKind = {
   SHIPPING: 'SHIPPING',
   BILLING: 'BILLING'

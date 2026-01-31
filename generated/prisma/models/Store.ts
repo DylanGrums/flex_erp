@@ -223,6 +223,8 @@ export type StoreWhereInput = {
   products?: Prisma.ProductListRelationFilter
   collections?: Prisma.CollectionListRelationFilter
   discounts?: Prisma.DiscountListRelationFilter
+  promotions?: Prisma.PromotionListRelationFilter
+  campaigns?: Prisma.CampaignListRelationFilter
   carts?: Prisma.CartListRelationFilter
   orders?: Prisma.OrderListRelationFilter
   cmsAssets?: Prisma.CmsAssetListRelationFilter
@@ -251,6 +253,8 @@ export type StoreOrderByWithRelationInput = {
   products?: Prisma.ProductOrderByRelationAggregateInput
   collections?: Prisma.CollectionOrderByRelationAggregateInput
   discounts?: Prisma.DiscountOrderByRelationAggregateInput
+  promotions?: Prisma.PromotionOrderByRelationAggregateInput
+  campaigns?: Prisma.CampaignOrderByRelationAggregateInput
   carts?: Prisma.CartOrderByRelationAggregateInput
   orders?: Prisma.OrderOrderByRelationAggregateInput
   cmsAssets?: Prisma.CmsAssetOrderByRelationAggregateInput
@@ -284,6 +288,8 @@ export type StoreWhereUniqueInput = Prisma.AtLeast<{
   products?: Prisma.ProductListRelationFilter
   collections?: Prisma.CollectionListRelationFilter
   discounts?: Prisma.DiscountListRelationFilter
+  promotions?: Prisma.PromotionListRelationFilter
+  campaigns?: Prisma.CampaignListRelationFilter
   carts?: Prisma.CartListRelationFilter
   orders?: Prisma.OrderListRelationFilter
   cmsAssets?: Prisma.CmsAssetListRelationFilter
@@ -340,6 +346,8 @@ export type StoreCreateInput = {
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
@@ -366,6 +374,8 @@ export type StoreUncheckedCreateInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
@@ -392,6 +402,8 @@ export type StoreUpdateInput = {
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
@@ -418,6 +430,8 @@ export type StoreUncheckedUpdateInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
@@ -785,6 +799,34 @@ export type StoreUpdateOneRequiredWithoutDiscountsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.StoreUpdateToOneWithWhereWithoutDiscountsInput, Prisma.StoreUpdateWithoutDiscountsInput>, Prisma.StoreUncheckedUpdateWithoutDiscountsInput>
 }
 
+export type StoreCreateNestedOneWithoutCampaignsInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutCampaignsInput, Prisma.StoreUncheckedCreateWithoutCampaignsInput>
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutCampaignsInput
+  connect?: Prisma.StoreWhereUniqueInput
+}
+
+export type StoreUpdateOneRequiredWithoutCampaignsNestedInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutCampaignsInput, Prisma.StoreUncheckedCreateWithoutCampaignsInput>
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutCampaignsInput
+  upsert?: Prisma.StoreUpsertWithoutCampaignsInput
+  connect?: Prisma.StoreWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StoreUpdateToOneWithWhereWithoutCampaignsInput, Prisma.StoreUpdateWithoutCampaignsInput>, Prisma.StoreUncheckedUpdateWithoutCampaignsInput>
+}
+
+export type StoreCreateNestedOneWithoutPromotionsInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutPromotionsInput, Prisma.StoreUncheckedCreateWithoutPromotionsInput>
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutPromotionsInput
+  connect?: Prisma.StoreWhereUniqueInput
+}
+
+export type StoreUpdateOneRequiredWithoutPromotionsNestedInput = {
+  create?: Prisma.XOR<Prisma.StoreCreateWithoutPromotionsInput, Prisma.StoreUncheckedCreateWithoutPromotionsInput>
+  connectOrCreate?: Prisma.StoreCreateOrConnectWithoutPromotionsInput
+  upsert?: Prisma.StoreUpsertWithoutPromotionsInput
+  connect?: Prisma.StoreWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StoreUpdateToOneWithWhereWithoutPromotionsInput, Prisma.StoreUpdateWithoutPromotionsInput>, Prisma.StoreUncheckedUpdateWithoutPromotionsInput>
+}
+
 export type StoreCreateNestedOneWithoutCartsInput = {
   create?: Prisma.XOR<Prisma.StoreCreateWithoutCartsInput, Prisma.StoreUncheckedCreateWithoutCartsInput>
   connectOrCreate?: Prisma.StoreCreateOrConnectWithoutCartsInput
@@ -830,6 +872,8 @@ export type StoreCreateWithoutCmsSitesInput = {
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
@@ -855,6 +899,8 @@ export type StoreUncheckedCreateWithoutCmsSitesInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
@@ -896,6 +942,8 @@ export type StoreUpdateWithoutCmsSitesInput = {
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
@@ -921,6 +969,8 @@ export type StoreUncheckedUpdateWithoutCmsSitesInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
@@ -946,6 +996,8 @@ export type StoreCreateWithoutCmsAssetsInput = {
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   cmsSites?: Prisma.CmsSiteCreateNestedManyWithoutStoreInput
@@ -971,6 +1023,8 @@ export type StoreUncheckedCreateWithoutCmsAssetsInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   cmsSites?: Prisma.CmsSiteUncheckedCreateNestedManyWithoutStoreInput
@@ -1012,6 +1066,8 @@ export type StoreUpdateWithoutCmsAssetsInput = {
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   cmsSites?: Prisma.CmsSiteUpdateManyWithoutStoreNestedInput
@@ -1037,6 +1093,8 @@ export type StoreUncheckedUpdateWithoutCmsAssetsInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   cmsSites?: Prisma.CmsSiteUncheckedUpdateManyWithoutStoreNestedInput
@@ -1061,6 +1119,8 @@ export type StoreCreateWithoutTenantInput = {
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
@@ -1086,6 +1146,8 @@ export type StoreUncheckedCreateWithoutTenantInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
@@ -1152,6 +1214,8 @@ export type StoreCreateWithoutBusinessUnitInput = {
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
@@ -1177,6 +1241,8 @@ export type StoreUncheckedCreateWithoutBusinessUnitInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
@@ -1228,6 +1294,8 @@ export type StoreCreateWithoutOrgUnitLinksInput = {
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
@@ -1253,6 +1321,8 @@ export type StoreUncheckedCreateWithoutOrgUnitLinksInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
@@ -1294,6 +1364,8 @@ export type StoreUpdateWithoutOrgUnitLinksInput = {
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
@@ -1319,6 +1391,8 @@ export type StoreUncheckedUpdateWithoutOrgUnitLinksInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
@@ -1344,6 +1418,8 @@ export type StoreCreateWithoutTagLinksInput = {
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
@@ -1369,6 +1445,8 @@ export type StoreUncheckedCreateWithoutTagLinksInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
@@ -1410,6 +1488,8 @@ export type StoreUpdateWithoutTagLinksInput = {
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
@@ -1435,6 +1515,8 @@ export type StoreUncheckedUpdateWithoutTagLinksInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
@@ -1460,6 +1542,8 @@ export type StoreCreateWithoutClassLinksInput = {
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
@@ -1485,6 +1569,8 @@ export type StoreUncheckedCreateWithoutClassLinksInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
@@ -1526,6 +1612,8 @@ export type StoreUpdateWithoutClassLinksInput = {
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
@@ -1551,6 +1639,8 @@ export type StoreUncheckedUpdateWithoutClassLinksInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
@@ -1577,6 +1667,8 @@ export type StoreCreateWithoutEmployeesInput = {
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
@@ -1602,6 +1694,8 @@ export type StoreUncheckedCreateWithoutEmployeesInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
@@ -1643,6 +1737,8 @@ export type StoreUpdateWithoutEmployeesInput = {
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
@@ -1668,6 +1764,8 @@ export type StoreUncheckedUpdateWithoutEmployeesInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
@@ -1693,6 +1791,8 @@ export type StoreCreateWithoutShiftsInput = {
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
@@ -1718,6 +1818,8 @@ export type StoreUncheckedCreateWithoutShiftsInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
@@ -1759,6 +1861,8 @@ export type StoreUpdateWithoutShiftsInput = {
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
@@ -1784,6 +1888,8 @@ export type StoreUncheckedUpdateWithoutShiftsInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
@@ -1809,6 +1915,8 @@ export type StoreCreateWithoutTimeOffRequestsInput = {
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
@@ -1834,6 +1942,8 @@ export type StoreUncheckedCreateWithoutTimeOffRequestsInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
@@ -1875,6 +1985,8 @@ export type StoreUpdateWithoutTimeOffRequestsInput = {
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
@@ -1900,6 +2012,8 @@ export type StoreUncheckedUpdateWithoutTimeOffRequestsInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
@@ -1924,6 +2038,8 @@ export type StoreCreateWithoutCustomersInput = {
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
@@ -1949,6 +2065,8 @@ export type StoreUncheckedCreateWithoutCustomersInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
@@ -1990,6 +2108,8 @@ export type StoreUpdateWithoutCustomersInput = {
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
@@ -2015,6 +2135,8 @@ export type StoreUncheckedUpdateWithoutCustomersInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
@@ -2040,6 +2162,8 @@ export type StoreCreateWithoutProductsInput = {
   customers?: Prisma.CustomerCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
@@ -2065,6 +2189,8 @@ export type StoreUncheckedCreateWithoutProductsInput = {
   customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
@@ -2106,6 +2232,8 @@ export type StoreUpdateWithoutProductsInput = {
   customers?: Prisma.CustomerUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
@@ -2131,6 +2259,8 @@ export type StoreUncheckedUpdateWithoutProductsInput = {
   customers?: Prisma.CustomerUncheckedUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
@@ -2156,6 +2286,8 @@ export type StoreCreateWithoutCollectionsInput = {
   customers?: Prisma.CustomerCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
@@ -2181,6 +2313,8 @@ export type StoreUncheckedCreateWithoutCollectionsInput = {
   customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
@@ -2222,6 +2356,8 @@ export type StoreUpdateWithoutCollectionsInput = {
   customers?: Prisma.CustomerUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
@@ -2247,6 +2383,8 @@ export type StoreUncheckedUpdateWithoutCollectionsInput = {
   customers?: Prisma.CustomerUncheckedUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
@@ -2272,6 +2410,8 @@ export type StoreCreateWithoutDiscountsInput = {
   customers?: Prisma.CustomerCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
@@ -2297,6 +2437,8 @@ export type StoreUncheckedCreateWithoutDiscountsInput = {
   customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutStoreInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
@@ -2338,6 +2480,8 @@ export type StoreUpdateWithoutDiscountsInput = {
   customers?: Prisma.CustomerUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
@@ -2363,6 +2507,256 @@ export type StoreUncheckedUpdateWithoutDiscountsInput = {
   customers?: Prisma.CustomerUncheckedUpdateManyWithoutStoreNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
+  carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
+  cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
+  cmsSites?: Prisma.CmsSiteUncheckedUpdateManyWithoutStoreNestedInput
+  employees?: Prisma.EmployeeStoreUncheckedUpdateManyWithoutStoreNestedInput
+  shifts?: Prisma.ShiftUncheckedUpdateManyWithoutStoreNestedInput
+  timeOffRequests?: Prisma.TimeOffRequestUncheckedUpdateManyWithoutStoreNestedInput
+}
+
+export type StoreCreateWithoutCampaignsInput = {
+  id?: string
+  code: string
+  name: string
+  timezone?: string
+  currency?: $Enums.CurrencyCode
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  businessUnit?: Prisma.BusinessUnitCreateNestedOneWithoutStoresInput
+  tenant: Prisma.TenantCreateNestedOneWithoutStoresInput
+  orgUnitLinks?: Prisma.StoreOrgUnitCreateNestedManyWithoutStoreInput
+  tagLinks?: Prisma.StoreTagAssignmentCreateNestedManyWithoutStoreInput
+  classLinks?: Prisma.StoreClassificationAssignmentCreateNestedManyWithoutStoreInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutStoreInput
+  products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
+  discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  carts?: Prisma.CartCreateNestedManyWithoutStoreInput
+  orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
+  cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
+  cmsSites?: Prisma.CmsSiteCreateNestedManyWithoutStoreInput
+  employees?: Prisma.EmployeeStoreCreateNestedManyWithoutStoreInput
+  shifts?: Prisma.ShiftCreateNestedManyWithoutStoreInput
+  timeOffRequests?: Prisma.TimeOffRequestCreateNestedManyWithoutStoreInput
+}
+
+export type StoreUncheckedCreateWithoutCampaignsInput = {
+  id?: string
+  tenantId: string
+  code: string
+  name: string
+  timezone?: string
+  currency?: $Enums.CurrencyCode
+  businessUnitId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  orgUnitLinks?: Prisma.StoreOrgUnitUncheckedCreateNestedManyWithoutStoreInput
+  tagLinks?: Prisma.StoreTagAssignmentUncheckedCreateNestedManyWithoutStoreInput
+  classLinks?: Prisma.StoreClassificationAssignmentUncheckedCreateNestedManyWithoutStoreInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutStoreInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
+  discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
+  cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
+  cmsSites?: Prisma.CmsSiteUncheckedCreateNestedManyWithoutStoreInput
+  employees?: Prisma.EmployeeStoreUncheckedCreateNestedManyWithoutStoreInput
+  shifts?: Prisma.ShiftUncheckedCreateNestedManyWithoutStoreInput
+  timeOffRequests?: Prisma.TimeOffRequestUncheckedCreateNestedManyWithoutStoreInput
+}
+
+export type StoreCreateOrConnectWithoutCampaignsInput = {
+  where: Prisma.StoreWhereUniqueInput
+  create: Prisma.XOR<Prisma.StoreCreateWithoutCampaignsInput, Prisma.StoreUncheckedCreateWithoutCampaignsInput>
+}
+
+export type StoreUpsertWithoutCampaignsInput = {
+  update: Prisma.XOR<Prisma.StoreUpdateWithoutCampaignsInput, Prisma.StoreUncheckedUpdateWithoutCampaignsInput>
+  create: Prisma.XOR<Prisma.StoreCreateWithoutCampaignsInput, Prisma.StoreUncheckedCreateWithoutCampaignsInput>
+  where?: Prisma.StoreWhereInput
+}
+
+export type StoreUpdateToOneWithWhereWithoutCampaignsInput = {
+  where?: Prisma.StoreWhereInput
+  data: Prisma.XOR<Prisma.StoreUpdateWithoutCampaignsInput, Prisma.StoreUncheckedUpdateWithoutCampaignsInput>
+}
+
+export type StoreUpdateWithoutCampaignsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  businessUnit?: Prisma.BusinessUnitUpdateOneWithoutStoresNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutStoresNestedInput
+  orgUnitLinks?: Prisma.StoreOrgUnitUpdateManyWithoutStoreNestedInput
+  tagLinks?: Prisma.StoreTagAssignmentUpdateManyWithoutStoreNestedInput
+  classLinks?: Prisma.StoreClassificationAssignmentUpdateManyWithoutStoreNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutStoreNestedInput
+  products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
+  discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
+  cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
+  cmsSites?: Prisma.CmsSiteUpdateManyWithoutStoreNestedInput
+  employees?: Prisma.EmployeeStoreUpdateManyWithoutStoreNestedInput
+  shifts?: Prisma.ShiftUpdateManyWithoutStoreNestedInput
+  timeOffRequests?: Prisma.TimeOffRequestUpdateManyWithoutStoreNestedInput
+}
+
+export type StoreUncheckedUpdateWithoutCampaignsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  businessUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  orgUnitLinks?: Prisma.StoreOrgUnitUncheckedUpdateManyWithoutStoreNestedInput
+  tagLinks?: Prisma.StoreTagAssignmentUncheckedUpdateManyWithoutStoreNestedInput
+  classLinks?: Prisma.StoreClassificationAssignmentUncheckedUpdateManyWithoutStoreNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutStoreNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
+  discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
+  cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
+  cmsSites?: Prisma.CmsSiteUncheckedUpdateManyWithoutStoreNestedInput
+  employees?: Prisma.EmployeeStoreUncheckedUpdateManyWithoutStoreNestedInput
+  shifts?: Prisma.ShiftUncheckedUpdateManyWithoutStoreNestedInput
+  timeOffRequests?: Prisma.TimeOffRequestUncheckedUpdateManyWithoutStoreNestedInput
+}
+
+export type StoreCreateWithoutPromotionsInput = {
+  id?: string
+  code: string
+  name: string
+  timezone?: string
+  currency?: $Enums.CurrencyCode
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  businessUnit?: Prisma.BusinessUnitCreateNestedOneWithoutStoresInput
+  tenant: Prisma.TenantCreateNestedOneWithoutStoresInput
+  orgUnitLinks?: Prisma.StoreOrgUnitCreateNestedManyWithoutStoreInput
+  tagLinks?: Prisma.StoreTagAssignmentCreateNestedManyWithoutStoreInput
+  classLinks?: Prisma.StoreClassificationAssignmentCreateNestedManyWithoutStoreInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutStoreInput
+  products?: Prisma.ProductCreateNestedManyWithoutStoreInput
+  collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
+  discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
+  carts?: Prisma.CartCreateNestedManyWithoutStoreInput
+  orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
+  cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
+  cmsSites?: Prisma.CmsSiteCreateNestedManyWithoutStoreInput
+  employees?: Prisma.EmployeeStoreCreateNestedManyWithoutStoreInput
+  shifts?: Prisma.ShiftCreateNestedManyWithoutStoreInput
+  timeOffRequests?: Prisma.TimeOffRequestCreateNestedManyWithoutStoreInput
+}
+
+export type StoreUncheckedCreateWithoutPromotionsInput = {
+  id?: string
+  tenantId: string
+  code: string
+  name: string
+  timezone?: string
+  currency?: $Enums.CurrencyCode
+  businessUnitId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  orgUnitLinks?: Prisma.StoreOrgUnitUncheckedCreateNestedManyWithoutStoreInput
+  tagLinks?: Prisma.StoreTagAssignmentUncheckedCreateNestedManyWithoutStoreInput
+  classLinks?: Prisma.StoreClassificationAssignmentUncheckedCreateNestedManyWithoutStoreInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutStoreInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
+  collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
+  discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
+  carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
+  cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
+  cmsSites?: Prisma.CmsSiteUncheckedCreateNestedManyWithoutStoreInput
+  employees?: Prisma.EmployeeStoreUncheckedCreateNestedManyWithoutStoreInput
+  shifts?: Prisma.ShiftUncheckedCreateNestedManyWithoutStoreInput
+  timeOffRequests?: Prisma.TimeOffRequestUncheckedCreateNestedManyWithoutStoreInput
+}
+
+export type StoreCreateOrConnectWithoutPromotionsInput = {
+  where: Prisma.StoreWhereUniqueInput
+  create: Prisma.XOR<Prisma.StoreCreateWithoutPromotionsInput, Prisma.StoreUncheckedCreateWithoutPromotionsInput>
+}
+
+export type StoreUpsertWithoutPromotionsInput = {
+  update: Prisma.XOR<Prisma.StoreUpdateWithoutPromotionsInput, Prisma.StoreUncheckedUpdateWithoutPromotionsInput>
+  create: Prisma.XOR<Prisma.StoreCreateWithoutPromotionsInput, Prisma.StoreUncheckedCreateWithoutPromotionsInput>
+  where?: Prisma.StoreWhereInput
+}
+
+export type StoreUpdateToOneWithWhereWithoutPromotionsInput = {
+  where?: Prisma.StoreWhereInput
+  data: Prisma.XOR<Prisma.StoreUpdateWithoutPromotionsInput, Prisma.StoreUncheckedUpdateWithoutPromotionsInput>
+}
+
+export type StoreUpdateWithoutPromotionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  businessUnit?: Prisma.BusinessUnitUpdateOneWithoutStoresNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutStoresNestedInput
+  orgUnitLinks?: Prisma.StoreOrgUnitUpdateManyWithoutStoreNestedInput
+  tagLinks?: Prisma.StoreTagAssignmentUpdateManyWithoutStoreNestedInput
+  classLinks?: Prisma.StoreClassificationAssignmentUpdateManyWithoutStoreNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutStoreNestedInput
+  products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
+  collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
+  discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
+  carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
+  cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
+  cmsSites?: Prisma.CmsSiteUpdateManyWithoutStoreNestedInput
+  employees?: Prisma.EmployeeStoreUpdateManyWithoutStoreNestedInput
+  shifts?: Prisma.ShiftUpdateManyWithoutStoreNestedInput
+  timeOffRequests?: Prisma.TimeOffRequestUpdateManyWithoutStoreNestedInput
+}
+
+export type StoreUncheckedUpdateWithoutPromotionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  currency?: Prisma.EnumCurrencyCodeFieldUpdateOperationsInput | $Enums.CurrencyCode
+  businessUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  orgUnitLinks?: Prisma.StoreOrgUnitUncheckedUpdateManyWithoutStoreNestedInput
+  tagLinks?: Prisma.StoreTagAssignmentUncheckedUpdateManyWithoutStoreNestedInput
+  classLinks?: Prisma.StoreClassificationAssignmentUncheckedUpdateManyWithoutStoreNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutStoreNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
+  collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
+  discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
@@ -2389,6 +2783,8 @@ export type StoreCreateWithoutCartsInput = {
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
   cmsSites?: Prisma.CmsSiteCreateNestedManyWithoutStoreInput
@@ -2414,6 +2810,8 @@ export type StoreUncheckedCreateWithoutCartsInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
   cmsSites?: Prisma.CmsSiteUncheckedCreateNestedManyWithoutStoreInput
@@ -2455,6 +2853,8 @@ export type StoreUpdateWithoutCartsInput = {
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
   cmsSites?: Prisma.CmsSiteUpdateManyWithoutStoreNestedInput
@@ -2480,6 +2880,8 @@ export type StoreUncheckedUpdateWithoutCartsInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
   cmsSites?: Prisma.CmsSiteUncheckedUpdateManyWithoutStoreNestedInput
@@ -2505,6 +2907,8 @@ export type StoreCreateWithoutOrdersInput = {
   products?: Prisma.ProductCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetCreateNestedManyWithoutStoreInput
   cmsSites?: Prisma.CmsSiteCreateNestedManyWithoutStoreInput
@@ -2530,6 +2934,8 @@ export type StoreUncheckedCreateWithoutOrdersInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutStoreInput
   collections?: Prisma.CollectionUncheckedCreateNestedManyWithoutStoreInput
   discounts?: Prisma.DiscountUncheckedCreateNestedManyWithoutStoreInput
+  promotions?: Prisma.PromotionUncheckedCreateNestedManyWithoutStoreInput
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutStoreInput
   carts?: Prisma.CartUncheckedCreateNestedManyWithoutStoreInput
   cmsAssets?: Prisma.CmsAssetUncheckedCreateNestedManyWithoutStoreInput
   cmsSites?: Prisma.CmsSiteUncheckedCreateNestedManyWithoutStoreInput
@@ -2571,6 +2977,8 @@ export type StoreUpdateWithoutOrdersInput = {
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
   cmsSites?: Prisma.CmsSiteUpdateManyWithoutStoreNestedInput
@@ -2596,6 +3004,8 @@ export type StoreUncheckedUpdateWithoutOrdersInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
   cmsSites?: Prisma.CmsSiteUncheckedUpdateManyWithoutStoreNestedInput
@@ -2631,6 +3041,8 @@ export type StoreUpdateWithoutTenantInput = {
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
@@ -2656,6 +3068,8 @@ export type StoreUncheckedUpdateWithoutTenantInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
@@ -2703,6 +3117,8 @@ export type StoreUpdateWithoutBusinessUnitInput = {
   products?: Prisma.ProductUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUpdateManyWithoutStoreNestedInput
@@ -2728,6 +3144,8 @@ export type StoreUncheckedUpdateWithoutBusinessUnitInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutStoreNestedInput
   collections?: Prisma.CollectionUncheckedUpdateManyWithoutStoreNestedInput
   discounts?: Prisma.DiscountUncheckedUpdateManyWithoutStoreNestedInput
+  promotions?: Prisma.PromotionUncheckedUpdateManyWithoutStoreNestedInput
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutStoreNestedInput
   carts?: Prisma.CartUncheckedUpdateManyWithoutStoreNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutStoreNestedInput
   cmsAssets?: Prisma.CmsAssetUncheckedUpdateManyWithoutStoreNestedInput
@@ -2761,6 +3179,8 @@ export type StoreCountOutputType = {
   products: number
   collections: number
   discounts: number
+  promotions: number
+  campaigns: number
   carts: number
   orders: number
   cmsAssets: number
@@ -2778,6 +3198,8 @@ export type StoreCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   products?: boolean | StoreCountOutputTypeCountProductsArgs
   collections?: boolean | StoreCountOutputTypeCountCollectionsArgs
   discounts?: boolean | StoreCountOutputTypeCountDiscountsArgs
+  promotions?: boolean | StoreCountOutputTypeCountPromotionsArgs
+  campaigns?: boolean | StoreCountOutputTypeCountCampaignsArgs
   carts?: boolean | StoreCountOutputTypeCountCartsArgs
   orders?: boolean | StoreCountOutputTypeCountOrdersArgs
   cmsAssets?: boolean | StoreCountOutputTypeCountCmsAssetsArgs
@@ -2849,6 +3271,20 @@ export type StoreCountOutputTypeCountDiscountsArgs<ExtArgs extends runtime.Types
 /**
  * StoreCountOutputType without action
  */
+export type StoreCountOutputTypeCountPromotionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PromotionWhereInput
+}
+
+/**
+ * StoreCountOutputType without action
+ */
+export type StoreCountOutputTypeCountCampaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CampaignWhereInput
+}
+
+/**
+ * StoreCountOutputType without action
+ */
 export type StoreCountOutputTypeCountCartsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CartWhereInput
 }
@@ -2915,6 +3351,8 @@ export type StoreSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   products?: boolean | Prisma.Store$productsArgs<ExtArgs>
   collections?: boolean | Prisma.Store$collectionsArgs<ExtArgs>
   discounts?: boolean | Prisma.Store$discountsArgs<ExtArgs>
+  promotions?: boolean | Prisma.Store$promotionsArgs<ExtArgs>
+  campaigns?: boolean | Prisma.Store$campaignsArgs<ExtArgs>
   carts?: boolean | Prisma.Store$cartsArgs<ExtArgs>
   orders?: boolean | Prisma.Store$ordersArgs<ExtArgs>
   cmsAssets?: boolean | Prisma.Store$cmsAssetsArgs<ExtArgs>
@@ -2976,6 +3414,8 @@ export type StoreInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   products?: boolean | Prisma.Store$productsArgs<ExtArgs>
   collections?: boolean | Prisma.Store$collectionsArgs<ExtArgs>
   discounts?: boolean | Prisma.Store$discountsArgs<ExtArgs>
+  promotions?: boolean | Prisma.Store$promotionsArgs<ExtArgs>
+  campaigns?: boolean | Prisma.Store$campaignsArgs<ExtArgs>
   carts?: boolean | Prisma.Store$cartsArgs<ExtArgs>
   orders?: boolean | Prisma.Store$ordersArgs<ExtArgs>
   cmsAssets?: boolean | Prisma.Store$cmsAssetsArgs<ExtArgs>
@@ -3006,6 +3446,8 @@ export type $StorePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     products: Prisma.$ProductPayload<ExtArgs>[]
     collections: Prisma.$CollectionPayload<ExtArgs>[]
     discounts: Prisma.$DiscountPayload<ExtArgs>[]
+    promotions: Prisma.$PromotionPayload<ExtArgs>[]
+    campaigns: Prisma.$CampaignPayload<ExtArgs>[]
     carts: Prisma.$CartPayload<ExtArgs>[]
     orders: Prisma.$OrderPayload<ExtArgs>[]
     cmsAssets: Prisma.$CmsAssetPayload<ExtArgs>[]
@@ -3427,6 +3869,8 @@ export interface Prisma__StoreClient<T, Null = never, ExtArgs extends runtime.Ty
   products<T extends Prisma.Store$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   collections<T extends Prisma.Store$collectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$collectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CollectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   discounts<T extends Prisma.Store$discountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$discountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DiscountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  promotions<T extends Prisma.Store$promotionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$promotionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PromotionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  campaigns<T extends Prisma.Store$campaignsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   carts<T extends Prisma.Store$cartsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$cartsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CartPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orders<T extends Prisma.Store$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cmsAssets<T extends Prisma.Store$cmsAssetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Store$cmsAssetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CmsAssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4052,6 +4496,54 @@ export type Store$discountsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.DiscountScalarFieldEnum | Prisma.DiscountScalarFieldEnum[]
+}
+
+/**
+ * Store.promotions
+ */
+export type Store$promotionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Promotion
+   */
+  select?: Prisma.PromotionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Promotion
+   */
+  omit?: Prisma.PromotionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PromotionInclude<ExtArgs> | null
+  where?: Prisma.PromotionWhereInput
+  orderBy?: Prisma.PromotionOrderByWithRelationInput | Prisma.PromotionOrderByWithRelationInput[]
+  cursor?: Prisma.PromotionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PromotionScalarFieldEnum | Prisma.PromotionScalarFieldEnum[]
+}
+
+/**
+ * Store.campaigns
+ */
+export type Store$campaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Campaign
+   */
+  select?: Prisma.CampaignSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Campaign
+   */
+  omit?: Prisma.CampaignOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CampaignInclude<ExtArgs> | null
+  where?: Prisma.CampaignWhereInput
+  orderBy?: Prisma.CampaignOrderByWithRelationInput | Prisma.CampaignOrderByWithRelationInput[]
+  cursor?: Prisma.CampaignWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CampaignScalarFieldEnum | Prisma.CampaignScalarFieldEnum[]
 }
 
 /**

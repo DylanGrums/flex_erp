@@ -7,3 +7,6 @@ export * from './lib/product-detail/sections/product-options-section.component';
 export * from './lib/product-detail/sections/product-variants-section.component';
 export * from './lib/product-detail/sections/product-collections-section.component';
 export * from './lib/product-detail/variants/icon-placeholder-cell.component';
+export * from './lib/promotions/promotion-rules-editor.component';
+export * from './lib/promotions/promotion-application-method-editor.component';
+export * from './lib/promotions/campaign-picker.component';

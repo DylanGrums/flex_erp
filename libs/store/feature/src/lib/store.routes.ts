@@ -17,6 +17,12 @@ import { StoreCategoriesPageComponent } from './pages/categories/categories.page
 import { StoreInventoryPageComponent } from './pages/inventory/inventory.page';
 import { StoreCustomersPageComponent } from './pages/customers/customers.page';
 import { StorePromotionsPageComponent } from './pages/promotions/promotions.page';
+import { PromotionCreateDialogComponent } from './pages/promotions/promotion-create.dialog';
+import { PromotionDetailPageComponent } from './pages/promotions/promotion-detail.page';
+import { PromotionEditDetailsDialogComponent } from './pages/promotions/promotion-edit-details.dialog';
+import { PromotionEditRulesDialogComponent } from './pages/promotions/promotion-edit-rules.dialog';
+import { StoreCampaignsPageComponent } from './pages/campaigns/campaigns.page';
+import { CampaignDetailPageComponent } from './pages/campaigns/campaign-detail.page';
 import { StorePriceListsPageComponent } from './pages/price-lists/price-lists.page';
 import { StoreProductsPageComponent } from './pages/products/products.page';
 
@@ -46,6 +52,17 @@ const rawRoutes: Routes = [
       { path: 'inventory', component: StoreInventoryPageComponent },
       { path: 'customers', component: StoreCustomersPageComponent },
       { path: 'promotions', component: StorePromotionsPageComponent },
+      { path: 'promotions/new', component: PromotionCreateDialogComponent },
+      {
+        path: 'promotions/:id',
+        component: PromotionDetailPageComponent,
+        children: [
+          { path: 'edit', component: PromotionEditDetailsDialogComponent },
+          { path: 'rules/edit', component: PromotionEditRulesDialogComponent },
+        ],
+      },
+      { path: 'campaigns', component: StoreCampaignsPageComponent },
+      { path: 'campaigns/:id', component: CampaignDetailPageComponent },
       { path: 'price-lists', component: StorePriceListsPageComponent },
     ],
   },

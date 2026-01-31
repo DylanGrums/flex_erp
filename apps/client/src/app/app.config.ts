@@ -16,7 +16,7 @@ import {
   Refresh,
   authInterceptor,
 } from '@flex-erp/auth/data-access';
-import { ProductsState } from '@flex-erp/store/data-access';
+import { CampaignsState, ProductsState, PromotionsState } from '@flex-erp/store/data-access';
 import {
   ContextState,
   contextInterceptor,
@@ -52,7 +52,7 @@ export const appConfig: ApplicationConfig = {
 
     // NGXS via functional providers
     importProvidersFrom(
-      NgxsModule.forRoot([AuthState, ProductsState, ContextState], {
+      NgxsModule.forRoot([AuthState, ProductsState, PromotionsState, CampaignsState, ContextState], {
         developmentMode: !environment.production,
       }),
       NgxsLoggerPluginModule.forRoot({ disabled: environment.production }),
