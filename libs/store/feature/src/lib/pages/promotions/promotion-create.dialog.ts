@@ -103,8 +103,8 @@ type CampaignPickerMode = 'none' | 'existing' | 'new';
       [contentClass]="contentClass"
       (openChange)="onOpenChange($event)"
     >
-      <div class="flex h-full flex-col">
-        <header class="flex items-center justify-between border-b border-ui-border-base px-6 py-4">
+      <div class="flex h-full flex-col items-center w-full ">
+        <header class="w-full flex items-center justify-between border-b border-ui-border-base  px-6 py-4">
           <div>
             <div class="text-base font-semibold text-ui-fg-base">Create promotion</div>
             <div class="text-xs text-ui-fg-muted">Configure promotion details and rules.</div>
@@ -119,15 +119,15 @@ type CampaignPickerMode = 'none' | 'existing' | 'new';
           </button>
         </header>
 
-        <div class="flex items-center gap-2 border-b border-ui-border-base px-6 py-3 text-xs font-semibold text-ui-fg-muted">
+        <div class="w-full flex items-center gap-2 border-b border-ui-border-base px-6 py-3 text-xs font-semibold text-ui-fg-muted">
           <span [class.text-ui-fg-base]="step() === 'template'">Template</span>
-          <span>·</span>
+          <span>ï¿½</span>
           <span [class.text-ui-fg-base]="step() === 'details'">Details</span>
-          <span>·</span>
+          <span>ï¿½</span>
           <span [class.text-ui-fg-base]="step() === 'campaign'">Campaign</span>
         </div>
 
-        <form class="flex-1 overflow-auto px-6 py-4" [formGroup]="form">
+        <form class="w-full flex-1 overflow-auto px-6 py-4 max-w-[720px]" [formGroup]="form">
           @if (step() === 'template') {
             <div class="space-y-4">
               <div class="text-sm font-semibold text-ui-fg-base">Choose a template</div>
@@ -244,7 +244,7 @@ type CampaignPickerMode = 'none' | 'existing' | 'new';
           }
         </form>
 
-        <footer class="flex items-center justify-between border-t border-ui-border-base px-6 py-4">
+        <footer class="w-full flex items-center justify-between border-t border-ui-border-base px-6 py-4">
           <button
             type="button"
             class="inline-flex h-9 items-center rounded-md border border-ui-border-base px-4 text-sm font-semibold text-ui-fg-base transition-fg hover:bg-ui-bg-subtle-hover"
